@@ -1,10 +1,10 @@
 from django.db import models
-from uuid import uuid4
+import uuid
 
 
 class Singer(models.Model):
     id = models.UUIDField(
-        default=uuid4(),
+        default=uuid.uuid4,
         primary_key=True,
         unique=True,
         null=False,
@@ -19,7 +19,7 @@ class Singer(models.Model):
 
 class Music(models.Model):
     id = models.UUIDField(
-        default=uuid4(),
+        default=uuid.uuid4,
         primary_key=True,
         unique=True,
         null=False,
