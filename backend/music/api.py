@@ -1,5 +1,5 @@
 from uuid import UUID
-from ninja import Router, Schema, UploadedFile
+from ninja import Router, Schema, UploadedFile, File
 from .models import Music, Singer
 from decouple import config
 from django.shortcuts import get_list_or_404, get_object_or_404
@@ -176,32 +176,45 @@ def update_music(
     cover: UploadedFile = None,
     audio: UploadedFile = None,
 ):
-    m = music.dict() if music != None else None
-    music = Music.objects.get(pk=music_id)
-    is_changed = False
+    urlCompleted = config("DOMAIN", default="http://127.0.0.1:8000", cast=str)
 
-    if m is not None and "title" in m:
-        music.title = m["title"]
-        is_changed = True
-    if cover is not None and cover.content_type.startswith("image/"):
-        music.cover = cover
-        is_changed = True
-    if audio is not None and audio.content_type.startswith("audio/"):
-        music.audio = audio
-        is_changed = True
+    try:
+        m = music.dict() if music != None else None
+        music = Music.objects.get(pk=music_id)
+        is_changed = False
 
-    if is_changed:
-        music.save()
+        if m is not None and "title" in m and m["title"] != music.title:
+            music.title = m["title"]
+            is_changed = True
+        if cover is not None and cover.content_type.startswith("image/"):
+            music.cover = cover
+            is_changed = True
+        if audio is not None and audio.content_type.startswith("audio/"):
+            music.audio = audio
+            is_changed = True
 
-    return {
-        "id": music.id,
-        "title": music.title,
-        "singers": [
-            {"id": singer.id, "name": singer.name} for singer in music.singers.all()
-        ],
-        "cover": music.cover.url,
-        "audio": music.audio.url,
-    }
+        if is_changed:
+            music.save()
+        else:
+            raise ValueError("Fill in one of the fields to update")
+
+        return {
+            "id": music.id,
+            "title": music.title,
+            "singers": [
+                {"id": singer.id, "name": singer.name} for singer in music.singers.all()
+            ],
+            "cover": f"{urlCompleted}{music.cover.url}",
+            "audio": f"{urlCompleted}{music.audio.url}",
+        }
+    except Exception as e:
+        message = "There was an internal error!"
+        if e.args[0] == "Fill in one of the fields to update":
+            message = "Fill in one of the fields to update"
+        if e.args[0] == "Music matching query does not exist.":
+            message = "There is no music with this ID."
+
+        return exception_handler(message=message, full_message=e.args)
 
 
 @router.delete("/music/{str:music_id}", tags=["musics"])
