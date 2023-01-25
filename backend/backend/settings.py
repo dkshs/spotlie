@@ -38,6 +38,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # My Middleware
+    "backend.middleware.process_put_patch",
 ]
 
 ROOT_URLCONF = "backend.urls"
