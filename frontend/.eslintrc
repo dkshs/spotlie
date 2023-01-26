@@ -1,0 +1,3 @@
+{
+  "extends": ["@ace-ex/eslint-config"]
+}
