@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/components/**/*.tsx", "./src/pages/**/*.tsx"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        merriweather: "Merriweather Sans, sans-serif",
+      },
+    },
   },
   plugins: [],
 };

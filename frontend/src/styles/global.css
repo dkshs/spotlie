@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply h-[100vh] bg-violet-900 bg-gradient-to-b from-black/60 to-zinc-900 text-gray-100 font-merriweather;
+}
