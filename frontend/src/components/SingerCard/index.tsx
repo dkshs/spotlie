@@ -1,0 +1,1 @@
+export { SingerCard } from "./SingerCard";

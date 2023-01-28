@@ -1,5 +1,1 @@
-export {
-  ListMusics,
-  type ListMusicsProps,
-  type MusicProps,
-} from "./ListMusics";
+export { ListMusics } from "./ListMusics";
