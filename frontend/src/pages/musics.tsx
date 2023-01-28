@@ -64,9 +64,9 @@ export default function MusicsPage() {
                     height={50}
                   />
                   <div className="hidden rounded-lg absolute group-hover:flex justify-center items-center inset-0 group-hover:bg-black/50">
-                    <button type="button" className="rounded-full duration-200">
+                    <div className="rounded-full duration-200">
                       <Play size={24} weight="fill" />
-                    </button>
+                    </div>
                   </div>
                 </div>
                 <div className="flex flex-col gap-0.5 text-base font-normal truncate text-start">
