@@ -1,14 +1,12 @@
 from uuid import UUID
 from ninja import Router, Schema, UploadedFile
 from .models import Music, Singer
-from decouple import config
 from django.shortcuts import get_object_or_404
 from .error import exception_message_handler
 from typing import List, Dict
-
+from .formatter import format_singer_query, format_music_query
 
 router = Router()
-URL_COMPLETED = config("BASE_URL", default="http://127.0.0.1:8000", cast=str)
 
 
 @router.get("/musics", tags=["musics"])
@@ -64,25 +62,7 @@ def get_musics(
         if limit is not None:
             musics = musics[:limit]
 
-        return [
-            {
-                "id": i.id,
-                "title": i.title,
-                "singers": [
-                    {
-                        "id": singer.id,
-                        "name": singer.name,
-                        "image": f"{URL_COMPLETED}{singer.image.url}"
-                        if singer.image
-                        else None,
-                    }
-                    for singer in i.singers.all()
-                ],
-                "cover": f"{URL_COMPLETED}{i.cover.url}",
-                "audio": f"{URL_COMPLETED}{i.audio.url}",
-            }
-            for i in musics
-        ]
+        return [format_music_query(i) for i in musics]
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -94,20 +74,7 @@ def get_music(request, music_id: UUID):
         return {}
 
     music = music.first()
-    return {
-        "id": music.id,
-        "title": music.title,
-        "singers": [
-            {
-                "id": singer.id,
-                "name": singer.name,
-                "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
-            }
-            for singer in music.singers.all()
-        ],
-        "cover": f"{URL_COMPLETED}{music.cover.url}",
-        "audio": f"{URL_COMPLETED}{music.audio.url}",
-    }
+    return format_music_query(music)
 
 
 class MusicCreateRequest(Schema):
@@ -136,14 +103,7 @@ def create_music(
         if not singers[0]:
             raise ValueError("The singers do not exist or are invalid!")
 
-        singers = [
-            {
-                "id": i[0].id,
-                "name": i[0].name,
-                "image": f"{URL_COMPLETED}{i[0].image.url}" if i[0].image else None,
-            }
-            for i in singers
-        ]
+        singers = [format_singer_query(i[0]) for i in singers]
         musics = Music.objects.filter(title=m["title"]).filter(
             singers__in=[i["id"] for i in singers]
         )
@@ -157,12 +117,7 @@ def create_music(
             music.singers.add(i["id"])
         music.save()
 
-        return {
-            "title": music.title,
-            "singers": singers,
-            "cover": f"{URL_COMPLETED}{music.cover.url}",
-            "audio": f"{URL_COMPLETED}{music.audio.url}",
-        }
+        return format_music_query(music)
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -204,22 +159,7 @@ def update_music(
         else:
             raise ValueError("Fill in one of the fields to update.")
 
-        return {
-            "id": music.id,
-            "title": music.title,
-            "singers": [
-                {
-                    "id": singer.id,
-                    "name": singer.name,
-                    "image": f"{URL_COMPLETED}{singer.image.url}"
-                    if singer.image
-                    else None,
-                }
-                for singer in music.singers.all()
-            ],
-            "cover": f"{URL_COMPLETED}{music.cover.url}",
-            "audio": f"{URL_COMPLETED}{music.audio.url}",
-        }
+        return format_music_query(music)
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -242,14 +182,7 @@ def update_music_singers(request, music_id: UUID, singers: MusicUpdateSingersReq
         if not singers[0]:
             raise ValueError("The singers do not exist or are invalid!")
 
-        singers = [
-            {
-                "id": i.id,
-                "name": i.name,
-                "image": f"{URL_COMPLETED}{i.image.url}" if i.image else None,
-            }
-            for i in singers
-        ]
+        singers = [format_singer_query(i) for i in singers]
         musics = (
             Music.objects.filter(title=music.title)
             .filter(singers__in=[i["id"] for i in singers])
@@ -260,31 +193,16 @@ def update_music_singers(request, music_id: UUID, singers: MusicUpdateSingersReq
                 "There is already a song with that title and those singers!"
             )
 
-        singers_len = len(music.singers.all())
         for singer in singers:
             s = music.singers.filter(name=singer["name"])
+            singers_len = len(music.singers.all())
             if s.exists():
                 if singers_len > 1:
                     music.singers.remove(s.first())
             else:
                 music.singers.add(singer["id"])
 
-        singers = [
-            {
-                "id": i.id,
-                "name": i.name,
-                "image": f"{URL_COMPLETED}{i.image.url}" if i.image else None,
-            }
-            for i in music.singers.all()
-        ]
-
-        return {
-            "id": music.id,
-            "title": music.title,
-            "singers": singers,
-            "cover": f"{URL_COMPLETED}{music.cover.url}",
-            "audio": f"{URL_COMPLETED}{music.audio.url}",
-        }
+        return format_music_query(music)
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -293,14 +211,7 @@ def update_music_singers(request, music_id: UUID, singers: MusicUpdateSingersReq
 def delete_music(request, music_id: UUID):
     try:
         music = Music.objects.get(pk=music_id)
-        singers = [
-            {
-                "id": i.id,
-                "name": i.name,
-                "image": f"{URL_COMPLETED}{i.image.url}" if i.image else None,
-            }
-            for i in music.singers.all()
-        ]
+        singers = [format_singer_query(i) for i in music.singers.all()]
         music.delete()
 
         return {"title": music.title, "singers": singers}
@@ -346,14 +257,7 @@ def get_singers(
         if limit is not None:
             singers = singers[:limit]
 
-        return [
-            {
-                "id": singer.id,
-                "name": singer.name,
-                "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
-            }
-            for singer in singers
-        ]
+        return [format_singer_query(singer) for singer in singers]
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -366,11 +270,7 @@ def get_singer(request, singer_id: UUID):
             return {}
 
         singer = singer.first()
-        return {
-            "id": singer.id,
-            "name": singer.name,
-            "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
-        }
+        return format_singer_query(singer)
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -385,11 +285,8 @@ def create_singer(request, singer: SingerRequest, image: UploadedFile = None):
         s = singer.dict()
         singer = Singer(**s, image=image)
         singer.save()
-        return {
-            "id": singer.id,
-            "name": singer.name,
-            "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
-        }
+
+        return format_singer_query(singer)
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -416,11 +313,7 @@ def update_singer(
         else:
             raise ValueError("Fill in one of the fields to update.")
 
-        return {
-            "id": singer.id,
-            "name": singer.name,
-            "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
-        }
+        return format_singer_query(singer)
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -431,8 +324,6 @@ def delete_singer(request, singer_id: UUID):
         singer = Singer.objects.get(pk=singer_id)
         singer.delete()
 
-        return {
-            "name": singer.name,
-        }
+        return {"name": singer.name}
     except Exception as e:
         return exception_message_handler(e.args)
