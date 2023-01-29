@@ -308,12 +308,12 @@ def update_music_singers(request, music_id: UUID, singers: MusicUpdateSingersReq
                 "There is already a song with that title and those singers!"
             )
 
-        for i in music.singers.all():
-            for singer in singers:
-                if i.name == singer["name"]:
-                    music.singers.remove(i)
-                else:
-                    music.singers.add(singer["id"])
+        for singer in singers:
+            s = music.singers.filter(name=singer["name"])
+            if s.exists():
+                music.singers.remove(s.first())
+            else:
+                music.singers.add(singer["id"])
 
         singers = [
             {
