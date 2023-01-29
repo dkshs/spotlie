@@ -34,11 +34,13 @@ def exception_handler(status_code=500, message=None, full_message=None):
     )
 
 
+URL_COMPLETED = config("DOMAIN", default="http://127.0.0.1:8000", cast=str)
+
+
 @router.get("/musics", tags=["musics"])
 def get_musics(
     request, id: str = None, title: str = None, singers: str = None, orderBy: str = None
 ):
-    urlCompleted = config("DOMAIN", default="http://127.0.0.1:8000", cast=str)
     musics = Music.objects.all()
 
     if orderBy is not None and (
@@ -97,10 +99,17 @@ def get_musics(
             "id": i.id,
             "title": i.title,
             "singers": [
-                {"id": singer.id, "name": singer.name} for singer in i.singers.all()
+                {
+                    "id": singer.id,
+                    "name": singer.name,
+                    "image": f"{URL_COMPLETED}{singer.image.url}"
+                    if singer.image
+                    else None,
+                }
+                for singer in i.singers.all()
             ],
-            "cover": f"{urlCompleted}{i.cover.url}",
-            "audio": f"{urlCompleted}{i.audio.url}",
+            "cover": f"{URL_COMPLETED}{i.cover.url}",
+            "audio": f"{URL_COMPLETED}{i.audio.url}",
         }
         for i in musics
     ]
@@ -108,17 +117,21 @@ def get_musics(
 
 @router.get("/music/{str:music_id}", tags=["musics"])
 def get_music(request, music_id: UUID):
-    urlCompleted = config("DOMAIN", default="http://127.0.0.1:8000", cast=str)
     music = get_object_or_404(Music, id=music_id)
 
     return {
         "id": music.id,
         "title": music.title,
         "singers": [
-            {"id": singer.id, "name": singer.name} for singer in music.singers.all()
+            {
+                "id": singer.id,
+                "name": singer.name,
+                "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
+            }
+            for singer in music.singers.all()
         ],
-        "cover": f"{urlCompleted}{music.cover.url}",
-        "audio": f"{urlCompleted}{music.audio.url}",
+        "cover": f"{URL_COMPLETED}{music.cover.url}",
+        "audio": f"{URL_COMPLETED}{music.audio.url}",
     }
 
 
@@ -131,8 +144,6 @@ class MusicCreateRequest(Schema):
 def create_music(
     request, music: MusicCreateRequest, cover: UploadedFile, audio: UploadedFile
 ):
-    urlCompleted = config("DOMAIN", default="http://127.0.0.1:8000", cast=str)
-
     try:
         if not cover.content_type.startswith("image/"):
             raise ValueError("Cover must be an image.")
@@ -150,7 +161,14 @@ def create_music(
         if not singers[0]:
             raise ValueError("The singers do not exist or are invalid!")
 
-        singers = [{"id": i[0].id, "name": i[0].name} for i in singers]
+        singers = [
+            {
+                "id": i[0].id,
+                "name": i[0].name,
+                "image": f"{URL_COMPLETED}{i[0].image.url}" if i[0].image else None,
+            }
+            for i in singers
+        ]
         musics = Music.objects.filter(title=m["title"]).filter(
             singers__in=[i["id"] for i in singers]
         )
@@ -167,8 +185,8 @@ def create_music(
         return {
             "title": music.title,
             "singers": singers,
-            "cover": f"{urlCompleted}{music.cover.url}",
-            "audio": f"{urlCompleted}{music.audio.url}",
+            "cover": f"{URL_COMPLETED}{music.cover.url}",
+            "audio": f"{URL_COMPLETED}{music.audio.url}",
         }
     except Exception as e:
         message = "There was an internal error!"
@@ -203,8 +221,6 @@ def update_music(
     cover: UploadedFile = None,
     audio: UploadedFile = None,
 ):
-    urlCompleted = config("DOMAIN", default="http://127.0.0.1:8000", cast=str)
-
     try:
         m = music.dict() if music != None else None
         music = Music.objects.get(pk=music_id)
@@ -229,10 +245,17 @@ def update_music(
             "id": music.id,
             "title": music.title,
             "singers": [
-                {"id": singer.id, "name": singer.name} for singer in music.singers.all()
+                {
+                    "id": singer.id,
+                    "name": singer.name,
+                    "image": f"{URL_COMPLETED}{singer.image.url}"
+                    if singer.image
+                    else None,
+                }
+                for singer in music.singers.all()
             ],
-            "cover": f"{urlCompleted}{music.cover.url}",
-            "audio": f"{urlCompleted}{music.audio.url}",
+            "cover": f"{URL_COMPLETED}{music.cover.url}",
+            "audio": f"{URL_COMPLETED}{music.audio.url}",
         }
     except Exception as e:
         message = "There was an internal error!"
@@ -249,11 +272,102 @@ def update_music(
         )
 
 
+class MusicUpdateSingersRequest(Schema):
+    singers: List[Dict]
+
+
+@router.patch("/music/{str:music_id}/singers", tags=["musics"])
+def update_music_singers(request, music_id: UUID, singers: MusicUpdateSingersRequest):
+    try:
+        music = get_object_or_404(Music, pk=music_id)
+
+        s = singers.dict()
+        for i in s["singers"]:
+            if "name" not in i:
+                raise ValueError("Singers must have a name!")
+
+        singers = [get_object_or_404(Singer, name=i["name"]) for i in s["singers"]]
+        if not singers[0]:
+            raise ValueError("The singers do not exist or are invalid!")
+
+        singers = [
+            {
+                "id": i.id,
+                "name": i.name,
+                "image": f"{URL_COMPLETED}{i.image.url}" if i.image else None,
+            }
+            for i in singers
+        ]
+        musics = (
+            Music.objects.filter(title=music.title)
+            .filter(singers__in=[i["id"] for i in singers])
+            .exclude(title=music.title)
+        )
+        if musics.exists():
+            raise ValueError(
+                "There is already a song with that title and those singers!"
+            )
+
+        for i in music.singers.all():
+            for singer in singers:
+                if i.name == singer["name"]:
+                    music.singers.remove(i)
+                else:
+                    music.singers.add(singer["id"])
+
+        singers = [
+            {
+                "id": i.id,
+                "name": i.name,
+                "image": f"{URL_COMPLETED}{i.image.url}" if i.image else None,
+            }
+            for i in music.singers.all()
+        ]
+
+        return {
+            "id": music.id,
+            "title": music.title,
+            "singers": singers,
+            "cover": f"{URL_COMPLETED}{music.cover.url}",
+            "audio": f"{URL_COMPLETED}{music.audio.url}",
+        }
+
+    except Exception as e:
+        message = "There was an internal error!"
+        status = 500
+        if e.args[0] == "Singers must have a name!":
+            message = "Singers must have a name!"
+            status = 400
+        if e.args[0] in [
+            "The singers do not exist or are invalid!",
+            "No Singer matches the given query.",
+        ]:
+            message = "The singers do not exist or are invalid!"
+            status = 400
+        if e.args[0] == "There is already a song with that title and those singers!":
+            message = "There is already a song with that title and those singers!"
+            status = 400
+        if e.args[0] == "No Music matches the given query.":
+            status = 404
+            message = "There is no music with this ID."
+
+        return exception_handler(
+            status_code=status, message=message, full_message=e.args
+        )
+
+
 @router.delete("/music/{str:music_id}", tags=["musics"])
 def delete_music(request, music_id: UUID):
     try:
         music = Music.objects.get(pk=music_id)
-        singers = [{"id": i.id, "name": i.name} for i in music.singers.all()]
+        singers = [
+            {
+                "id": i.id,
+                "name": i.name,
+                "image": f"{URL_COMPLETED}{i.image.url}" if i.image else None,
+            }
+            for i in music.singers.all()
+        ]
         music.delete()
 
         return {"title": music.title, "singers": singers}
@@ -312,14 +426,25 @@ def get_singers(request, id: str = None, name: str = None, orderBy: str = None):
                 full_message=e.args,
             )
 
-    return [{"id": singer.id, "name": singer.name} for singer in singers]
+    return [
+        {
+            "id": singer.id,
+            "name": singer.name,
+            "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
+        }
+        for singer in singers
+    ]
 
 
 @router.get("/singer/{str:singer_id}", tags=["singers"])
 def get_singer(request, singer_id: UUID):
     try:
         singer = get_object_or_404(Singer, id=singer_id)
-        return {"id": singer.id, "name": singer.name}
+        return {
+            "id": singer.id,
+            "name": singer.name,
+            "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
+        }
     except Exception as e:
         message = "Invalid ID or invalid query!"
         status = 400
@@ -336,12 +461,16 @@ class SingerRequest(Schema):
 
 
 @router.post("/singer", tags=["singers"])
-def create_singer(request, singer: SingerRequest):
+def create_singer(request, singer: SingerRequest, image: UploadedFile = None):
     try:
         s = singer.dict()
-        singer = Singer(**s)
+        singer = Singer(**s, image=image)
         singer.save()
-        return {"id": singer.id, "name": singer.name}
+        return {
+            "id": singer.id,
+            "name": singer.name,
+            "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
+        }
     except Exception as e:
         message = None
         if e.args[0] == "UNIQUE constraint failed: music_singer.name":
@@ -354,21 +483,41 @@ def create_singer(request, singer: SingerRequest):
 
 
 @router.patch("/singer/{str:singer_id}", tags=["singers"])
-def update_singer(request, singer_id: UUID, singer: SingerRequest):
+def update_singer(
+    request, singer_id: UUID, singer: SingerRequest = None, image: UploadedFile = None
+):
     try:
-        s = singer.dict()
+        s = singer.dict() if singer != None else None
         singer = Singer.objects.get(pk=singer_id)
-        singer.name = s["name"]
-        singer.save()
+        is_changed = False
 
-        return {"id": singer.id, "name": singer.name}
+        if s != None and "name" in s:
+            singer.name = s["name"]
+            is_changed = True
+
+        if image != None and image.content_type.startswith("image/"):
+            singer.image = image
+            is_changed = True
+
+        if is_changed:
+            singer.save()
+        else:
+            raise ValueError("Fill in one of the fields to update")
+
+        return {
+            "id": singer.id,
+            "name": singer.name,
+            "image": f"{URL_COMPLETED}{singer.image.url}" if singer.image else None,
+        }
     except Exception as e:
         message = "Invalid ID or invalid name!"
         status = 400
-        if e.args[0] == "Singer matching query does not exist.":
-            status = 404
-            message = "There is no singer with this ID."
 
+        if e.args[0] == "Singer matching query does not exist.":
+            message = "There is no singer with this ID."
+            status = 404
+        if e.args[0] == "Fill in one of the fields to update":
+            message = "Fill in one of the fields to update"
         if e.args[0] == "UNIQUE constraint failed: music_singer.name":
             message = "This name already exists!"
 
@@ -383,7 +532,9 @@ def delete_singer(request, singer_id: UUID):
         singer = Singer.objects.get(pk=singer_id)
         singer.delete()
 
-        return {"id": singer.id, "name": singer.name}
+        return {
+            "name": singer.name,
+        }
     except Exception as e:
         message = "Invalid ID!"
         status = 400

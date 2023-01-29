@@ -12,6 +12,7 @@ class Singer(models.Model):
         editable=False,
     )
     name = models.CharField(max_length=30, unique=True, null=False, blank=False)
+    image = models.ImageField(upload_to="singers", blank=True)
 
     def __str__(self) -> str:
         return self.name
