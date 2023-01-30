@@ -7,16 +7,20 @@ import { ListMusics } from "@/components/ListMusics";
 import { ListSingers } from "@/components/ListSingers";
 
 export default function Home() {
-  const { data: musics } = useQuery<MusicProps[]>({
-    queryKey: ["musics"],
-    queryFn: async () => {
-      const response = await api.get("/musics?limit=10");
-      return response.data;
+  const { data: musics, isFetching: musicsIsFetching } = useQuery<MusicProps[]>(
+    {
+      queryKey: ["musics"],
+      queryFn: async () => {
+        const response = await api.get("/musics?limit=10");
+        return response.data;
+      },
+      staleTime: 1000 * 60,
     },
-    staleTime: 1000 * 60,
-  });
+  );
 
-  const { data: singers } = useQuery<SingerProps[]>({
+  const { data: singers, isFetching: singerIsFetching } = useQuery<
+    SingerProps[]
+  >({
     queryKey: ["singers"],
     queryFn: async () => {
       const response = await api.get("/singers?limit=10");
@@ -28,8 +32,8 @@ export default function Home() {
   return (
     <>
       <Meta path="/" title="Home" />
-      <ListMusics musics={musics} />
-      <ListSingers singers={singers} />
+      <ListMusics musics={musics} isFetching={musicsIsFetching} />
+      <ListSingers singers={singers} isFetching={singerIsFetching} />
     </>
   );
 }

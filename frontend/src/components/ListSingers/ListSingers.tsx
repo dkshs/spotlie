@@ -1,14 +1,16 @@
 import type { SingerProps } from "@/utils/types";
 
 import Link from "next/link";
-import { Loading } from "../Loading";
 import { SingerCard } from "../SingerCard";
 
 interface ListSingersProps {
   singers?: SingerProps[];
+  isFetching?: boolean;
 }
 
-export function ListSingers({ singers }: ListSingersProps) {
+export function ListSingers({ singers, isFetching }: ListSingersProps) {
+  const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   return (
     <section className="px-9 mt-8">
       <header className="flex justify-between mb-4 items-center">
@@ -21,13 +23,23 @@ export function ListSingers({ singers }: ListSingersProps) {
         </Link>
       </header>
       <div className="pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
-        {!singers ? (
-          <div className="min-h-[218px] p-10">
-            <Loading />
-          </div>
-        ) : (
-          singers.map((singer) => <SingerCard key={singer.id} {...singer} />)
-        )}
+        {!singers || isFetching
+          ? skeletonItems.map((i) => (
+              <div
+                key={i}
+                className="py-1 max-w-[178px] snap-center min-h-[206px]"
+              >
+                <div className="rounded-lg overflow-hidden block min-h-[178px] min-w-[178px]">
+                  <div className="aspect-square bg-black/20 animate-pulse" />
+                </div>
+                <div className="flex flex-col mt-2 gap-0.5 text-base font-normal truncate">
+                  <span className="h-6 w-1/2 bg-black/20 animate-pulse" />
+                </div>
+              </div>
+            ))
+          : singers.map((singer) => (
+              <SingerCard key={singer.id} singer={singer} />
+            ))}
       </div>
     </section>
   );

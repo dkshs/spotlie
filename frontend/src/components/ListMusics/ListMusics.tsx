@@ -1,13 +1,16 @@
-import Link from "next/link";
 import type { MusicProps } from "@/utils/types";
+
+import Link from "next/link";
 import { MusicCard } from "../MusicCard";
-import { Loading } from "../Loading";
 
 interface ListMusicsProps {
   musics?: MusicProps[];
+  isFetching?: boolean;
 }
 
-export function ListMusics({ musics }: ListMusicsProps) {
+export function ListMusics({ musics, isFetching }: ListMusicsProps) {
+  const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   return (
     <section className="px-9 mt-8">
       <header className="flex justify-between mb-4 items-center">
@@ -20,13 +23,22 @@ export function ListMusics({ musics }: ListMusicsProps) {
         </Link>
       </header>
       <div className="pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
-        {!musics ? (
-          <div className="min-h-[244px] p-10">
-            <Loading />
-          </div>
-        ) : (
-          musics.map((music) => <MusicCard key={music.id} {...music} />)
-        )}
+        {!musics || isFetching
+          ? skeletonItems.map((i) => (
+              <div
+                key={i}
+                className="py-1 max-w-[178px] snap-center min-h-[244px]"
+              >
+                <div className="rounded-lg overflow-hidden block min-h-[178px] min-w-[178px]">
+                  <div className="aspect-square bg-black/20 animate-pulse" />
+                </div>
+                <div className="flex flex-col mt-2 gap-0.5 text-base font-normal truncate">
+                  <span className="h-6 w-1/2 bg-black/20 animate-pulse" />
+                  <span className="h-5 w/1-2 bg-black/20 animate-pulse" />
+                </div>
+              </div>
+            ))
+          : musics.map((music) => <MusicCard key={music.id} music={music} />)}
       </div>
     </section>
   );

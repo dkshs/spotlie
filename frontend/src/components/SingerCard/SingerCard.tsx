@@ -4,7 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { User } from "phosphor-react";
 
-export function SingerCard(singer: SingerProps) {
+interface SingerCardProps {
+  singer: SingerProps;
+}
+
+export function SingerCard({ singer }: SingerCardProps) {
   return (
     <div key={singer.id} className="py-1 max-w-[178px] snap-center">
       <Link
@@ -13,11 +17,12 @@ export function SingerCard(singer: SingerProps) {
       >
         {singer.image ? (
           <Image
-            className="aspect-square object-cover shadow-xl shadow-black/60 hover:opacity-50 duration-300"
+            className="aspect-square object-cover shadow-xl shadow-black/60 hover:opacity-50 bg-black/20 duration-300"
             src={singer.image}
             alt={singer.name}
             width={178}
             height={178}
+            priority
           />
         ) : (
           <User className="w-full h-full hover:opacity-70 duration-300" />

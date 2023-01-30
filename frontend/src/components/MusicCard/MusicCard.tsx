@@ -5,12 +5,16 @@ import Link from "next/link";
 
 import { Play } from "phosphor-react";
 
-export function MusicCard(music: MusicProps) {
+interface MusicCardProps {
+  music: MusicProps;
+}
+
+export function MusicCard({ music }: MusicCardProps) {
   return (
-    <div key={music.id} className="py-1 max-w-[178px] snap-center">
+    <div className="py-1 max-w-[178px] snap-center">
       <div className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] group">
         <Image
-          className="aspect-square object-cover shadow-xl shadow-black/60"
+          className="aspect-square object-cover shadow-xl shadow-black/60 bg-black/20"
           src={music.cover}
           alt="Capa da música"
           width={178}
