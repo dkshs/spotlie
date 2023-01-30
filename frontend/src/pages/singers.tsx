@@ -11,9 +11,10 @@ import { Meta } from "@/components/Meta";
 import { User } from "phosphor-react";
 
 export default function SingersPage() {
+  const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [query, setQuery] = useState("");
 
-  const { data: singers } = useQuery<SingerProps[]>({
+  const { data: singers, isFetching } = useQuery<SingerProps[]>({
     queryKey: ["all-singers"],
     queryFn: async () => {
       const response = await api.get("/singers");
@@ -54,7 +55,19 @@ export default function SingersPage() {
             filteredSingers?.length === 0 && query !== "" ? "flex" : "grid"
           } grid-cols-1 sm:grid-cols-2 gap-1 pt-6`}
         >
-          {filteredSingers?.length === 0 && query !== "" ? (
+          {isFetching || !filteredSingers ? (
+            skeletonItems.map((i) => (
+              <div
+                key={i}
+                className="flex items-start px-4 py-2 rounded-md gap-3"
+              >
+                <div className="relative rounded-lg min-w-[50px] min-h-[50px]">
+                  <div className="rounded-lg w-[50px] h-[50px] bg-black/40 animate-pulse" />
+                </div>
+                <span className="mt-1 h-6 w-1/3 bg-black/20 rounded-lg animate-pulse" />
+              </div>
+            ))
+          ) : filteredSingers?.length === 0 && query !== "" ? (
             <div className="flex flex-col w-full justify-center py-4 px-4">
               <span className="text-center mt-4">Nenhum cantor encontrado</span>
             </div>
@@ -68,7 +81,7 @@ export default function SingersPage() {
                 <div className="relative rounded-lg min-w-[50px] min-h-[50px] bg-black/40 hover:opacity-70 duration-300">
                   {singer.image ? (
                     <Image
-                      className="aspect-square rounded-lg object-cover shadow-lg hover:opacity-70 duration-200"
+                      className="aspect-square rounded-lg object-cover shadow-lg bg-black/40 hover:opacity-70 duration-200"
                       src={singer.image}
                       alt={singer.name}
                       width={50}

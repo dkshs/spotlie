@@ -11,9 +11,10 @@ import { Meta } from "@/components/Meta";
 import { Play } from "phosphor-react";
 
 export default function MusicsPage() {
+  const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [query, setQuery] = useState("");
 
-  const { data: musics } = useQuery<MusicProps[]>({
+  const { data: musics, isFetching } = useQuery<MusicProps[]>({
     queryKey: ["all-musics"],
     queryFn: async () => {
       const response = await api.get("/musics");
@@ -54,14 +55,29 @@ export default function MusicsPage() {
             filteredMusics?.length === 0 && query !== "" ? "flex" : "grid"
           } grid-cols-1 sm:grid-cols-2 gap-1 pt-6`}
         >
-          {filteredMusics?.length === 0 && query !== "" ? (
+          {isFetching || !filteredMusics ? (
+            skeletonItems.map((i) => (
+              <div
+                key={i}
+                className="flex items-center px-4 py-2 rounded-md gap-3"
+              >
+                <div className="relative rounded-lg min-w-[50px] min-h-[50px]">
+                  <div className="rounded-lg w-[50px] h-[50px] bg-black/40 animate-pulse" />
+                </div>
+                <div className="flex flex-col gap-1 w-full">
+                  <span className="h-6 w-1/3 bg-black/20 rounded-lg animate-pulse" />
+                  <span className="h-5 w-1/3 bg-black/20 rounded-lg animate-pulse" />
+                </div>
+              </div>
+            ))
+          ) : filteredMusics.length === 0 && query !== "" ? (
             <div className="col-span-2 w-full flex flex-col justify-center py-4 px-4">
               <span className="text-center mt-4">
                 Nenhuma música encontrada
               </span>
             </div>
           ) : (
-            filteredMusics?.map((music) => (
+            filteredMusics.map((music) => (
               <button
                 type="button"
                 key={music.id}
@@ -69,7 +85,7 @@ export default function MusicsPage() {
               >
                 <div className="relative rounded-lg min-w-[50px] min-h-[50px]">
                   <Image
-                    className="aspect-square rounded-lg object-cover shadow-lg"
+                    className="aspect-square rounded-lg object-cover shadow-lg bg-black/40"
                     src={music.cover}
                     alt={music.title}
                     width={50}
