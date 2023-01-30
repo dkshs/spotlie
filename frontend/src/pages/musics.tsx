@@ -1,19 +1,31 @@
-import { Meta } from "@/components/Meta";
-import { musics as initialMusics } from "@/utils/musics";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/axios";
+
+import type { MusicProps } from "@/utils/types";
+
 import Image from "next/image";
 import Link from "next/link";
+import { Meta } from "@/components/Meta";
 
 import { Play } from "phosphor-react";
-import { useState } from "react";
 
 export default function MusicsPage() {
-  const [musics] = useState(initialMusics);
   const [query, setQuery] = useState("");
+
+  const { data: musics } = useQuery<MusicProps[]>({
+    queryKey: ["all-musics"],
+    queryFn: async () => {
+      const response = await api.get("/musics");
+      return response.data;
+    },
+    staleTime: 1000 * 60,
+  });
 
   const filteredMusics =
     query === ""
       ? musics
-      : musics.filter((music) =>
+      : musics?.filter((music) =>
           music.title
             .toLowerCase()
             .replace(/\s+/g, "")
@@ -39,17 +51,17 @@ export default function MusicsPage() {
         </div>
         <div
           className={`${
-            filteredMusics.length === 0 && query !== "" ? "flex" : "grid"
-          } grid-cols-1 sm:grid-cols-2 pt-6`}
+            filteredMusics?.length === 0 && query !== "" ? "flex" : "grid"
+          } grid-cols-1 sm:grid-cols-2 gap-1 pt-6`}
         >
-          {filteredMusics.length === 0 && query !== "" ? (
+          {filteredMusics?.length === 0 && query !== "" ? (
             <div className="col-span-2 w-full flex flex-col justify-center py-4 px-4">
               <span className="text-center mt-4">
                 Nenhuma música encontrada
               </span>
             </div>
           ) : (
-            filteredMusics.map((music) => (
+            filteredMusics?.map((music) => (
               <button
                 type="button"
                 key={music.id}
@@ -77,7 +89,7 @@ export default function MusicsPage() {
                     {music.title}
                   </Link>
                   <div className="truncate pr-2.5">
-                    {music.singers.map((singer) => (
+                    {music.singers?.map((singer) => (
                       <Link
                         key={singer.id}
                         href={`/singer/${singer.id}`}

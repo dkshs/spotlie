@@ -1,10 +1,11 @@
 import type { SingerProps } from "@/utils/types";
 
 import Link from "next/link";
+import { Loading } from "../Loading";
 import { SingerCard } from "../SingerCard";
 
 interface ListSingersProps {
-  singers: SingerProps[];
+  singers?: SingerProps[];
 }
 
 export function ListSingers({ singers }: ListSingersProps) {
@@ -20,9 +21,13 @@ export function ListSingers({ singers }: ListSingersProps) {
         </Link>
       </header>
       <div className="pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
-        {singers.map((singer) => (
-          <SingerCard key={singer.id} {...singer} />
-        ))}
+        {!singers ? (
+          <div className="min-h-[218px] p-10">
+            <Loading />
+          </div>
+        ) : (
+          singers.map((singer) => <SingerCard key={singer.id} {...singer} />)
+        )}
       </div>
     </section>
   );

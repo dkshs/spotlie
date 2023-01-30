@@ -1,7 +1,7 @@
 export interface SingerProps {
   id: string;
   name: string;
-  img: string;
+  image: string;
 }
 
 export interface MusicProps {

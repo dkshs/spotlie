@@ -1,17 +1,31 @@
-import { Meta } from "@/components/Meta";
-import { singers as initialSingers } from "@/utils/singers";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/axios";
+
+import type { SingerProps } from "@/utils/types";
+
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { Meta } from "@/components/Meta";
+
+import { User } from "phosphor-react";
 
 export default function SingersPage() {
-  const [singers] = useState(initialSingers);
   const [query, setQuery] = useState("");
+
+  const { data: singers } = useQuery<SingerProps[]>({
+    queryKey: ["all-singers"],
+    queryFn: async () => {
+      const response = await api.get("/singers");
+      return response.data;
+    },
+    staleTime: 1000 * 60,
+  });
 
   const filteredSingers =
     query === ""
       ? singers
-      : singers.filter((singer) =>
+      : singers?.filter((singer) =>
           singer.name
             .toLowerCase()
             .replace(/\s+/g, "")
@@ -37,28 +51,32 @@ export default function SingersPage() {
         </div>
         <div
           className={`${
-            filteredSingers.length === 0 && query !== "" ? "flex" : "grid"
-          } grid-cols-1 sm:grid-cols-2 pt-6`}
+            filteredSingers?.length === 0 && query !== "" ? "flex" : "grid"
+          } grid-cols-1 sm:grid-cols-2 gap-1 pt-6`}
         >
-          {filteredSingers.length === 0 && query !== "" ? (
+          {filteredSingers?.length === 0 && query !== "" ? (
             <div className="flex flex-col w-full justify-center py-4 px-4">
               <span className="text-center mt-4">Nenhum cantor encontrado</span>
             </div>
           ) : (
-            filteredSingers.map((singer) => (
+            filteredSingers?.map((singer) => (
               <Link
                 key={singer.id}
                 href={`/singer/${singer.id}`}
                 className="flex px-4 py-2 rounded-md gap-3 hover:bg-black/30 focus:outline-none focus:bg-black/50 duration-200"
               >
-                <div className="relative rounded-lg min-w-[50px] min-h-[50px]">
-                  <Image
-                    className="aspect-square rounded-lg object-cover shadow-lg hover:opacity-70 duration-200"
-                    src={singer.img}
-                    alt={singer.name}
-                    width={50}
-                    height={50}
-                  />
+                <div className="relative rounded-lg min-w-[50px] min-h-[50px] bg-black/40 hover:opacity-70 duration-300">
+                  {singer.image ? (
+                    <Image
+                      className="aspect-square rounded-lg object-cover shadow-lg hover:opacity-70 duration-200"
+                      src={singer.image}
+                      alt={singer.name}
+                      width={50}
+                      height={50}
+                    />
+                  ) : (
+                    <User className="w-full h-full hover:opacity-70 duration-300" />
+                  )}
                 </div>
                 <div className="flex flex-col mt-1 text-base font-normal truncate text-start">
                   <p className="truncate pr-2.5 hover:text-purple-400 active:opacity-70 capitalize duration-200">
