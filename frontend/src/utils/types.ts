@@ -9,4 +9,5 @@ export interface MusicProps {
   title: string;
   singers: SingerProps[];
   cover: string;
+  audio: string;
 }

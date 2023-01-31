@@ -1,15 +1,18 @@
+import { useMusic } from "@/hooks/useMusic";
 import type { MusicProps } from "@/utils/types";
 
 import Image from "next/image";
 import Link from "next/link";
 
-import { Play } from "phosphor-react";
+import { Pause, Play } from "phosphor-react";
 
 interface MusicCardProps {
   music: MusicProps;
 }
 
 export function MusicCard({ music }: MusicCardProps) {
+  const { playMusic, musicState, currentMusic, pauseMusic } = useMusic();
+
   return (
     <div className="py-1 max-w-[178px] snap-center">
       <div className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] group">
@@ -21,12 +24,40 @@ export function MusicCard({ music }: MusicCardProps) {
           height={178}
           priority
         />
-        <div className="hidden absolute group-hover:flex justify-center items-center inset-0 group-hover:bg-black/50">
+        <div
+          className={`absolute justify-center items-center inset-0 ${
+            musicState === "playing" && music.id === currentMusic?.id
+              ? "flex bg-black/50"
+              : "hidden group-hover:flex group-hover:bg-black/50"
+          }`}
+        >
           <button
             type="button"
-            className="p-3 bg-purple-600/40 backdrop-blur-sm rounded-full hover:scale-110 duration-200"
+            onClick={() =>
+              musicState === "playing" && music.id === currentMusic?.id
+                ? pauseMusic()
+                : playMusic(music)
+            }
+            className="p-3 bg-purple-600/40 backdrop-blur-sm rounded-full hover:scale-110 focus:outline-none focus:ring-2 ring-blue-300 duration-200"
           >
-            <Play size={32} weight="fill" />
+            {musicState === "playing" && currentMusic?.id === music.id ? (
+              <>
+                <Image
+                  src="/musicPlaying.gif"
+                  alt="Música tocando"
+                  className="group-hover:hidden flex"
+                  height={32}
+                  width={32}
+                />
+                <Pause
+                  size={32}
+                  weight="fill"
+                  className="hidden group-hover:flex"
+                />
+              </>
+            ) : (
+              <Play size={32} weight="fill" />
+            )}
           </button>
         </div>
       </div>

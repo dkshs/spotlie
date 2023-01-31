@@ -20,7 +20,7 @@ export function Header() {
 
   return (
     <nav className="fixed inset-x-0 h-[72px] backdrop-blur-md bg-black/50 border-b border-zinc-300/20 z-[9999]">
-      <ul className="flex gap-2 w-full h-full items-center m-auto max-w-7xl px-6 2xl:px-0">
+      <ul className="flex gap-2 w-full h-full items-center m-auto max-w-[1600px] px-6">
         <li className="mr-3">
           <Link href="/" className="outline-blue-300 duration-200 rounded-full">
             <SpotifyLogo weight="fill" size={50} className="text-green-500" />

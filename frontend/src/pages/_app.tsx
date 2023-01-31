@@ -6,16 +6,21 @@ import { queryClient } from "@/lib/queryClient";
 import type { AppProps } from "next/app";
 
 import { Header } from "@/components/Header";
+import { Player } from "@/components/Player";
+import { MusicContextProvider } from "@/context/useContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="max-w-7xl min-w-[320px] m-auto">
-        <Header />
-        <div className="pt-[72px]">
-          <Component {...pageProps} />
+      <MusicContextProvider>
+        <div className="max-w-[1600px] min-w-[320px] m-auto">
+          <Header />
+          <div className="pt-[72px]">
+            <Component {...pageProps} />
+          </div>
+          <Player />
         </div>
-      </div>
+      </MusicContextProvider>
     </QueryClientProvider>
   );
 }

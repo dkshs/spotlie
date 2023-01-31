@@ -8,9 +8,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
 
-import { Play } from "phosphor-react";
+import { Pause, Play } from "phosphor-react";
+import { useMusic } from "@/hooks/useMusic";
 
 export default function MusicsPage() {
+  const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
+
   const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [query, setQuery] = useState("");
 
@@ -81,6 +84,11 @@ export default function MusicsPage() {
               <button
                 type="button"
                 key={music.id}
+                onClick={() =>
+                  musicState === "playing" && currentMusic?.id === music.id
+                    ? pauseMusic()
+                    : playMusic(music)
+                }
                 className="flex items-center px-4 py-2 rounded-md gap-3 hover:bg-black/30 focus:outline-none focus:bg-black/50 group duration-200"
               >
                 <div className="relative rounded-lg min-w-[50px] min-h-[50px]">
@@ -91,9 +99,37 @@ export default function MusicsPage() {
                     width={50}
                     height={50}
                   />
-                  <div className="hidden rounded-lg absolute group-hover:flex justify-center items-center inset-0 group-hover:bg-black/50">
+                  <div
+                    className={`absolute rounded-lg justify-center items-center inset-0 ${
+                      musicState === "playing" && music.id === currentMusic?.id
+                        ? "flex bg-black/50"
+                        : "hidden group-hover:flex group-hover:bg-black/50"
+                    }`}
+                  >
                     <div className="rounded-full duration-200">
-                      <Play size={24} weight="fill" />
+                      {musicState === "playing" &&
+                      currentMusic?.id === music.id ? (
+                        <>
+                          <Image
+                            src="/musicPlaying.gif"
+                            alt="Música tocando"
+                            className="group-hover:hidden flex"
+                            height={24}
+                            width={24}
+                          />
+                          <Pause
+                            size={24}
+                            weight="fill"
+                            className="hidden hover:text-purple-400 group-hover:flex duration-300"
+                          />
+                        </>
+                      ) : (
+                        <Play
+                          size={24}
+                          weight="fill"
+                          className="hover:text-purple-400 duration-300"
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

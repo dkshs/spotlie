@@ -6,6 +6,10 @@ module.exports = {
       fontFamily: {
         merriweather: "Merriweather Sans, sans-serif",
       },
+      screens: {
+        xxs: "352px",
+        xs: "460px",
+      },
     },
   },
   plugins: [],
