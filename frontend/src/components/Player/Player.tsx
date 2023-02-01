@@ -1,4 +1,5 @@
 import { useMusic } from "@/hooks/useMusic";
+import * as Progress from "@radix-ui/react-progress";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -24,6 +25,8 @@ export function Player() {
     repeatMusic,
     skipMusic,
     previousMusic,
+    isShuffle,
+    shuffleMusics,
   } = useMusic();
 
   return (
@@ -34,12 +37,15 @@ export function Player() {
             <span className="text-xs opacity-75">{time.currentTime}</span>
             <span className="text-xs opacity-75">{time.duration}</span>
           </div>
-          <div className="max-w-[1600px] mx-auto">
-            <div
-              className="bg-white h-0.5 duration-500"
+          <Progress.Root
+            value={time.percentage}
+            className="max-w-[1600px] mx-auto bg-white/20"
+          >
+            <Progress.Indicator
+              className="h-0.5 bg-white duration-300"
               style={{ width: `${time.percentage}%` }}
-            />
-          </div>
+            ></Progress.Indicator>
+          </Progress.Root>
         </div>
         <div className="p-4 flex items-center justify-between max-w-[1600px] min-w-[320px] m-auto">
           <div className="flex group sm:w-[30%] truncate">
@@ -81,7 +87,10 @@ export function Player() {
           <div className="flex items-center justify-center gap-3 sm:w-[40%]">
             <button
               type="button"
-              className="hidden xs:inline-flex p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
+              onClick={() => shuffleMusics()}
+              className={`hidden xs:inline-flex p-2.5 ${
+                isShuffle && "text-blue-600"
+              } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
             >
               <Shuffle size={24} weight="fill" />
             </button>

@@ -23,9 +23,11 @@ interface MusicContextProps {
   musicState: MusicStateProps;
   time: MusicTimeProps;
   isRepeat: boolean;
+  isShuffle: boolean;
   playMusic: (music: MusicProps) => void;
   pauseMusic: () => void;
   repeatMusic: () => void;
+  shuffleMusics: () => void;
   skipMusic: () => void;
   previousMusic: () => void;
 }
@@ -35,6 +37,7 @@ const ctxInitialValues: MusicContextProps = {
   musicState: "paused",
   time: { currentTime: "00:00", duration: "00:00", percentage: 0 },
   isRepeat: false,
+  isShuffle: false,
   playMusic: (music: MusicProps): void => {
     throw new Error("playMusic() not implemented.");
   },
@@ -43,6 +46,9 @@ const ctxInitialValues: MusicContextProps = {
   },
   repeatMusic: (): void => {
     throw new Error("repeatMusic() not implemented.");
+  },
+  shuffleMusics: (): void => {
+    throw new Error("shuffleMusics() not implemented.");
   },
   skipMusic: (): void => {
     throw new Error("skipMusic() not implemented.");
@@ -58,6 +64,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
   const [musics, setMusics] = useState<MusicProps[] | []>([]);
   const [musicState, setMusicState] = useState<MusicStateProps>("paused");
   const [isRepeat, setIsRepeat] = useState(false);
+  const [isShuffle, setIsShuffle] = useState(false);
   const [time, setTime] = useState<MusicTimeProps>(ctxInitialValues.time);
   const [currentMusic, setCurrentMusic] = useState<MusicProps | null>(null);
   const [musicAudio, setMusicAudio] = useState<HTMLAudioElement | undefined>(
@@ -68,6 +75,10 @@ export function MusicContextProvider(props: PropsWithChildren) {
     useLocalStorage<MusicProps | null>("currentMusic", null);
   const [localMusicRepeat, setLocalMusicRepeat] = useLocalStorage(
     "repeatMusic",
+    false,
+  );
+  const [localMusicShuffle, setLocalMusicShuffle] = useLocalStorage(
+    "shuffleMusic",
     false,
   );
 
@@ -89,7 +100,12 @@ export function MusicContextProvider(props: PropsWithChildren) {
     } else {
       setIsRepeat(false);
     }
-  }, [localMusicRepeat]);
+    if (localMusicShuffle) {
+      setIsShuffle(true);
+    } else {
+      setIsShuffle(false);
+    }
+  }, [localMusicRepeat, localMusicShuffle]);
 
   const verifyMusic = useCallback(
     async (music: MusicProps | null) => {
@@ -142,13 +158,20 @@ export function MusicContextProvider(props: PropsWithChildren) {
   }, [musicAudio]);
 
   const skipMusic = useCallback(async () => {
-    for (let i = 0; i < musics.length; i++) {
-      const song = musics[i];
-      if (song.id === currentMusic?.id) {
-        playMusic(musics[musics.length - 1 === i ? 0 : i + 1]);
+    const randomIndex = Number(
+      String(Math.random() * musics.length - 1).split(".")[0],
+    );
+    if (isShuffle) {
+      playMusic(musics[randomIndex]);
+    } else {
+      for (let i = 0; i < musics.length; i++) {
+        const song = musics[i];
+        if (song.id === currentMusic?.id) {
+          playMusic(musics[musics.length - 1 === i ? 0 : i + 1]);
+        }
       }
     }
-  }, [currentMusic, musics, playMusic]);
+  }, [currentMusic, isShuffle, musics, playMusic]);
 
   const previousMusic = useCallback(async () => {
     for (let i = 0; i < musics.length; i++) {
@@ -160,7 +183,12 @@ export function MusicContextProvider(props: PropsWithChildren) {
   }, [currentMusic, musics, playMusic]);
 
   const addEvents = useCallback(() => {
-    musicAudio?.addEventListener("timeupdate", () => {
+    musicAudio?.addEventListener("play", () => setMusicState("playing"));
+    musicAudio?.addEventListener("pause", () => setMusicState("paused"));
+  }, [musicAudio]);
+
+  const musicUpdateTime = useCallback(() => {
+    if (musicAudio) {
       const musicDuration = musicAudio.duration;
       const musicCurrentTime = musicAudio.currentTime;
       const musicProgress = (musicCurrentTime * 100) / musicDuration;
@@ -168,11 +196,9 @@ export function MusicContextProvider(props: PropsWithChildren) {
       setTime({
         currentTime: musicTimeFormatter(musicAudio).musicCurrentTime,
         duration: musicTimeFormatter(musicAudio).musicDurationTime,
-        percentage: musicProgress,
+        percentage: Number(musicProgress.toFixed(0)),
       });
-    });
-    musicAudio?.addEventListener("play", () => setMusicState("playing"));
-    musicAudio?.addEventListener("pause", () => setMusicState("paused"));
+    }
   }, [musicAudio]);
 
   useEffect(() => {
@@ -184,16 +210,41 @@ export function MusicContextProvider(props: PropsWithChildren) {
         skipMusic();
       }
     };
+    musicAudio?.addEventListener("timeupdate", musicUpdateTime);
     musicAudio?.addEventListener("ended", musicEnded);
     return () => {
       musicAudio?.removeEventListener("ended", musicEnded);
+      musicAudio?.removeEventListener("timeupdate", musicUpdateTime);
     };
-  }, [addEvents, currentMusic, isRepeat, musicAudio, playMusic, skipMusic]);
+  }, [
+    addEvents,
+    currentMusic,
+    isRepeat,
+    musicAudio,
+    musicUpdateTime,
+    playMusic,
+    skipMusic,
+  ]);
 
   const repeatMusic = useCallback(() => {
-    setIsRepeat(!localMusicRepeat);
-    setLocalMusicRepeat(!isRepeat);
-  }, [isRepeat, localMusicRepeat, setLocalMusicRepeat]);
+    if (isRepeat) {
+      setIsRepeat(false);
+      setLocalMusicRepeat(false);
+    } else {
+      setIsRepeat(true);
+      setLocalMusicRepeat(true);
+    }
+  }, [isRepeat, setLocalMusicRepeat]);
+
+  const shuffleMusics = useCallback(() => {
+    if (isShuffle) {
+      setIsShuffle(false);
+      setLocalMusicShuffle(false);
+    } else {
+      setIsShuffle(true);
+      setLocalMusicShuffle(true);
+    }
+  }, [isShuffle, setLocalMusicShuffle]);
 
   return (
     <MusicContext.Provider
@@ -207,6 +258,8 @@ export function MusicContextProvider(props: PropsWithChildren) {
         repeatMusic,
         skipMusic,
         previousMusic,
+        isShuffle,
+        shuffleMusics,
       }}
     >
       {props.children}
