@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <MusicContextProvider>
         <div className="max-w-[1600px] min-w-[320px] m-auto">
           <Header />
-          <div className="pt-[72px]">
+          <div className="pt-[72px] pb-[90px]">
             <Component {...pageProps} />
           </div>
           <Player />

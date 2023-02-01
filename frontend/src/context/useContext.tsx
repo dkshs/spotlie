@@ -73,8 +73,12 @@ export function MusicContextProvider(props: PropsWithChildren) {
 
   useEffect(() => {
     const getMusics = async () => {
-      const { data } = await api.get("/musics");
-      setMusics(data);
+      try {
+        const { data } = await api.get("/musics");
+        setMusics(data);
+      } catch (err) {
+        setMusics([]);
+      }
     };
     getMusics();
   }, []);

@@ -11,8 +11,12 @@ export default function Home() {
     {
       queryKey: ["musics"],
       queryFn: async () => {
-        const response = await api.get("/musics?limit=10");
-        return response.data;
+        try {
+          const { data } = await api.get("/musics?limit=10");
+          return data;
+        } catch (err) {
+          return [];
+        }
       },
       staleTime: 1000 * 60,
     },
@@ -23,8 +27,12 @@ export default function Home() {
   >({
     queryKey: ["singers"],
     queryFn: async () => {
-      const response = await api.get("/singers?limit=10");
-      return response.data;
+      try {
+        const { data } = await api.get("/singers?limit=10");
+        return data;
+      } catch (err) {
+        return [];
+      }
     },
     staleTime: 1000 * 60,
   });
