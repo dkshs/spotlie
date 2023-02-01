@@ -89,7 +89,13 @@ export default function MusicsPage() {
                     ? pauseMusic()
                     : playMusic(music)
                 }
-                className="flex items-center px-4 py-2 rounded-md gap-3 hover:bg-black/30 focus:outline-none focus:bg-black/50 group duration-200"
+                className={`flex items-center px-4 py-2 rounded-md gap-3 ${
+                  musicState === "playing" && music.id === currentMusic?.id
+                    ? "bg-black/40"
+                    : musicState === "paused" &&
+                      music.id === currentMusic?.id &&
+                      "bg-black/20"
+                } hover:bg-black/30 focus:outline-none focus:bg-black/50 group duration-200`}
               >
                 <div className="relative rounded-lg min-w-[50px] min-h-[50px]">
                   <Image
@@ -101,7 +107,9 @@ export default function MusicsPage() {
                   />
                   <div
                     className={`absolute rounded-lg justify-center items-center inset-0 ${
-                      musicState === "playing" && music.id === currentMusic?.id
+                      (musicState === "playing" &&
+                        music.id === currentMusic?.id) ||
+                      (musicState === "paused" && music.id === currentMusic?.id)
                         ? "flex bg-black/50"
                         : "hidden group-hover:flex group-hover:bg-black/50"
                     }`}
@@ -141,14 +149,15 @@ export default function MusicsPage() {
                     {music.title}
                   </Link>
                   <div className="truncate pr-2.5">
-                    {music.singers?.map((singer) => (
+                    {music.singers?.map((singer, i) => (
                       <Link
                         key={singer.id}
                         href={`/singer/${singer.id}`}
                         className="focus:outline-none focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
                       >
                         {singer.name}
-                        {music.singers.length > 1 && ", "}
+                        {i === music.singers.length - 1 ||
+                          (music.singers.length > 1 && <span>, </span>)}
                       </Link>
                     ))}
                   </div>

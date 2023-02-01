@@ -26,7 +26,8 @@ export function MusicCard({ music }: MusicCardProps) {
         />
         <div
           className={`absolute justify-center items-center inset-0 ${
-            musicState === "playing" && music.id === currentMusic?.id
+            (musicState === "playing" && music.id === currentMusic?.id) ||
+            (musicState === "paused" && music.id === currentMusic?.id)
               ? "flex bg-black/50"
               : "hidden group-hover:flex group-hover:bg-black/50"
           }`}

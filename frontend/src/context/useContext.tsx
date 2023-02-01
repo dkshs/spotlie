@@ -5,7 +5,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "usehooks-ts";
 import { api } from "@/lib/axios";
 import { musicTimeFormatter } from "@/utils/formatter";
@@ -23,65 +22,140 @@ interface MusicContextProps {
   currentMusic: MusicProps | null;
   musicState: MusicStateProps;
   time: MusicTimeProps;
+  isRepeat: boolean;
   playMusic: (music: MusicProps) => void;
   pauseMusic: () => void;
+  repeatMusic: () => void;
+  skipMusic: () => void;
+  previousMusic: () => void;
 }
 
 const ctxInitialValues: MusicContextProps = {
   currentMusic: null,
   musicState: "paused",
-  time: { currentTime: "0:00", duration: "0:00", percentage: 0 },
+  time: { currentTime: "00:00", duration: "00:00", percentage: 0 },
+  isRepeat: false,
   playMusic: (music: MusicProps): void => {
     throw new Error("playMusic() not implemented.");
   },
   pauseMusic: (): void => {
     throw new Error("pauseMusic() not implemented.");
   },
+  repeatMusic: (): void => {
+    throw new Error("repeatMusic() not implemented.");
+  },
+  skipMusic: (): void => {
+    throw new Error("skipMusic() not implemented.");
+  },
+  previousMusic: (): void => {
+    throw new Error("previousMusic() not implemented.");
+  },
 };
 
 export const MusicContext = createContext<MusicContextProps>(ctxInitialValues);
 
 export function MusicContextProvider(props: PropsWithChildren) {
-  const [musicState, setMusicState] = useState<MusicStateProps>(
-    ctxInitialValues.musicState,
-  );
+  const [musics, setMusics] = useState<MusicProps[] | []>([]);
+  const [musicState, setMusicState] = useState<MusicStateProps>("paused");
+  const [isRepeat, setIsRepeat] = useState(false);
   const [time, setTime] = useState<MusicTimeProps>(ctxInitialValues.time);
   const [currentMusic, setCurrentMusic] = useState<MusicProps | null>(null);
-  const [localCurrentMusic, setLocalCurrentMusic] =
-    useLocalStorage<MusicProps | null>("currentMusic", null);
-  const [musicAudio, setMusicAudio] = useState<HTMLAudioElement | null>(null);
-
-  const saveOrDeleteMusic = useCallback(
-    (music: MusicProps | null) => {
-      if (music) {
-        setCurrentMusic(music);
-        setLocalCurrentMusic(music);
-      } else {
-        setCurrentMusic(null);
-        setLocalCurrentMusic(null);
-        setMusicAudio(null);
-      }
-    },
-    [setLocalCurrentMusic],
+  const [musicAudio, setMusicAudio] = useState<HTMLAudioElement | undefined>(
+    typeof Audio !== "undefined" ? new Audio("") : undefined,
   );
 
-  const { data: music } = useQuery<MusicProps>({
-    queryKey: ["music-verification"],
-    queryFn: async () => {
-      if (localCurrentMusic) {
-        const { data } = await api.get(`/music/${localCurrentMusic.id}`);
-        return data;
+  const [localCurrentMusic, setLocalCurrentMusic] =
+    useLocalStorage<MusicProps | null>("currentMusic", null);
+  const [localMusicRepeat, setLocalMusicRepeat] = useLocalStorage(
+    "repeatMusic",
+    false,
+  );
+
+  useEffect(() => {
+    const getMusics = async () => {
+      const { data } = await api.get("/musics");
+      setMusics(data);
+    };
+    getMusics();
+  }, []);
+
+  useEffect(() => {
+    if (localMusicRepeat) {
+      setIsRepeat(true);
+    } else {
+      setIsRepeat(false);
+    }
+  }, [localMusicRepeat]);
+
+  const verifyMusic = useCallback(
+    async (music: MusicProps | null) => {
+      if (music) {
+        try {
+          if (music.id !== currentMusic?.id) {
+            const { data } = await api.get(`/music/${music.id}`);
+            if (data) {
+              setCurrentMusic(data);
+            } else {
+              setCurrentMusic(null);
+            }
+          }
+        } catch (e) {
+          setCurrentMusic(null);
+          setLocalCurrentMusic(null);
+        }
       }
-      return null;
     },
-    staleTime: 1000 * 60,
-  });
+    [currentMusic, setLocalCurrentMusic],
+  );
 
   useEffect(() => {
-    saveOrDeleteMusic(music || null);
-  }, [music, saveOrDeleteMusic]);
+    verifyMusic(localCurrentMusic);
+  }, [localCurrentMusic, verifyMusic]);
 
-  useEffect(() => {
+  const playMusic = useCallback(
+    async (music: MusicProps) => {
+      setLocalCurrentMusic(music);
+      setCurrentMusic(music);
+
+      if (musicAudio?.src === music.audio) {
+        musicAudio.play();
+      } else {
+        musicAudio?.pause();
+        const audio = new Audio();
+        audio.preload = "metadata";
+        audio.src = music.audio;
+        setMusicAudio(audio);
+        audio.play();
+      }
+      setMusicState("playing");
+    },
+    [setLocalCurrentMusic, musicAudio],
+  );
+
+  const pauseMusic = useCallback(() => {
+    musicAudio?.pause();
+    setMusicState("paused");
+  }, [musicAudio]);
+
+  const skipMusic = useCallback(async () => {
+    for (let i = 0; i < musics.length; i++) {
+      const song = musics[i];
+      if (song.id === currentMusic?.id) {
+        playMusic(musics[musics.length - 1 === i ? 0 : i + 1]);
+      }
+    }
+  }, [currentMusic, musics, playMusic]);
+
+  const previousMusic = useCallback(async () => {
+    for (let i = 0; i < musics.length; i++) {
+      const song = musics[i];
+      if (song.id === currentMusic?.id) {
+        playMusic(musics[i === 0 ? musics.length - 1 : i - 1]);
+      }
+    }
+  }, [currentMusic, musics, playMusic]);
+
+  const addEvents = useCallback(() => {
     musicAudio?.addEventListener("timeupdate", () => {
       const musicDuration = musicAudio.duration;
       const musicCurrentTime = musicAudio.currentTime;
@@ -93,35 +167,43 @@ export function MusicContextProvider(props: PropsWithChildren) {
         percentage: musicProgress,
       });
     });
+    musicAudio?.addEventListener("play", () => setMusicState("playing"));
+    musicAudio?.addEventListener("pause", () => setMusicState("paused"));
   }, [musicAudio]);
 
-  const playMusic = useCallback(
-    (music: MusicProps) => {
-      saveOrDeleteMusic(music);
-      if (musicAudio) {
-        musicAudio.pause();
-      }
-      if (musicAudio && musicAudio.src === music.audio) {
-        musicAudio.play();
+  useEffect(() => {
+    addEvents();
+    const musicEnded = () => {
+      if (isRepeat) {
+        playMusic(currentMusic!);
       } else {
-        const audio = new Audio();
-        audio.src = music.audio;
-        setMusicAudio(audio);
-        audio.play();
+        skipMusic();
       }
-      setMusicState("playing");
-    },
-    [musicAudio, saveOrDeleteMusic],
-  );
+    };
+    musicAudio?.addEventListener("ended", musicEnded);
+    return () => {
+      musicAudio?.removeEventListener("ended", musicEnded);
+    };
+  }, [addEvents, currentMusic, isRepeat, musicAudio, playMusic, skipMusic]);
 
-  const pauseMusic = useCallback(() => {
-    musicAudio?.pause();
-    setMusicState("paused");
-  }, [musicAudio]);
+  const repeatMusic = useCallback(() => {
+    setIsRepeat(!localMusicRepeat);
+    setLocalMusicRepeat(!isRepeat);
+  }, [isRepeat, localMusicRepeat, setLocalMusicRepeat]);
 
   return (
     <MusicContext.Provider
-      value={{ currentMusic, playMusic, pauseMusic, musicState, time }}
+      value={{
+        currentMusic,
+        playMusic,
+        pauseMusic,
+        musicState,
+        time,
+        isRepeat,
+        repeatMusic,
+        skipMusic,
+        previousMusic,
+      }}
     >
       {props.children}
     </MusicContext.Provider>
