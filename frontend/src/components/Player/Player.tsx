@@ -60,7 +60,7 @@ export function Player() {
         <div className="p-4 flex items-center justify-between max-w-[1600px] min-w-[320px] m-auto">
           <div className="flex group sm:w-[30%] truncate">
             <Link
-              href={`/player/${currentMusic.id}`}
+              href="/player"
               className="relative rounded-lg group focus:outline outline-2 outline-purple-400"
             >
               <Image

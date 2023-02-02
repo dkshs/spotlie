@@ -75,7 +75,7 @@ export default function MusicPage() {
       ) : music && music.singers ? (
         <div className="flex flex-col justify-center text-center md:justify-start md:text-start md:flex-row md:min-h-[280px]">
           <div
-            className="absolute bg-cover inset-0 bg-center bg-no-repeat md:h-96 z-[-1] blur-3xl opacity-50"
+            className="absolute bg-cover inset-0 bg-center bg-no-repeat md:h-80 z-[-1] blur-3xl opacity-50"
             style={{ backgroundImage: `url(${music.cover})` }}
           ></div>
           <Meta title={music.title} path={`/music/${id}`} />
