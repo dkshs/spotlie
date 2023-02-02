@@ -22,8 +22,12 @@ export function Header() {
     <nav className="fixed inset-x-0 h-[72px] backdrop-blur-md bg-black/50 border-b border-zinc-300/20 z-[9999]">
       <ul className="flex gap-2 w-full h-full items-center m-auto max-w-[1600px] px-6">
         <li className="mr-3">
-          <Link href="/" className="outline-blue-300 duration-200 rounded-full">
-            <SpotifyLogo weight="fill" size={50} className="text-green-500" />
+          <Link href="/" className="focus:outline-none group">
+            <SpotifyLogo
+              weight="fill"
+              size={50}
+              className="text-green-500 group-focus:ring-2 ring-purple-400 rounded-full duration-200"
+            />
           </Link>
         </li>
         {navLinks.map((navLink, i) => (
@@ -34,7 +38,7 @@ export function Header() {
                 router.pathname === navLink.href
                   ? "text-purple-600"
                   : "text-inherit"
-              } hover:text-purple-400 focus:outline-none focus:ring-2 focus:text-purple-400 ring-blue-300 active:opacity-70 duration-200`}
+              } hover:text-purple-400 focus:outline-none focus:ring-2 focus:text-purple-400 ring-purple-400 active:opacity-70 duration-200`}
             >
               <navLink.icon size={24} weight="fill" />{" "}
               <span className="hidden sm:block font-bold">{navLink.label}</span>

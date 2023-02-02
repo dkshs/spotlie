@@ -10,6 +10,15 @@ module.exports = {
         xxs: "352px",
         xs: "460px",
       },
+      animation: {
+        player: "player 20s linear infinite",
+      },
+      keyframes: {
+        player: {
+          "0%, 100%": { backgroundPosition: "center" },
+          "50%": { backgroundPosition: "bottom" },
+        },
+      },
     },
   },
   plugins: [],

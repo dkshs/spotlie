@@ -32,6 +32,16 @@ export function Player() {
   return (
     currentMusic && (
       <div className="fixed bottom-0 inset-x-0 bg-black/80 backdrop-blur-2xl z-[9999] group/time">
+        <div
+          className={`absolute inset-0 bg-center ${
+            musicState === "playing" && "animate-player"
+          } bg-cover bg-no-repeat z-[-1] blur-3xl opacity-20 transition-all duration-1000`}
+          style={
+            musicState === "playing"
+              ? { backgroundImage: `url(${currentMusic.cover})` }
+              : { background: "transparent" }
+          }
+        ></div>
         <div className="h-0.5 bg-zinc-600">
           <div className="hidden absolute group-hover/time:flex justify-between inset-x-0 -top-6 max-w-[1600px] mx-auto px-4">
             <span className="text-xs opacity-75">{time.currentTime}</span>
@@ -51,7 +61,7 @@ export function Player() {
           <div className="flex group sm:w-[30%] truncate">
             <Link
               href={`/player/${currentMusic.id}`}
-              className="relative rounded-lg group"
+              className="relative rounded-lg group focus:outline outline-2 outline-purple-400"
             >
               <Image
                 src={currentMusic.cover}
@@ -61,7 +71,7 @@ export function Player() {
                 width={56}
               />
               <div className="hidden absolute justify-center items-center inset-0 group-hover:flex group-hover:bg-black/50 group-focus:flex group-focus:bg-black/50">
-                <div className="w-full h-full flex justify-center items-center focus:outline-none focus:ring-2 ring-blue-300 rounded-lg duration-300">
+                <div className="w-full h-full flex justify-center items-center rounded-lg duration-300">
                   <ArrowsOutSimple
                     size={32}
                     className="hover:text-blue-400 duration-200"

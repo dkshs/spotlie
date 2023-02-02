@@ -84,7 +84,7 @@ export default function MusicsPage() {
               <button
                 type="button"
                 key={music.id}
-                onClick={() =>
+                onDoubleClick={() =>
                   musicState === "playing" && currentMusic?.id === music.id
                     ? pauseMusic()
                     : playMusic(music)
