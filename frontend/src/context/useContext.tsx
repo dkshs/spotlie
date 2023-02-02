@@ -24,7 +24,7 @@ interface MusicContextProps {
   time: MusicTimeProps;
   isRepeat: boolean;
   isShuffle: boolean;
-  playMusic: (music: MusicProps) => void;
+  playMusic: (music: MusicProps, musics?: MusicProps[]) => void;
   pauseMusic: () => void;
   repeatMusic: () => void;
   shuffleMusics: () => void;
@@ -38,7 +38,7 @@ const ctxInitialValues: MusicContextProps = {
   time: { currentTime: "00:00", duration: "00:00", percentage: 0 },
   isRepeat: false,
   isShuffle: false,
-  playMusic: (music: MusicProps): void => {
+  playMusic: (music: MusicProps, musics?: MusicProps[]): void => {
     throw new Error("playMusic() not implemented.");
   },
   pauseMusic: (): void => {
@@ -82,17 +82,18 @@ export function MusicContextProvider(props: PropsWithChildren) {
     false,
   );
 
-  useEffect(() => {
-    const getMusics = async () => {
-      try {
-        const { data } = await api.get("/musics");
-        setMusics(data);
-      } catch (err) {
-        setMusics([]);
-      }
-    };
-    getMusics();
+  const getMusics = useCallback(async () => {
+    try {
+      const { data } = await api.get("/musics");
+      setMusics(data);
+    } catch (err) {
+      setMusics([]);
+    }
   }, []);
+
+  useEffect(() => {
+    getMusics();
+  }, [getMusics]);
 
   useEffect(() => {
     if (localMusicRepeat) {
@@ -133,7 +134,13 @@ export function MusicContextProvider(props: PropsWithChildren) {
   }, [localCurrentMusic, verifyMusic]);
 
   const playMusic = useCallback(
-    async (music: MusicProps) => {
+    async (music: MusicProps, musics?: MusicProps[]) => {
+      if (!music) return;
+      if (musics) {
+        setMusics(musics);
+      } else {
+        getMusics();
+      }
       setLocalCurrentMusic(music);
       setCurrentMusic(music);
 
@@ -149,7 +156,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
       }
       setMusicState("playing");
     },
-    [setLocalCurrentMusic, musicAudio],
+    [setLocalCurrentMusic, musicAudio, getMusics],
   );
 
   const pauseMusic = useCallback(() => {
@@ -162,12 +169,12 @@ export function MusicContextProvider(props: PropsWithChildren) {
       String(Math.random() * musics.length - 1).split(".")[0],
     );
     if (isShuffle) {
-      playMusic(musics[randomIndex]);
+      playMusic(musics[randomIndex], musics);
     } else {
       for (let i = 0; i < musics.length; i++) {
         const song = musics[i];
         if (song.id === currentMusic?.id) {
-          playMusic(musics[musics.length - 1 === i ? 0 : i + 1]);
+          playMusic(musics[musics.length - 1 === i ? 0 : i + 1], musics);
         }
       }
     }
@@ -177,7 +184,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
     for (let i = 0; i < musics.length; i++) {
       const song = musics[i];
       if (song.id === currentMusic?.id) {
-        playMusic(musics[i === 0 ? musics.length - 1 : i - 1]);
+        playMusic(musics[i === 0 ? musics.length - 1 : i - 1], musics);
       }
     }
   }, [currentMusic, musics, playMusic]);

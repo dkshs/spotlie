@@ -87,7 +87,7 @@ export function Player() {
                 {currentMusic.title}
               </Link>
               <Link
-                href={`/music/${currentMusic.singers[0].id}`}
+                href={`/singer/${currentMusic.singers[0].id}`}
                 className="truncate hover:text-blue-400 focus:outline focus:text-blue-400 outline-1 outline-blue-300 duration-300"
               >
                 {currentMusic.singers[0].name}
