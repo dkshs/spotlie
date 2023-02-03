@@ -24,6 +24,7 @@ interface MusicContextProps {
   time: MusicTimeProps;
   isRepeat: boolean;
   isShuffle: boolean;
+  musics: MusicProps[];
   playMusic: (music: MusicProps, musics?: MusicProps[]) => void;
   pauseMusic: () => void;
   repeatMusic: () => void;
@@ -38,6 +39,7 @@ const ctxInitialValues: MusicContextProps = {
   time: { currentTime: "00:00", duration: "00:00", percentage: 0 },
   isRepeat: false,
   isShuffle: false,
+  musics: [],
   playMusic: (music: MusicProps, musics?: MusicProps[]): void => {
     throw new Error("playMusic() not implemented.");
   },
@@ -267,6 +269,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
         previousMusic,
         isShuffle,
         shuffleMusics,
+        musics,
       }}
     >
       {props.children}

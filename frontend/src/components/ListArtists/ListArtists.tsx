@@ -17,6 +17,7 @@ export function ListArtists({ artists, isFetching }: ListArtistsProps) {
         <h1 className="font-bold text-xl">Artistas</h1>
         <Link
           href="/artists"
+          title="Ver mais artistas"
           className="bg-purple-800 py-1.5 px-4 rounded-3xl hover:scale-105 hover:bg-purple-600 focus:outline-none focus:ring-2 ring-blue-300 active:bg-purple-600/20 duration-200"
         >
           <span className="uppercase text-sm font-bold">Ver mais</span>

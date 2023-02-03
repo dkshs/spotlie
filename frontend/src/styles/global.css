@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply min-h-screen bg-violet-900 bg-gradient-to-b from-black/60 to-zinc-900 text-gray-100 font-merriweather;
+  @apply min-h-screen bg-violet-900 bg-gradient-to-b from-black/60 to-black text-gray-100 font-merriweather;
 }
 
 * {

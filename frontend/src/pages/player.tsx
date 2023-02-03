@@ -30,6 +30,7 @@ export default function PlayerPage() {
     currentMusic,
     repeatMusic,
     time,
+    musics,
   } = useMusic();
   const router = useRouter();
 
@@ -120,7 +121,7 @@ export default function PlayerPage() {
                 onClick={() =>
                   musicState === "playing"
                     ? pauseMusic()
-                    : playMusic(currentMusic)
+                    : playMusic(currentMusic, musics)
                 }
                 className="p-2.5 bg-zinc-800 rounded-full hover:scale-110 hover:bg-zinc-900 hover:text-blue-400 duration-300 active:opacity-70 active:scale-100 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300"
               >

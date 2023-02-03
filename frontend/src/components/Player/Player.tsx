@@ -27,21 +27,24 @@ export function Player() {
     previousMusic,
     isShuffle,
     shuffleMusics,
+    musics,
   } = useMusic();
 
   return (
     currentMusic && (
       <div className="fixed bottom-0 inset-x-0 bg-black/80 backdrop-blur-2xl z-[9999] group/time">
-        <div
-          className={`absolute inset-0 bg-center ${
-            musicState === "playing" && "animate-player"
-          } bg-cover bg-no-repeat z-[-1] blur-3xl opacity-20 transition-all duration-1000`}
-          style={
-            musicState === "playing"
-              ? { backgroundImage: `url(${currentMusic.cover})` }
-              : { background: "transparent" }
-          }
-        ></div>
+        <div className="absolute inset-0 z-[-1] overflow-hidden">
+          <div
+            className={`absolute inset-0 bg-center ${
+              musicState === "playing" && "animate-player"
+            } bg-cover bg-no-repeat z-[-1] blur-3xl opacity-20 transition-all duration-1000`}
+            style={
+              musicState === "playing"
+                ? { backgroundImage: `url(${currentMusic.cover})` }
+                : { background: "transparent" }
+            }
+          />
+        </div>
         <div className="h-0.5 bg-zinc-600">
           <div className="hidden absolute group-hover/time:flex justify-between inset-x-0 -top-6 max-w-[1600px] mx-auto px-4">
             <span className="text-xs opacity-75">{time.currentTime}</span>
@@ -61,6 +64,7 @@ export function Player() {
           <div className="flex group sm:w-[30%] truncate">
             <Link
               href="/player"
+              title="Abrir player"
               className="relative rounded-lg group focus:outline outline-2 outline-purple-400"
             >
               <Image
@@ -82,12 +86,14 @@ export function Player() {
             <div className="flex flex-col gap-0.5 px-3 truncate">
               <Link
                 href={`/music/${currentMusic.id}`}
+                title={currentMusic.title}
                 className="truncate hover:text-blue-400 focus:outline focus:text-blue-400 outline-1 outline-blue-300 duration-300"
               >
                 {currentMusic.title}
               </Link>
               <Link
                 href={`/artist/${currentMusic.artist.id}`}
+                title={currentMusic.artist.name}
                 className="truncate hover:text-blue-400 focus:outline focus:text-blue-400 outline-1 outline-blue-300 duration-300"
               >
                 {currentMusic.artist.name}
@@ -98,6 +104,7 @@ export function Player() {
             <button
               type="button"
               onClick={() => shuffleMusics()}
+              title={`${isShuffle ? "Desativar" : "Ativar"} a ordem aleatória`}
               className={`hidden xs:inline-flex p-2.5 ${
                 isShuffle && "text-blue-600"
               } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
@@ -106,6 +113,7 @@ export function Player() {
             </button>
             <button
               type="button"
+              title="Voltar"
               onClick={() => previousMusic()}
               className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
             >
@@ -113,10 +121,11 @@ export function Player() {
             </button>
             <button
               type="button"
+              title={`${musicState === "playing" ? "Pausar" : "Play"}`}
               onClick={() =>
                 musicState === "playing"
                   ? pauseMusic()
-                  : playMusic(currentMusic)
+                  : playMusic(currentMusic, musics)
               }
               className="p-2.5 bg-zinc-800 rounded-full hover:scale-110 hover:bg-zinc-900 hover:text-blue-400 duration-300 active:opacity-70 active:scale-100 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300"
             >
@@ -128,6 +137,7 @@ export function Player() {
             </button>
             <button
               type="button"
+              title="Avançar"
               onClick={() => skipMusic()}
               className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
             >
@@ -135,6 +145,7 @@ export function Player() {
             </button>
             <button
               type="button"
+              title={`${isRepeat ? "Não repetir" : "Repetir"}`}
               onClick={() => repeatMusic()}
               className={`hidden xs:inline-flex p-2.5 ${
                 isRepeat && "text-blue-600"
@@ -150,6 +161,7 @@ export function Player() {
           <div className="hidden sm:flex justify-end group w-[30%]">
             <button
               type="button"
+              title="Mudo"
               className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
             >
               <SpeakerHigh size={24} />

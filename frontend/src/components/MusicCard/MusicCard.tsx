@@ -15,11 +15,24 @@ export function MusicCard({ music }: MusicCardProps) {
 
   return (
     <div className="py-1 max-w-[178px] snap-center">
-      <div className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] group">
+      <button
+        type="button"
+        title={`${
+          musicState === "playing" && currentMusic?.id === music.id
+            ? "Pausar"
+            : "Reproduzir"
+        } ${music.title}`}
+        onClick={() =>
+          musicState === "playing" && music.id === currentMusic?.id
+            ? pauseMusic()
+            : playMusic(music)
+        }
+        className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] group focus:outline-none focus:ring ring-purple-600 duration-200"
+      >
         <Image
           className="aspect-square object-cover shadow-xl shadow-black/60 bg-black/20"
           src={music.cover}
-          alt="Capa da música"
+          alt={music.title}
           width={178}
           height={178}
           priority
@@ -29,18 +42,10 @@ export function MusicCard({ music }: MusicCardProps) {
             (musicState === "playing" && music.id === currentMusic?.id) ||
             (musicState === "paused" && music.id === currentMusic?.id)
               ? "flex bg-black/50"
-              : "hidden group-hover:flex group-hover:bg-black/50"
+              : "hidden group-hover:flex group-hover:bg-black/50 group-focus-visible:flex group-focus-visible:bg-black/50"
           }`}
         >
-          <button
-            type="button"
-            onClick={() =>
-              musicState === "playing" && music.id === currentMusic?.id
-                ? pauseMusic()
-                : playMusic(music)
-            }
-            className="p-3 bg-purple-600/40 backdrop-blur-sm rounded-full hover:scale-110 focus:outline-none focus:ring-2 ring-blue-300 duration-200"
-          >
+          <div className="p-3 bg-purple-600/40 backdrop-blur-sm rounded-full hover:scale-110 duration-200">
             {musicState === "playing" && currentMusic?.id === music.id ? (
               <>
                 <Image
@@ -59,21 +64,23 @@ export function MusicCard({ music }: MusicCardProps) {
             ) : (
               <Play size={32} weight="fill" />
             )}
-          </button>
+          </div>
         </div>
-      </div>
+      </button>
       <div className="flex flex-col mt-2 gap-0.5 text-base font-normal truncate">
         <Link
           href={`/music/${music.id}`}
-          className="truncate pr-2.5 focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
+          title={music.title}
+          className="truncate pr-2.5 focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200 focus:outline-none"
         >
           {music.title}
         </Link>
         <div className="truncate pr-2.5">
           <Link
             key={music.artist.id}
+            title={music.artist.name}
             href={`/artist/${music.artist.id}`}
-            className="focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
+            className="focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200 focus:outline-none"
           >
             {music.artist.name}
           </Link>

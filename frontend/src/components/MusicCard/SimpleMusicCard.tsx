@@ -21,6 +21,11 @@ export function SimpleMusicCard({
   return (
     <button
       type="button"
+      title={`${
+        musicState === "playing" && currentMusic?.id === music.id
+          ? "Pausar"
+          : "Reproduzir"
+      } ${music.title}`}
       onDoubleClick={() =>
         musicState === "playing" && currentMusic?.id === music.id
           ? pauseMusic()
@@ -32,7 +37,7 @@ export function SimpleMusicCard({
           : musicState === "paused" &&
             music.id === currentMusic?.id &&
             "bg-black/20"
-      } hover:bg-black/30 focus:outline-none focus:bg-black/50 group duration-200`}
+      } hover:bg-black/30 focus:outline-none focus:bg-black/50 group duration-200 focus:ring-2 ring-purple-600`}
     >
       <div className="relative rounded-lg min-w-[50px] min-h-[50px]">
         <Image
@@ -47,7 +52,7 @@ export function SimpleMusicCard({
             (musicState === "playing" && music.id === currentMusic?.id) ||
             (musicState === "paused" && music.id === currentMusic?.id)
               ? "flex bg-black/50"
-              : "hidden group-hover:flex group-hover:bg-black/50"
+              : "hidden group-hover:flex group-hover:bg-black/50 group-focus:flex group-focus:bg-black/50"
           }`}
         >
           <div className="rounded-full duration-200">
@@ -79,6 +84,7 @@ export function SimpleMusicCard({
       <div className="flex flex-col gap-0.5 text-base font-normal truncate text-start">
         <Link
           href={`/music/${music.id}`}
+          title={music.title}
           className="focus:outline-none truncate pr-2.5 focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
         >
           {music.title}
@@ -87,6 +93,7 @@ export function SimpleMusicCard({
           <div className="truncate pr-2.5">
             <Link
               key={music.artist.id}
+              title={music.artist.name}
               href={`/artist/${music.artist.id}`}
               className="focus:outline-none focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
             >

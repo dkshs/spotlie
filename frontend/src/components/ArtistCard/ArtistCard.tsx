@@ -13,7 +13,8 @@ export function ArtistCard({ artist }: ArtistCardProps) {
     <div key={artist.id} className="py-1 max-w-[178px] snap-center">
       <Link
         href={`/artist/${artist.id}`}
-        className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] bg-black/40 hover:opacity-70 duration-300"
+        title={artist.name}
+        className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] bg-black/40 hover:opacity-70 focus:outline-none focus:ring ring-purple-600 duration-300"
       >
         {artist.image ? (
           <Image
@@ -31,6 +32,7 @@ export function ArtistCard({ artist }: ArtistCardProps) {
       <div className="flex flex-col mt-2 gap-0.5 text-base font-normal truncate">
         <Link
           href={`/artist/${artist.id}`}
+          title={artist.name}
           className="truncate pr-2.5 focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
         >
           {artist.name}
