@@ -1,10 +1,10 @@
 from uuid import UUID
 from ninja import Router, Schema, UploadedFile
-from ..models import Music, Singer
+from ..models import Music, Artist
 from django.shortcuts import get_object_or_404
 from ..error import exception_message_handler
 from typing import List, Dict
-from ..formatter import format_singer_query, format_music_query
+from ..formatter import artist_query_formatter, music_query_formatter
 
 router = Router()
 
@@ -14,7 +14,8 @@ def get_musics(
     request,
     id: str = None,
     title: str = None,
-    singers: str = None,
+    artist: str = None,
+    participants: str = None,
     orderBy: str = None,
     limit: int = None,
 ):
@@ -26,11 +27,11 @@ def get_musics(
             column = orderBy[0]
             order = orderBy[1] if len(orderBy) == 2 else "desc"
 
-            if column not in ["title", "singers"]:
-                raise ValueError("Fields that can be sorted are 'title' and 'singers'")
+            if column not in ["title", "artist"]:
+                raise ValueError("Fields that can be sorted are 'title' and 'artist'")
 
-            if column == "singers":
-                column = "singers__name"
+            if column == "artist":
+                column = "artist"
 
             musics = (
                 musics.order_by(column)
@@ -52,17 +53,22 @@ def get_musics(
             if None in musics:
                 return []
 
-        if singers is not None:
-            singers = list(singers.rsplit(","))
-            singers_musics = [
-                musics.filter(singers__name__icontains=i) for i in singers
+        if artist is not None:
+            artists = list(artist.rsplit(","))
+            artist_musics = [musics.filter(artist__name__icontains=i) for i in artists]
+            musics = artist_musics[0]
+
+        if participants is not None:
+            participants = list(participants.rsplit(","))
+            participants_musics = [
+                musics.filter(participants__name__icontains=i) for i in participants
             ]
-            musics = singers_musics[0]
+            musics = participants_musics[0]
 
         if limit is not None:
             musics = musics[:limit]
 
-        return [format_music_query(i) for i in musics]
+        return [music_query_formatter(i) for i in musics]
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -74,12 +80,14 @@ def get_music(request, music_id: UUID):
         return {}
 
     music = music.first()
-    return format_music_query(music)
+    return music_query_formatter(music)
 
 
 class MusicCreateRequest(Schema):
     title: str
-    singers: List[Dict] = []
+    artist: str
+    letters: str = ""
+    participants: List[Dict] = []
 
 
 @router.post("/music", tags=["musics"])
@@ -93,37 +101,57 @@ def create_music(
             raise ValueError("The audio must be an audio file.")
 
         m = music.dict()
-        if m["singers"] == [] and len(m["singers"]) == 0:
-            raise ValueError("Singers cannot be null!")
-        for i in m["singers"]:
-            if "name" not in i:
-                raise ValueError("Singers must have a name!")
+        if m["participants"] != [] and len(m["participants"]) != 0:
+            for i in m["participants"]:
+                if "name" not in i:
+                    raise ValueError("Participants must have a name!")
+            participants = [
+                Artist.objects.filter(name=i["name"]) for i in m["participants"]
+            ]
+            if not participants[0].exists():
+                raise ValueError("The participants do not exist or are invalid!")
 
-        singers = [Singer.objects.filter(name=i["name"]) for i in m["singers"]]
-        if not singers[0]:
-            raise ValueError("The singers do not exist or are invalid!")
+            participants = [artist_query_formatter(i[0]) for i in participants]
 
-        singers = [format_singer_query(i[0]) for i in singers]
-        musics = Music.objects.filter(title=m["title"]).filter(
-            singers__in=[i["id"] for i in singers]
-        )
+        if m["title"].strip() == "":
+            raise ValueError("Title cannot be empty!")
+
+        if "artist" not in m and m["artist"].strip() == "":
+            raise ValueError("Artist cannot be null!")
+
+        artist = Artist.objects.filter(name=m["artist"])
+        if not artist.exists():
+            raise ValueError("The artists do not exist or are invalid!")
+        artist = artist_query_formatter(artist[0])
+
+        musics = Music.objects.filter(title=m["title"]).filter(artist__id=artist["id"])
         if musics.exists():
             raise ValueError("There is already this song!")
 
-        music = Music(title=m["title"], cover=cover, audio=audio)
+        letters = m["letters"].strip() if m["letters"].strip() != "" else ""
+
+        music = Music(
+            title=m["title"].strip(),
+            artist_id=artist["id"],
+            cover=cover,
+            audio=audio,
+            letters=letters,
+        )
         music.save()
 
-        for i in singers:
-            music.singers.add(i["id"])
-        music.save()
+        if m["participants"] != [] and len(m["participants"]) != 0:
+            for i in participants:
+                music.participants.add(i["id"])
+            music.save()
 
-        return format_music_query(music)
+        return music_query_formatter(music)
     except Exception as e:
         return exception_message_handler(e.args)
 
 
 class MusicUpdateRequest(Schema):
     title: str
+    letters: str = ""
 
 
 @router.patch("/music/{str:music_id}", tags=["musics"])
@@ -147,6 +175,9 @@ def update_music(
         ):
             music.title = m["title"].strip()
             is_changed = True
+        if m is not None and m["letters"].strip() != "":
+            is_changed = True
+            music.letters = m["letters"].strip()
         if cover is not None and cover.content_type.startswith("image/"):
             music.cover = cover
             is_changed = True
@@ -159,50 +190,45 @@ def update_music(
         else:
             raise ValueError("Fill in one of the fields to update.")
 
-        return format_music_query(music)
+        return music_query_formatter(music)
     except Exception as e:
         return exception_message_handler(e.args)
 
 
-class MusicUpdateSingersRequest(Schema):
-    singers: List[Dict]
+class MusicUpdateParticipantsRequest(Schema):
+    participants: List[Dict]
 
 
-@router.patch("/music/{str:music_id}/singers", tags=["musics"])
-def update_music_singers(request, music_id: UUID, singers: MusicUpdateSingersRequest):
+@router.patch("/music/{str:music_id}/participants", tags=["musics"])
+def update_music_participants(
+    request, music_id: UUID, participants: MusicUpdateParticipantsRequest
+):
     try:
         music = get_object_or_404(Music, pk=music_id)
+        music_artist = music.artist
 
-        s = singers.dict()
-        for i in s["singers"]:
+        p = participants.dict()
+        for i in p["participants"]:
             if "name" not in i:
-                raise ValueError("Singers must have a name!")
+                raise ValueError("Participants must have a name!")
 
-        singers = [get_object_or_404(Singer, name=i["name"]) for i in s["singers"]]
-        if not singers[0]:
-            raise ValueError("The singers do not exist or are invalid!")
+        participants = [
+            get_object_or_404(Artist, name=i["name"]) for i in p["participants"]
+        ]
+        if not participants[0]:
+            raise ValueError("The participants do not exist or are invalid!")
 
-        singers = [format_singer_query(i) for i in singers]
-        musics = (
-            Music.objects.filter(title=music.title)
-            .filter(singers__in=[i["id"] for i in singers])
-            .exclude(title=music.title)
-        )
-        if musics.exists():
-            raise ValueError(
-                "There is already a song with that title and those singers!"
-            )
+        participants = [artist_query_formatter(i) for i in participants]
 
-        for singer in singers:
-            s = music.singers.filter(name=singer["name"])
-            singers_len = len(music.singers.all())
-            if s.exists():
-                if singers_len > 1:
-                    music.singers.remove(s.first())
-            else:
-                music.singers.add(singer["id"])
+        for participant in participants:
+            if music_artist.name != participant["name"]:
+                p = music.participants.filter(name=participant["name"])
+                if p.exists():
+                    music.participants.remove(p.first())
+                else:
+                    music.participants.add(participant["id"])
 
-        return format_music_query(music)
+        return music_query_formatter(music)
     except Exception as e:
         return exception_message_handler(e.args)
 
@@ -211,9 +237,8 @@ def update_music_singers(request, music_id: UUID, singers: MusicUpdateSingersReq
 def delete_music(request, music_id: UUID):
     try:
         music = Music.objects.get(pk=music_id)
-        singers = [format_singer_query(i) for i in music.singers.all()]
         music.delete()
 
-        return {"title": music.title, "singers": singers}
+        return {"title": music.title}
     except Exception as e:
         return exception_message_handler(e.args)

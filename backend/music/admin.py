@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Music, Singer
+from .models import Music, Artist
 
-admin.site.register(Singer)
+admin.site.register(Artist)
 admin.site.register(Music)

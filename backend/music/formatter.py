@@ -4,7 +4,7 @@ from decouple import config
 URL_COMPLETED = config("BASE_URL", default="http://127.0.0.1:8000", cast=str)
 
 
-def format_singer_query(query):
+def artist_query_formatter(query):
     return {
         "id": query.id,
         "name": query.name,
@@ -12,11 +12,15 @@ def format_singer_query(query):
     }
 
 
-def format_music_query(query):
+def music_query_formatter(query):
     return {
         "id": query.id,
         "title": query.title,
-        "singers": [format_singer_query(singer) for singer in query.singers.all()],
+        "artist": artist_query_formatter(query.artist),
+        "participants": [
+            artist_query_formatter(singer) for singer in query.participants.all()
+        ],
+        "letters": query.letters,
         "cover": f"{URL_COMPLETED}{query.cover.url}",
         "audio": f"{URL_COMPLETED}{query.audio.url}",
     }

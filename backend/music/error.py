@@ -34,30 +34,36 @@ def exception_message_handler(exception_arg, message: str = None, status: int = 
     ]:
         message = "The song with this query does not exist!"
         status = 404
-    if exception_arg[0] == "Fields that can be sorted are 'title' and 'singers'":
+    if exception_arg[0] == "Fields that can be sorted are 'title' and 'artist'":
         message = "Invalid query."
         status = 400
     if exception_arg[0] == "O valor “%(value)s” não é um UUID válido":
         message = "The id query must only have ids of type UUID."
         status = 400
-    if exception_arg[0] == "Singers cannot be null!":
-        message = "Singers cannot be null!"
+    if exception_arg[0] == "Artist cannot be null!":
+        message = "Artist cannot be null!"
         status = 400
-    if exception_arg[0] == "Singers must have a name!":
-        message = "Singers must have a name!"
+    if exception_arg[0] == "Participants must have a name!":
+        message = "Participants must have a name!"
         status = 400
     if exception_arg[0] == "There is already this song!":
         message = "There is already this song!"
         status = 400
     if exception_arg[0] in [
-        "The singers do not exist or are invalid!",
-        "No Singer matches the given query.",
-        "Singer matching query does not exist.",
+        "The artists do not exist or are invalid!",
+        "No Artist matches the given query.",
+        "Artist matching query does not exist.",
     ]:
-        message = "The singers do not exist or are invalid!"
+        message = "The artists do not exist or are invalid!"
+        status = 400
+    if exception_arg[0] == "The participants do not exist or are invalid!":
+        message = "The participants do not exist or are invalid!"
         status = 400
     if exception_arg[0] == "Cover must be an image.":
         message = "Cover must be an image."
+        status = 400
+    if exception_arg[0] == "Image must be an image.":
+        message = "Image must be an image."
         status = 400
     if exception_arg[0] == "The audio must be an audio file.":
         message = "The audio must be an audio file."
@@ -65,17 +71,26 @@ def exception_message_handler(exception_arg, message: str = None, status: int = 
     if exception_arg[0] == "Fill in one of the fields to update.":
         message = "Fill in one of the fields to update."
         status = 400
-    if exception_arg[0] == "There is already a song with that title and those singers!":
-        message = "There is already a song with that title and those singers!"
+    if exception_arg[0] == "There is already a song with that title and those artist!":
+        message = "There is already a song with that title and those artist!"
+        status = 400
+    if (
+        exception_arg[0]
+        == "There is already a song with that title and those participants!"
+    ):
+        message = "There is already a song with that title and those participants!"
         status = 400
     if exception_arg[0] == "The field that can be filtered is 'name'.":
         message = "The field that can be filtered is 'name'."
         status = 400
-    if exception_arg[0] == "UNIQUE constraint failed: music_singer.name":
-        message = "Existing singer with that name."
+    if exception_arg[0] == "Title cannot be empty!":
+        message = "Title cannot be empty!"
         status = 400
-    if exception_arg[0] == "Singer matching query does not exist.":
-        message = "The singers do not exist."
+    if exception_arg[0] == "UNIQUE constraint failed: music_artist.name":
+        message = "Existing artist with that name."
+        status = 400
+    if exception_arg[0] == "Artist matching query does not exist.":
+        message = "The artists do not exist."
         status = 404
 
     return exception_handler(
