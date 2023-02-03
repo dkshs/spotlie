@@ -88,8 +88,8 @@ export default function PlayerPage() {
             </div>
           </div>
         </div>
-        <div className="fixed bottom-0 inset-x-0 bg-black/50 backdrop-blur-2xl z-10 min-h-[76px]">
-          <div className="relative pt-4 pb-2 gap-6 sm:p-4 flex-col sm:flex-row flex items-center justify-between flex-wrap">
+        <div className="fixed bottom-0 inset-x-0 bg-black/50 backdrop-blur-2xl z-10">
+          <div className="min-h-[90px] relative h-full py-6 md:pt-4 gap-6 sm:p-4 flex-col sm:flex-row flex items-center justify-between flex-wrap">
             <div className="absolute top-0 h-0.5 bg-transparent inset-x-0 px-5 xs:px-9 lg:px-12">
               <div className="absolute flex justify-between inset-x-0 -top-6 px-7 xs:px-12 lg:px-14">
                 <span className="text-xs opacity-75">{time.currentTime}</span>
@@ -110,14 +110,14 @@ export default function PlayerPage() {
                   isShuffle && "text-blue-600"
                 } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
               >
-                <Shuffle size={24} weight="fill" />
+                <Shuffle size={26} weight="fill" />
               </button>
               <button
                 type="button"
                 onClick={() => previousMusic()}
                 className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
               >
-                <SkipBack size={24} weight="fill" />
+                <SkipBack size={26} weight="fill" />
               </button>
               <button
                 type="button"
@@ -129,9 +129,9 @@ export default function PlayerPage() {
                 className="p-2.5 bg-zinc-800 rounded-full hover:scale-110 hover:bg-zinc-900 hover:text-blue-400 duration-300 active:opacity-70 active:scale-100 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300"
               >
                 {musicState === "playing" ? (
-                  <Pause size={24} weight="fill" />
+                  <Pause size={26} weight="fill" />
                 ) : (
-                  <Play size={24} weight="fill" />
+                  <Play size={26} weight="fill" />
                 )}
               </button>
               <button
@@ -139,7 +139,7 @@ export default function PlayerPage() {
                 onClick={() => skipMusic()}
                 className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
               >
-                <SkipForward size={24} weight="fill" />
+                <SkipForward size={26} weight="fill" />
               </button>
               <button
                 type="button"
@@ -149,9 +149,9 @@ export default function PlayerPage() {
                 } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
               >
                 {isRepeat ? (
-                  <RepeatOnce size={24} weight="fill" />
+                  <RepeatOnce size={26} weight="fill" />
                 ) : (
-                  <Repeat size={24} weight="fill" />
+                  <Repeat size={26} weight="fill" />
                 )}
               </button>
             </div>
@@ -163,9 +163,9 @@ export default function PlayerPage() {
                 className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
               >
                 {isMuted ? (
-                  <SpeakerSlash size={24} />
+                  <SpeakerSlash size={26} />
                 ) : (
-                  <SpeakerHigh size={24} />
+                  <SpeakerHigh size={26} />
                 )}
               </button>
             </div>
