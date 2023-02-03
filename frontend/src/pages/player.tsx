@@ -17,6 +17,7 @@ import {
   SpeakerHigh,
   SpeakerSlash,
 } from "phosphor-react";
+import { Meta } from "@/components/Meta";
 
 export default function PlayerPage() {
   const {
@@ -34,12 +35,14 @@ export default function PlayerPage() {
     musics,
     handleMusicVolume,
     isMuted,
+    handleMusicTime,
   } = useMusic();
   const router = useRouter();
 
   return (
     currentMusic && (
       <div className="px-5 xs:px-9 lg:px-14 h-screen">
+        <Meta path="/player" title="Player" />
         <div
           className="absolute inset-0 bg-center bg-cover bg-no-repeat z-[-1] blur-xl opacity-20 transition-all duration-1000"
           style={{ backgroundImage: `url(${currentMusic.cover})` }}
@@ -88,7 +91,7 @@ export default function PlayerPage() {
             </div>
           </div>
         </div>
-        <div className="fixed bottom-0 inset-x-0 bg-black/50 backdrop-blur-2xl z-10">
+        <div className="fixed bottom-0 inset-x-0 bg-black/50 backdrop-blur-2xl z-10 group">
           <div className="min-h-[90px] relative h-full py-6 md:pt-4 gap-6 sm:p-4 flex-col sm:flex-row flex items-center justify-between flex-wrap">
             <div className="absolute top-0 h-0.5 bg-transparent inset-x-0 px-5 xs:px-9 lg:px-12">
               <div className="absolute flex justify-between inset-x-0 -top-6 px-7 xs:px-12 lg:px-14">
@@ -96,10 +99,16 @@ export default function PlayerPage() {
                 <span className="text-xs opacity-75">{time.duration}</span>
               </div>
               <Progress.Root value={time.percentage} className="bg-white/20">
+                <button
+                  className="inset-x-0 h-4 absolute -top-2 mx-5 xs:mx-9 lg:mx-12 outline-none"
+                  onClick={handleMusicTime}
+                />
                 <Progress.Indicator
-                  className="h-0.5 bg-white duration-300"
+                  className="relative h-0.5 bg-white duration-300 flex items-center"
                   style={{ width: `${time.percentage}%` }}
-                ></Progress.Indicator>
+                >
+                  <div className="hidden group-hover:inline-block absolute p-1.5 bg-white rounded-full outline-none right-0" />
+                </Progress.Indicator>
               </Progress.Root>
             </div>
             <div className="flex items-center justify-center gap-3 flex-wrap w-full">

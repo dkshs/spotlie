@@ -1,5 +1,6 @@
 import {
   createContext,
+  MouseEvent,
   PropsWithChildren,
   useCallback,
   useEffect,
@@ -15,6 +16,7 @@ type MusicStateProps = "playing" | "paused";
 interface MusicTimeProps {
   currentTime: string;
   duration: string;
+  durationNumber: number;
   percentage: number;
 }
 
@@ -33,12 +35,18 @@ interface MusicContextProps {
   skipMusic: () => void;
   previousMusic: () => void;
   handleMusicVolume: () => void;
+  handleMusicTime: (event: MouseEvent<HTMLElement>) => void;
 }
 
 const ctxInitialValues: MusicContextProps = {
   currentMusic: null,
   musicState: "paused",
-  time: { currentTime: "00:00", duration: "00:00", percentage: 0 },
+  time: {
+    currentTime: "00:00",
+    duration: "00:00",
+    percentage: 0,
+    durationNumber: 0,
+  },
   isRepeat: false,
   isShuffle: false,
   isMuted: false,
@@ -63,6 +71,9 @@ const ctxInitialValues: MusicContextProps = {
   },
   handleMusicVolume: (): void => {
     throw new Error("handleMusicVolume() not implemented.");
+  },
+  handleMusicTime: (): void => {
+    throw new Error("handleMusicTime() not implemented.");
   },
 };
 
@@ -174,10 +185,8 @@ export function MusicContextProvider(props: PropsWithChildren) {
   }, [musicAudio]);
 
   const skipMusic = useCallback(async () => {
-    const randomIndex = Number(
-      String(Math.random() * musics.length - 1).split(".")[0],
-    );
     if (isShuffle) {
+      const randomIndex = Math.floor(Math.random() * musics.length - 1);
       playMusic(musics[randomIndex], musics);
     } else {
       for (let i = 0; i < musics.length; i++) {
@@ -203,7 +212,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
     musicAudio?.addEventListener("pause", () => setMusicState("paused"));
   }, [musicAudio]);
 
-  const musicUpdateTime = useCallback(() => {
+  const updateMusicTime = useCallback(() => {
     if (musicAudio) {
       const musicDuration = musicAudio.duration;
       const musicCurrentTime = musicAudio.currentTime;
@@ -213,6 +222,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
         currentTime: musicTimeFormatter(musicAudio).musicCurrentTime,
         duration: musicTimeFormatter(musicAudio).musicDurationTime,
         percentage: Number(musicProgress.toFixed(0)),
+        durationNumber: musicDuration,
       });
     }
   }, [musicAudio]);
@@ -226,18 +236,18 @@ export function MusicContextProvider(props: PropsWithChildren) {
         skipMusic();
       }
     };
-    musicAudio?.addEventListener("timeupdate", musicUpdateTime);
+    musicAudio?.addEventListener("timeupdate", updateMusicTime);
     musicAudio?.addEventListener("ended", musicEnded);
     return () => {
       musicAudio?.removeEventListener("ended", musicEnded);
-      musicAudio?.removeEventListener("timeupdate", musicUpdateTime);
+      musicAudio?.removeEventListener("timeupdate", updateMusicTime);
     };
   }, [
     addEvents,
     currentMusic,
     isRepeat,
     musicAudio,
-    musicUpdateTime,
+    updateMusicTime,
     playMusic,
     skipMusic,
   ]);
@@ -272,6 +282,16 @@ export function MusicContextProvider(props: PropsWithChildren) {
     }
   }, [musicAudio]);
 
+  const handleMusicTime = useCallback(
+    (event: MouseEvent<HTMLElement>) => {
+      const { width, left } = event.currentTarget.getBoundingClientRect();
+      const x = event.clientX - left;
+      const jumpToTime = (x / width) * time.durationNumber;
+      if (musicAudio) musicAudio.currentTime = jumpToTime;
+    },
+    [musicAudio, time.durationNumber],
+  );
+
   return (
     <MusicContext.Provider
       value={{
@@ -289,6 +309,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
         musics,
         handleMusicVolume,
         isMuted,
+        handleMusicTime,
       }}
     >
       {props.children}

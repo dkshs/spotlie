@@ -31,6 +31,7 @@ export function Player() {
     musics,
     handleMusicVolume,
     isMuted,
+    handleMusicTime,
   } = useMusic();
 
   return (
@@ -57,10 +58,16 @@ export function Player() {
             value={time.percentage}
             className="max-w-[1600px] mx-auto bg-white/20"
           >
+            <button
+              className="w-full h-4 absolute -top-2 max-w-[1600px] mx-auto outline-none"
+              onClick={handleMusicTime}
+            />
             <Progress.Indicator
-              className="h-0.5 bg-white duration-300"
+              className="relative h-0.5 bg-white duration-300 flex items-center"
               style={{ width: `${time.percentage}%` }}
-            ></Progress.Indicator>
+            >
+              <div className="hidden group-hover/time:inline-block cursor-grab absolute p-1.5 bg-white rounded-full outline-none right-0" />
+            </Progress.Indicator>
           </Progress.Root>
         </div>
         <div className="p-4 flex items-center justify-between max-w-[1600px] min-w-[320px] m-auto">
