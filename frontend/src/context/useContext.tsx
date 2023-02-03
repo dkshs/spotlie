@@ -112,21 +112,21 @@ export function MusicContextProvider(props: PropsWithChildren) {
     async (music: MusicProps | null) => {
       if (music) {
         try {
-          if (music.id !== currentMusic?.id) {
-            const { data } = await api.get(`/music/${music.id}`);
-            if (data) {
-              setCurrentMusic(data);
-            } else {
-              setCurrentMusic(null);
-            }
+          // if (music.id !== currentMusic?.id) {
+          const { data } = await api.get(`/music/${music.id}`);
+          if (data) {
+            setCurrentMusic(data);
+          } else {
+            setCurrentMusic(null);
           }
+          // }
         } catch (e) {
           setCurrentMusic(null);
           setLocalCurrentMusic(null);
         }
       }
     },
-    [currentMusic, setLocalCurrentMusic],
+    [setLocalCurrentMusic],
   );
 
   useEffect(() => {
@@ -156,7 +156,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
       }
       setMusicState("playing");
     },
-    [setLocalCurrentMusic, musicAudio, getMusics],
+    [musicAudio, getMusics, setLocalCurrentMusic],
   );
 
   const pauseMusic = useCallback(() => {

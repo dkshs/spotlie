@@ -2,29 +2,29 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 
-import type { SingerProps } from "@/utils/types";
+import type { ArtistProps } from "@/utils/types";
 
 import { Meta } from "@/components/Meta";
-import { SimpleSingerCard } from "@/components/SingerCard";
+import { SimpleArtistCard } from "@/components/ArtistCard";
 
-export default function SingersPage() {
+export default function ArtistsPage() {
   const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [query, setQuery] = useState("");
 
-  const { data: singers, isFetching } = useQuery<SingerProps[]>({
-    queryKey: ["all-singers"],
+  const { data: artists, isFetching } = useQuery<ArtistProps[]>({
+    queryKey: ["all-artists"],
     queryFn: async () => {
-      const response = await api.get("/singers");
+      const response = await api.get("/artists");
       return response.data;
     },
     staleTime: 1000 * 60,
   });
 
-  const filteredSingers =
+  const filteredArtists =
     query === ""
-      ? singers
-      : singers?.filter((singer) =>
-          singer.name
+      ? artists
+      : artists?.filter((artist) =>
+          artist.name
             .toLowerCase()
             .replace(/\s+/g, "")
             .includes(query.toLowerCase().replace(/\s+/g, "")),
@@ -35,24 +35,24 @@ export default function SingersPage() {
       <Meta title="Cantores" path="/singers" />
       <div className="px-4 sm:px-9 mt-6">
         <div className="flex gap-2 flex-wrap justify-between items-center">
-          <h1 className="text-2xl font-bold">Cantores</h1>
-          <label className="sr-only" htmlFor="searchForSinger">
-            Procure por um cantor
+          <h1 className="text-2xl font-bold">Artistas</h1>
+          <label className="sr-only" htmlFor="searchForArtist">
+            Procure por um artista
           </label>
           <input
             type="text"
-            placeholder="Procure por um cantor..."
-            id="searchForSinger"
+            placeholder="Procure por um artista..."
+            id="searchForArtist"
             className="bg-black/30 pl-4 pr-2 sm:px-5 py-2 rounded-3xl focus:outline-none focus:ring-2 ring-purple-500"
             onChange={(event) => setQuery(event.target.value)}
           />
         </div>
         <div
           className={`${
-            filteredSingers?.length === 0 && query !== "" ? "flex" : "grid"
+            filteredArtists?.length === 0 && query !== "" ? "flex" : "grid"
           } grid-cols-1 sm:grid-cols-2 gap-1 pt-6`}
         >
-          {isFetching || !filteredSingers ? (
+          {isFetching || !filteredArtists ? (
             skeletonItems.map((i) => (
               <div
                 key={i}
@@ -64,13 +64,15 @@ export default function SingersPage() {
                 <span className="mt-1 h-6 w-1/3 bg-black/20 rounded-lg animate-pulse" />
               </div>
             ))
-          ) : filteredSingers?.length === 0 && query !== "" ? (
+          ) : filteredArtists?.length === 0 && query !== "" ? (
             <div className="flex flex-col w-full justify-center py-4 px-4">
-              <span className="text-center mt-4">Nenhum cantor encontrado</span>
+              <span className="text-center mt-4">
+                Nenhum artista encontrado
+              </span>
             </div>
           ) : (
-            filteredSingers.map((singer) => (
-              <SimpleSingerCard key={singer.id} singer={singer} />
+            filteredArtists.map((artist) => (
+              <SimpleArtistCard key={artist.id} artist={artist} />
             ))
           )}
         </div>

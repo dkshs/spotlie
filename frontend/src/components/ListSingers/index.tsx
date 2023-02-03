@@ -1,1 +1,0 @@
-export { ListSingers } from "./ListSingers";

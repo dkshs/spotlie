@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { House, SpotifyLogo, Headphones } from "phosphor-react";
+import { House, SpotifyLogo } from "phosphor-react";
 
 export function Header() {
   const router = useRouter();
@@ -12,12 +12,12 @@ export function Header() {
       title: "Ir para o início",
       icon: House,
     },
-    {
-      href: "/my/library",
-      label: "Biblioteca",
-      title: "Ir para a biblioteca",
-      icon: Headphones,
-    },
+    // {
+    //   href: "/my/library",
+    //   label: "Biblioteca",
+    //   title: "Ir para a biblioteca",
+    //   icon: Headphones,
+    // },
   ];
 
   return (

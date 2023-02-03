@@ -70,16 +70,13 @@ export function MusicCard({ music }: MusicCardProps) {
           {music.title}
         </Link>
         <div className="truncate pr-2.5">
-          {music.singers.map((singer) => (
-            <Link
-              key={singer.id}
-              href={`/singer/${singer.id}`}
-              className="focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
-            >
-              {singer.name}
-              {music.singers.length > 1 && ", "}
-            </Link>
-          ))}
+          <Link
+            key={music.artist.id}
+            href={`/artist/${music.artist.id}`}
+            className="focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
+          >
+            {music.artist.name}
+          </Link>
         </div>
       </div>
     </div>

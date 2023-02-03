@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { api } from "@/lib/axios";
 
-import type { MusicProps, SingerProps } from "@/utils/types";
+import type { MusicProps, ArtistProps } from "@/utils/types";
 
 import { Meta } from "@/components/Meta";
 import Head from "next/head";
@@ -24,17 +24,17 @@ export default function ArtistPage() {
     data: artist,
     isFetching,
     isLoading,
-  } = useQuery<SingerProps | null>({
+  } = useQuery<ArtistProps | null>({
     queryKey: [`artist-${id}`],
     queryFn: async () => {
       if (!id) return null;
       try {
-        const { data } = await api.get<SingerProps>(`/singer/${id}`);
+        const { data } = await api.get<ArtistProps>(`/artist/${id}`);
         if (data) {
-          const res = await api.get(`/musics?singers=${data.name}&limit=10`);
+          const res = await api.get(`/musics?artist=${data.name}&limit=10`);
           const newArtistMusics = [];
           for (const music of res.data) {
-            if (music.singers[0].name === data.name) {
+            if (music.artist.name === data.name) {
               newArtistMusics.push(music);
             }
           }
@@ -103,20 +103,20 @@ export default function ArtistPage() {
                       type="button"
                       title={`${
                         musicState === "playing" &&
-                        currentMusic?.singers[0].name === artist.name
+                        currentMusic?.artist.name === artist.name
                           ? "Pausar"
                           : "Reproduzir"
                       }`}
                       onClick={() =>
                         musicState === "playing" &&
-                        currentMusic?.singers[0].name === artist.name
+                        currentMusic?.artist.name === artist.name
                           ? pauseMusic()
                           : playMusic(artistMusics[0], artistMusics)
                       }
                       className="flex items-center p-3 bg-purple-700 rounded-full hover:bg-purple-600 shadow-md hover:shadow-purple-800/50 hover:scale-105 active:opacity-70 active:scale-100 focus:outline-none focus:ring-2 ring-purple-400 ring-offset-black ring-offset-2 duration-300"
                     >
                       {musicState === "playing" &&
-                      currentMusic?.singers[0].name === artist.name ? (
+                      currentMusic?.artist.name === artist.name ? (
                         <Pause size={24} weight="fill" />
                       ) : (
                         <Play size={24} weight="fill" />

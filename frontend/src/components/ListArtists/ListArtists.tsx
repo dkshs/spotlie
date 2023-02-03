@@ -1,29 +1,29 @@
-import type { SingerProps } from "@/utils/types";
+import type { ArtistProps } from "@/utils/types";
 
 import Link from "next/link";
-import { SingerCard } from "../SingerCard";
+import { ArtistCard } from "../ArtistCard";
 
-interface ListSingersProps {
-  singers?: SingerProps[];
+interface ListArtistsProps {
+  artists?: ArtistProps[];
   isFetching?: boolean;
 }
 
-export function ListSingers({ singers, isFetching }: ListSingersProps) {
+export function ListArtists({ artists, isFetching }: ListArtistsProps) {
   const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
     <section className="px-9 mt-8">
       <header className="flex justify-between mb-4 items-center">
-        <h1 className="font-bold text-xl">Cantores</h1>
+        <h1 className="font-bold text-xl">Artistas</h1>
         <Link
-          href="/singers"
+          href="/artists"
           className="bg-purple-800 py-1.5 px-4 rounded-3xl hover:scale-105 hover:bg-purple-600 focus:outline-none focus:ring-2 ring-blue-300 active:bg-purple-600/20 duration-200"
         >
           <span className="uppercase text-sm font-bold">Ver mais</span>
         </Link>
       </header>
       <div className="pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
-        {!singers || isFetching
+        {!artists || isFetching
           ? skeletonItems.map((i) => (
               <div
                 key={i}
@@ -37,8 +37,8 @@ export function ListSingers({ singers, isFetching }: ListSingersProps) {
                 </div>
               </div>
             ))
-          : singers.map((singer) => (
-              <SingerCard key={singer.id} singer={singer} />
+          : artists.map((artist) => (
+              <ArtistCard key={artist.id} artist={artist} />
             ))}
       </div>
     </section>

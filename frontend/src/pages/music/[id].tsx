@@ -72,7 +72,7 @@ export default function MusicPage() {
             </div>
           </div>
         </div>
-      ) : music && music.singers ? (
+      ) : music ? (
         <div className="flex flex-col justify-center text-center md:justify-start md:text-start md:flex-row md:min-h-[280px]">
           <div
             className="absolute bg-cover inset-0 bg-center bg-no-repeat md:h-80 z-[-1] blur-3xl opacity-50"
@@ -99,10 +99,10 @@ export default function MusicPage() {
               </h1>
               <div className="flex gap-2 items-center self-center md:self-start md:mb-2">
                 <div className="flex items-center gap-2">
-                  {music.singers[0].image ? (
+                  {music.artist.image ? (
                     <Image
-                      src={music.singers[0].image}
-                      alt={music.singers[0].name}
+                      src={music.artist.image}
+                      alt={music.artist.name}
                       className="bg-black/20 rounded-full w-6 h-6"
                       width={24}
                       height={24}
@@ -115,11 +115,11 @@ export default function MusicPage() {
                     />
                   )}
                   <Link
-                    href={`/singer/${music.singers[0].id}`}
-                    title={music.singers[0].name}
+                    href={`/artist/${music.artist.id}`}
+                    title={music.artist.name}
                     className="hover:text-purple-400 focus:outline outline-2 rounded-sm outline-purple-400 active:opacity-70 duration-200"
                   >
-                    {music.singers[0].name}
+                    {music.artist.name}
                   </Link>
                   <span className="before:content-['•'] before:mr-1.5">
                     {musicDuration}

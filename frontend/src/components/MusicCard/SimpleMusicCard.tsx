@@ -85,17 +85,13 @@ export function SimpleMusicCard({
         </Link>
         {showArtist && (
           <div className="truncate pr-2.5">
-            {music.singers?.map((singer, i) => (
-              <Link
-                key={singer.id}
-                href={`/singer/${singer.id}`}
-                className="focus:outline-none focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
-              >
-                {singer.name}
-                {i === music.singers.length - 1 ||
-                  (music.singers.length > 1 && <span>, </span>)}
-              </Link>
-            ))}
+            <Link
+              key={music.artist.id}
+              href={`/artist/${music.artist.id}`}
+              className="focus:outline-none focus:text-purple-400 hover:text-purple-400 active:opacity-70 duration-200"
+            >
+              {music.artist.name}
+            </Link>
           </div>
         )}
       </div>

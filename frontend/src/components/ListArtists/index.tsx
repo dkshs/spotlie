@@ -1,0 +1,1 @@
+export { ListArtists } from "./ListArtists";

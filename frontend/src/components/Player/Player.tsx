@@ -87,10 +87,10 @@ export function Player() {
                 {currentMusic.title}
               </Link>
               <Link
-                href={`/singer/${currentMusic.singers[0].id}`}
+                href={`/artist/${currentMusic.artist.id}`}
                 className="truncate hover:text-blue-400 focus:outline focus:text-blue-400 outline-1 outline-blue-300 duration-300"
               >
-                {currentMusic.singers[0].name}
+                {currentMusic.artist.name}
               </Link>
             </div>
           </div>

@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
-import type { MusicProps, SingerProps } from "@/utils/types";
+import type { MusicProps, ArtistProps } from "@/utils/types";
 
 import { Meta } from "@/components/Meta";
 import { ListMusics } from "@/components/ListMusics";
-import { ListSingers } from "@/components/ListSingers";
+import { ListArtists } from "@/components/ListArtists";
 
 export default function Home() {
-  const { data: musics, isFetching: musicsIsFetching } = useQuery<MusicProps[]>(
+  const { data: musics, isFetching: isFetchingMusics } = useQuery<MusicProps[]>(
     {
       queryKey: ["musics"],
       queryFn: async () => {
@@ -22,13 +22,13 @@ export default function Home() {
     },
   );
 
-  const { data: singers, isFetching: singerIsFetching } = useQuery<
-    SingerProps[]
+  const { data: artists, isFetching: isFetchingArtists } = useQuery<
+    ArtistProps[]
   >({
-    queryKey: ["singers"],
+    queryKey: ["artists"],
     queryFn: async () => {
       try {
-        const { data } = await api.get("/singers?limit=10");
+        const { data } = await api.get("/artists?limit=10");
         return data;
       } catch (err) {
         return [];
@@ -40,8 +40,8 @@ export default function Home() {
   return (
     <>
       <Meta path="/" title="Home" />
-      <ListMusics musics={musics} isFetching={musicsIsFetching} />
-      <ListSingers singers={singers} isFetching={singerIsFetching} />
+      <ListMusics musics={musics} isFetching={isFetchingMusics} />
+      <ListArtists artists={artists} isFetching={isFetchingArtists} />
     </>
   );
 }

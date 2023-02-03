@@ -60,6 +60,7 @@ export default function PlayerPage() {
               className="rounded-lg object-cover aspect-square"
               width={500}
               height={500}
+              priority
             />
           </div>
           <div className="flex flex-col gap-2 my-5 md:m-0 truncate w-full">
@@ -74,11 +75,11 @@ export default function PlayerPage() {
             </div>
             <div>
               <Link
-                href={`/singer/${currentMusic.singers[0].id}`}
-                title={currentMusic.singers[0].name}
+                href={`/singer/${currentMusic.artist.id}`}
+                title={currentMusic.artist.name}
                 className="focus:outline-none focus:underline focus:text-purple-400 hover:text-purple-400 decoration-purple-400 truncate text-lg font-light duration-300"
               >
-                {currentMusic.singers[0].name}
+                {currentMusic.artist.name}
               </Link>
             </div>
           </div>

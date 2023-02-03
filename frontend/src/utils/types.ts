@@ -1,4 +1,4 @@
-export interface SingerProps {
+export interface ArtistProps {
   id: string;
   name: string;
   image: string;
@@ -7,7 +7,9 @@ export interface SingerProps {
 export interface MusicProps {
   id: string;
   title: string;
-  singers: SingerProps[];
+  artist: ArtistProps;
+  participants: ArtistProps[];
+  letters: string;
   cover: string;
   audio: string;
 }
