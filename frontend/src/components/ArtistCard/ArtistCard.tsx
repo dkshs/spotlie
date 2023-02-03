@@ -14,7 +14,7 @@ export function ArtistCard({ artist }: ArtistCardProps) {
       <Link
         href={`/artist/${artist.id}`}
         title={artist.name}
-        className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] bg-black/40 hover:opacity-70 focus:outline-none focus:ring ring-purple-600 duration-300"
+        className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] bg-black/40 hover:opacity-70 outline-none focus:ring ring-purple-600 duration-300"
       >
         {artist.image ? (
           <Image

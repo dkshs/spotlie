@@ -26,6 +26,12 @@ export function SimpleMusicCard({
           ? "Pausar"
           : "Reproduzir"
       } ${music.title}`}
+      onKeyDown={(e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        musicState === "playing" && currentMusic?.id === music.id
+          ? pauseMusic()
+          : playMusic(music);
+      }}
       onDoubleClick={() =>
         musicState === "playing" && currentMusic?.id === music.id
           ? pauseMusic()
@@ -52,7 +58,7 @@ export function SimpleMusicCard({
             (musicState === "playing" && music.id === currentMusic?.id) ||
             (musicState === "paused" && music.id === currentMusic?.id)
               ? "flex bg-black/50"
-              : "hidden group-hover:flex group-hover:bg-black/50 group-focus:flex group-focus:bg-black/50"
+              : "hidden group-hover:flex group-hover:bg-black/50 group-focus-visible:flex group-focus-visible:bg-black/50"
           }`}
         >
           <div className="rounded-full duration-200">

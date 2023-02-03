@@ -24,6 +24,7 @@ interface MusicContextProps {
   time: MusicTimeProps;
   isRepeat: boolean;
   isShuffle: boolean;
+  isMuted: boolean;
   musics: MusicProps[];
   playMusic: (music: MusicProps, musics?: MusicProps[]) => void;
   pauseMusic: () => void;
@@ -31,6 +32,7 @@ interface MusicContextProps {
   shuffleMusics: () => void;
   skipMusic: () => void;
   previousMusic: () => void;
+  handleMusicVolume: () => void;
 }
 
 const ctxInitialValues: MusicContextProps = {
@@ -39,6 +41,7 @@ const ctxInitialValues: MusicContextProps = {
   time: { currentTime: "00:00", duration: "00:00", percentage: 0 },
   isRepeat: false,
   isShuffle: false,
+  isMuted: false,
   musics: [],
   playMusic: (music: MusicProps, musics?: MusicProps[]): void => {
     throw new Error("playMusic() not implemented.");
@@ -58,6 +61,9 @@ const ctxInitialValues: MusicContextProps = {
   previousMusic: (): void => {
     throw new Error("previousMusic() not implemented.");
   },
+  handleMusicVolume: (): void => {
+    throw new Error("handleMusicVolume() not implemented.");
+  },
 };
 
 export const MusicContext = createContext<MusicContextProps>(ctxInitialValues);
@@ -67,6 +73,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
   const [musicState, setMusicState] = useState<MusicStateProps>("paused");
   const [isRepeat, setIsRepeat] = useState(false);
   const [isShuffle, setIsShuffle] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const [time, setTime] = useState<MusicTimeProps>(ctxInitialValues.time);
   const [currentMusic, setCurrentMusic] = useState<MusicProps | null>(null);
   const [musicAudio, setMusicAudio] = useState<HTMLAudioElement | undefined>(
@@ -255,6 +262,16 @@ export function MusicContextProvider(props: PropsWithChildren) {
     }
   }, [isShuffle, setLocalMusicShuffle]);
 
+  const handleMusicVolume = useCallback(() => {
+    if (musicAudio && musicAudio.volume > 0) {
+      musicAudio.volume = 0;
+      setIsMuted(true);
+    } else if (musicAudio && musicAudio.volume <= 0) {
+      musicAudio.volume = 1;
+      setIsMuted(false);
+    }
+  }, [musicAudio]);
+
   return (
     <MusicContext.Provider
       value={{
@@ -270,6 +287,8 @@ export function MusicContextProvider(props: PropsWithChildren) {
         isShuffle,
         shuffleMusics,
         musics,
+        handleMusicVolume,
+        isMuted,
       }}
     >
       {props.children}

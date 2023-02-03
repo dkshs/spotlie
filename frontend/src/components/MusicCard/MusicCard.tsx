@@ -27,7 +27,7 @@ export function MusicCard({ music }: MusicCardProps) {
             ? pauseMusic()
             : playMusic(music)
         }
-        className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] group focus:outline-none focus:ring ring-purple-600 duration-200"
+        className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] group outline-none focus-visible:ring ring-purple-600 duration-200"
       >
         <Image
           className="aspect-square object-cover shadow-xl shadow-black/60 bg-black/20"

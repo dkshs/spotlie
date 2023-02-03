@@ -15,6 +15,7 @@ import {
   SkipBack,
   SkipForward,
   SpeakerHigh,
+  SpeakerSlash,
 } from "phosphor-react";
 
 export default function PlayerPage() {
@@ -31,6 +32,8 @@ export default function PlayerPage() {
     repeatMusic,
     time,
     musics,
+    handleMusicVolume,
+    isMuted,
   } = useMusic();
   const router = useRouter();
 
@@ -155,9 +158,15 @@ export default function PlayerPage() {
             <div className="hidden sm:flex absolute right-0 pr-5 xs:pr-9 lg:pr-14">
               <button
                 type="button"
+                title={isMuted ? "Com som" : "Mudo"}
+                onClick={() => handleMusicVolume()}
                 className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
               >
-                <SpeakerHigh size={24} />
+                {isMuted ? (
+                  <SpeakerSlash size={24} />
+                ) : (
+                  <SpeakerHigh size={24} />
+                )}
               </button>
             </div>
           </div>

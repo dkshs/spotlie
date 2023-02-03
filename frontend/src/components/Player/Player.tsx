@@ -12,6 +12,7 @@ import {
   SkipBack,
   SkipForward,
   SpeakerHigh,
+  SpeakerSlash,
 } from "phosphor-react";
 
 export function Player() {
@@ -28,6 +29,8 @@ export function Player() {
     isShuffle,
     shuffleMusics,
     musics,
+    handleMusicVolume,
+    isMuted,
   } = useMusic();
 
   return (
@@ -161,10 +164,11 @@ export function Player() {
           <div className="hidden sm:flex justify-end group w-[30%]">
             <button
               type="button"
-              title="Mudo"
+              title={isMuted ? "Com som" : "Mudo"}
+              onClick={() => handleMusicVolume()}
               className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
             >
-              <SpeakerHigh size={24} />
+              {isMuted ? <SpeakerSlash size={24} /> : <SpeakerHigh size={24} />}
             </button>
           </div>
         </div>
