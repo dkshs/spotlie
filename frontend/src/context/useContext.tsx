@@ -1,6 +1,5 @@
 import {
   createContext,
-  MouseEvent,
   PropsWithChildren,
   useCallback,
   useEffect,
@@ -27,6 +26,7 @@ interface MusicContextProps {
   isRepeat: boolean;
   isShuffle: boolean;
   isMuted: boolean;
+  musicVolume: number;
   musics: MusicProps[];
   playMusic: (music: MusicProps, musics?: MusicProps[]) => void;
   pauseMusic: () => void;
@@ -34,8 +34,8 @@ interface MusicContextProps {
   shuffleMusics: () => void;
   skipMusic: () => void;
   previousMusic: () => void;
-  handleMusicVolume: () => void;
-  handleMusicTime: (event: MouseEvent<HTMLElement>) => void;
+  handleMusicVolume: (value?: number) => void;
+  handleMusicTime: (value: number) => void;
 }
 
 const ctxInitialValues: MusicContextProps = {
@@ -51,7 +51,8 @@ const ctxInitialValues: MusicContextProps = {
   isShuffle: false,
   isMuted: false,
   musics: [],
-  playMusic: (music: MusicProps, musics?: MusicProps[]): void => {
+  musicVolume: 1,
+  playMusic: (): void => {
     throw new Error("playMusic() not implemented.");
   },
   pauseMusic: (): void => {
@@ -85,6 +86,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
   const [isRepeat, setIsRepeat] = useState(false);
   const [isShuffle, setIsShuffle] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [musicVolume, setMusicVolume] = useState(1);
   const [time, setTime] = useState<MusicTimeProps>(ctxInitialValues.time);
   const [currentMusic, setCurrentMusic] = useState<MusicProps | null>(null);
   const [musicAudio, setMusicAudio] = useState<HTMLAudioElement | undefined>(
@@ -132,14 +134,12 @@ export function MusicContextProvider(props: PropsWithChildren) {
     async (music: MusicProps | null) => {
       if (music) {
         try {
-          // if (music.id !== currentMusic?.id) {
           const { data } = await api.get(`/music/${music.id}`);
           if (data) {
             setCurrentMusic(data);
           } else {
             setCurrentMusic(null);
           }
-          // }
         } catch (e) {
           setCurrentMusic(null);
           setLocalCurrentMusic(null);
@@ -184,7 +184,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
     setMusicState("paused");
   }, [musicAudio]);
 
-  const skipMusic = useCallback(async () => {
+  const skipMusic = useCallback(() => {
     if (isShuffle) {
       const randomIndex = Math.floor(Math.random() * musics.length - 1);
       playMusic(musics[randomIndex], musics);
@@ -198,7 +198,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
     }
   }, [currentMusic, isShuffle, musics, playMusic]);
 
-  const previousMusic = useCallback(async () => {
+  const previousMusic = useCallback(() => {
     for (let i = 0; i < musics.length; i++) {
       const song = musics[i];
       if (song.id === currentMusic?.id) {
@@ -221,7 +221,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
       setTime({
         currentTime: musicTimeFormatter(musicAudio).musicCurrentTime,
         duration: musicTimeFormatter(musicAudio).musicDurationTime,
-        percentage: Number(musicProgress.toFixed(0)),
+        percentage: Math.floor(musicProgress),
         durationNumber: musicDuration,
       });
     }
@@ -272,24 +272,35 @@ export function MusicContextProvider(props: PropsWithChildren) {
     }
   }, [isShuffle, setLocalMusicShuffle]);
 
-  const handleMusicVolume = useCallback(() => {
-    if (musicAudio && musicAudio.volume > 0) {
-      musicAudio.volume = 0;
-      setIsMuted(true);
-    } else if (musicAudio && musicAudio.volume <= 0) {
-      musicAudio.volume = 1;
-      setIsMuted(false);
-    }
-  }, [musicAudio]);
+  const handleMusicVolume = useCallback(
+    (value?: number) => {
+      if (value && musicAudio) {
+        musicAudio.volume = value;
+        setMusicVolume(musicAudio.volume);
+      }
+      if (!value && musicAudio && musicAudio.volume > 0) {
+        musicAudio.volume = 0;
+        setMusicVolume(0);
+        setIsMuted(true);
+      } else if (!value && musicAudio) {
+        musicAudio.volume = 1;
+        setMusicVolume(1);
+        setIsMuted(false);
+      } else {
+        setIsMuted(false);
+      }
+    },
+    [musicAudio],
+  );
 
   const handleMusicTime = useCallback(
-    (event: MouseEvent<HTMLElement>) => {
-      const { width, left } = event.currentTarget.getBoundingClientRect();
-      const x = event.clientX - left;
-      const jumpToTime = (x / width) * time.durationNumber;
-      if (musicAudio) musicAudio.currentTime = jumpToTime;
+    (value: number) => {
+      if (musicAudio) {
+        const time = (value / 100) * musicAudio.duration || 0;
+        musicAudio.currentTime = time;
+      }
     },
-    [musicAudio, time.durationNumber],
+    [musicAudio],
   );
 
   return (
@@ -310,6 +321,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
         handleMusicVolume,
         isMuted,
         handleMusicTime,
+        musicVolume,
       }}
     >
       {props.children}

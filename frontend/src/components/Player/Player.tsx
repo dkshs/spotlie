@@ -1,5 +1,6 @@
 import { useMusic } from "@/hooks/useMusic";
-import * as Progress from "@radix-ui/react-progress";
+
+import * as Slider from "@radix-ui/react-slider";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -12,6 +13,7 @@ import {
   SkipBack,
   SkipForward,
   SpeakerHigh,
+  SpeakerLow,
   SpeakerSlash,
 } from "phosphor-react";
 
@@ -32,6 +34,7 @@ export function Player() {
     handleMusicVolume,
     isMuted,
     handleMusicTime,
+    musicVolume,
   } = useMusic();
 
   return (
@@ -50,25 +53,26 @@ export function Player() {
           />
         </div>
         <div className="h-0.5 bg-zinc-600">
-          <div className="hidden absolute group-hover/time:flex justify-between inset-x-0 -top-6 max-w-[1600px] mx-auto px-4">
+          <div className="opacity-0 absolute translate-y-4 flex group-hover/time:opacity-100 group-hover/time:translate-y-0 justify-between inset-x-0 -top-6 max-w-[1600px] mx-auto px-4 duration-300">
             <span className="text-xs opacity-75">{time.currentTime}</span>
             <span className="text-xs opacity-75">{time.duration}</span>
           </div>
-          <Progress.Root
-            value={time.percentage}
-            className="max-w-[1600px] mx-auto bg-white/20"
+          <Slider.Root
+            defaultValue={[0]}
+            max={100}
+            step={1}
+            aria-label="Progresso da música"
+            value={[time.percentage]}
+            onValueChange={(value) => handleMusicTime(value[0])}
+            className="max-w-[1600px] mx-auto w-full flex items-center select-none touch-auto h-0.5 relative"
           >
-            <button
-              className="w-full h-4 absolute -top-2 max-w-[1600px] mx-auto outline-none"
-              onClick={handleMusicTime}
-            />
-            <Progress.Indicator
-              className="relative h-0.5 bg-white duration-300 flex items-center"
-              style={{ width: `${time.percentage}%` }}
-            >
-              <div className="hidden group-hover/time:inline-block cursor-grab absolute p-1.5 bg-white rounded-full outline-none right-0" />
-            </Progress.Indicator>
-          </Progress.Root>
+            <div className="h-4 w-full relative flex items-center cursor-pointer">
+              <Slider.Track className="bg-white/20 grow w-full h-0.5 absolute">
+                <Slider.Range className="bg-white h-full absolute" />
+              </Slider.Track>
+              <Slider.Thumb className="block w-1 h-1 cursor-grab group-hover/time:h-4 group-hover/time:w-4 bg-white rounded-full focus:w-4 focus:h-4 focus:outline-none focus:ring-2 ring-purple-400 ring-offset-4 ring-offset-black duration-300" />
+            </div>
+          </Slider.Root>
         </div>
         <div className="p-4 flex items-center justify-between max-w-[1600px] min-w-[320px] m-auto">
           <div className="flex group sm:w-[30%] truncate">
@@ -84,7 +88,7 @@ export function Player() {
                 height={56}
                 width={56}
               />
-              <div className="hidden absolute justify-center items-center inset-0 group-hover:flex group-hover:bg-black/50 group-focus:flex group-focus:bg-black/50">
+              <div className="hidden rounded-lg absolute justify-center items-center inset-0 group-hover:flex group-hover:bg-black/50 group-focus:flex group-focus:bg-black/50">
                 <div className="w-full h-full flex justify-center items-center rounded-lg duration-300">
                   <ArrowsOutSimple
                     size={32}
@@ -168,15 +172,37 @@ export function Player() {
               )}
             </button>
           </div>
-          <div className="hidden sm:flex justify-end group w-[30%]">
+          <div className="hidden sm:flex justify-end group w-[30%] items-center gap-2 group/volume">
             <button
               type="button"
               title={isMuted ? "Com som" : "Mudo"}
               onClick={() => handleMusicVolume()}
               className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
             >
-              {isMuted ? <SpeakerSlash size={24} /> : <SpeakerHigh size={24} />}
+              {isMuted ? (
+                <SpeakerSlash size={24} />
+              ) : musicVolume <= 0.5 ? (
+                <SpeakerLow size={24} />
+              ) : (
+                <SpeakerHigh size={24} />
+              )}
             </button>
+            <Slider.Root
+              defaultValue={[1]}
+              max={1}
+              step={0.1}
+              value={[musicVolume]}
+              onValueChange={(value) => handleMusicVolume(value[0])}
+              aria-label="Volume"
+              className="hidden md:flex w-24 rounded-3xl h-1.5 items-center relative"
+            >
+              <div className="h-4 w-full relative flex items-center">
+                <Slider.Track className="bg-white/20 grow w-full h-1.5 absolute rounded-3xl">
+                  <Slider.Range className="group-hover/volume:bg-blue-600 bg-white/50 h-full absolute rounded-3xl duration-300" />
+                </Slider.Track>
+                <Slider.Thumb className="block cursor-grab h-0 w-0 group-hover/volume:h-3 group-hover/volume:w-3 bg-blue-400 rounded-full focus:outline-none focus:w-3 focus:h-3 focus:ring-2 ring-blue-400 ring-offset-4 ring-offset-black duration-300" />
+              </div>
+            </Slider.Root>
           </div>
         </div>
       </div>

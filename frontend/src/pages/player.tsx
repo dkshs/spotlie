@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import Image from "next/image";
 import Link from "next/link";
-import * as Progress from "@radix-ui/react-progress";
+import * as Slider from "@radix-ui/react-slider";
 
 import {
   CaretDown,
@@ -15,6 +15,7 @@ import {
   SkipBack,
   SkipForward,
   SpeakerHigh,
+  SpeakerLow,
   SpeakerSlash,
 } from "phosphor-react";
 import { Meta } from "@/components/Meta";
@@ -36,6 +37,7 @@ export default function PlayerPage() {
     handleMusicVolume,
     isMuted,
     handleMusicTime,
+    musicVolume,
   } = useMusic();
   const router = useRouter();
 
@@ -59,7 +61,7 @@ export default function PlayerPage() {
             </button>
           </div>
         </nav>
-        <div className="flex flex-col gap-2 items-center md:items-start justify-center h-full pt-[72px] pb-[76px]">
+        <div className="flex flex-col gap-2 items-center md:items-start justify-center h-full pt-16 pb-24">
           <div className="relative max-h-[500px] max-w-[500px] w-full min-w-[200px] min-h-[200px] xs:min-w-[256px] xs:min-h-[256px] md:mb-8 duration-300">
             <Image
               src={currentMusic.cover}
@@ -92,24 +94,28 @@ export default function PlayerPage() {
           </div>
         </div>
         <div className="fixed bottom-0 inset-x-0 bg-black/50 backdrop-blur-2xl z-10 group">
-          <div className="min-h-[90px] relative h-full py-6 md:pt-4 gap-6 sm:p-4 flex-col sm:flex-row flex items-center justify-between flex-wrap">
+          <div className="min-h-[90px] relative h-full py-6 gap-6 sm:p-6 flex-col sm:flex-row flex items-center justify-between flex-wrap">
             <div className="absolute top-0 h-0.5 bg-transparent inset-x-0 px-5 xs:px-9 lg:px-12">
               <div className="absolute flex justify-between inset-x-0 -top-6 px-7 xs:px-12 lg:px-14">
                 <span className="text-xs opacity-75">{time.currentTime}</span>
                 <span className="text-xs opacity-75">{time.duration}</span>
               </div>
-              <Progress.Root value={time.percentage} className="bg-white/20">
-                <button
-                  className="inset-x-0 h-4 absolute -top-2 mx-5 xs:mx-9 lg:mx-12 outline-none"
-                  onClick={handleMusicTime}
-                />
-                <Progress.Indicator
-                  className="relative h-0.5 bg-white duration-300 flex items-center"
-                  style={{ width: `${time.percentage}%` }}
-                >
-                  <div className="hidden group-hover:inline-block absolute p-1.5 bg-white rounded-full outline-none right-0" />
-                </Progress.Indicator>
-              </Progress.Root>
+              <Slider.Root
+                defaultValue={[0]}
+                max={100}
+                step={1}
+                aria-label="Progresso da música"
+                value={[time.percentage]}
+                onValueChange={(value) => handleMusicTime(value[0])}
+                className="w-full flex items-center select-none touch-auto h-0.5 relative"
+              >
+                <div className="h-4 w-full relative flex items-center cursor-pointer">
+                  <Slider.Track className="bg-white/20 grow w-full h-0.5 absolute">
+                    <Slider.Range className="bg-white h-full absolute" />
+                  </Slider.Track>
+                  <Slider.Thumb className="block cursor-grab h-1 w-1 group-hover:h-4 group-hover:w-4 bg-white rounded-full focus:outline-none focus:w-4 focus:h-4 focus:ring-2 ring-purple-400 ring-offset-4 ring-offset-black duration-300" />
+                </div>
+              </Slider.Root>
             </div>
             <div className="flex items-center justify-center gap-3 flex-wrap w-full">
               <button
@@ -164,7 +170,7 @@ export default function PlayerPage() {
                 )}
               </button>
             </div>
-            <div className="hidden sm:flex absolute right-0 pr-5 xs:pr-9 lg:pr-14">
+            <div className="hidden sm:flex absolute gap-2 right-0 mr-5 xs:mr-9 lg:mr-14 items-center group/volume">
               <button
                 type="button"
                 title={isMuted ? "Com som" : "Mudo"}
@@ -173,10 +179,28 @@ export default function PlayerPage() {
               >
                 {isMuted ? (
                   <SpeakerSlash size={26} />
+                ) : musicVolume <= 0.5 ? (
+                  <SpeakerLow size={26} />
                 ) : (
                   <SpeakerHigh size={26} />
                 )}
               </button>
+              <Slider.Root
+                defaultValue={[1]}
+                max={1}
+                step={0.1}
+                value={[musicVolume]}
+                aria-label="Volume"
+                onValueChange={(value) => handleMusicVolume(value[0])}
+                className="hidden md:flex w-24 lg:w-28 rounded-3xl h-1.5 items-center relative"
+              >
+                <div className="h-4 w-full relative flex items-center">
+                  <Slider.Track className="bg-white/20 grow w-full h-1.5 absolute rounded-3xl">
+                    <Slider.Range className="group-hover/volume:bg-blue-600 bg-white/50 h-full absolute rounded-3xl duration-300" />
+                  </Slider.Track>
+                  <Slider.Thumb className="block cursor-grab h-0 w-0 group-hover/volume:h-3 group-hover/volume:w-3 bg-blue-400 rounded-full focus:outline-none focus:w-3 focus:h-3 focus:ring-2 ring-blue-400 ring-offset-4 ring-offset-black duration-300" />
+                </div>
+              </Slider.Root>
             </div>
           </div>
         </div>
