@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [process.env.NEXT_PUBLIC_DOMAINS_IMG],
+    domains: [process.env.NEXT_PUBLIC_IMG_DOMAINS],
   },
   env: {
     SITE_NAME: "Spotify-Zero",
