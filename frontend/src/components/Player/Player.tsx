@@ -39,7 +39,7 @@ export function Player() {
 
   return (
     currentMusic && (
-      <div className="fixed bottom-0 inset-x-0 bg-black/80 backdrop-blur-2xl z-[9999] group/time">
+      <div className="animate-playerFadeIn fixed bottom-0 inset-x-0 bg-black/80 backdrop-blur-2xl z-[9999] group/time">
         <div className="absolute inset-0 z-[-1] overflow-hidden">
           <div
             className={`absolute inset-0 bg-center ${

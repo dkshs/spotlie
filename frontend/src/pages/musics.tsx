@@ -14,8 +14,8 @@ export default function MusicsPage() {
   const { data: musics, isFetching } = useQuery<MusicProps[]>({
     queryKey: ["all-musics"],
     queryFn: async () => {
-      const response = await api.get("/musics");
-      return response.data;
+      const { data } = await api.get("/musics");
+      return data;
     },
     staleTime: 1000 * 60,
   });

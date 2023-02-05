@@ -18,7 +18,7 @@ export function ArtistCard({ artist }: ArtistCardProps) {
       >
         {artist.image ? (
           <Image
-            className="aspect-square object-cover shadow-xl shadow-black/60 hover:opacity-50 bg-black/20 duration-300"
+            className="aspect-square object-cover shadow-xl shadow-black/60 hover:opacity-80 bg-black/20 duration-300"
             src={artist.image}
             alt={artist.name}
             width={178}

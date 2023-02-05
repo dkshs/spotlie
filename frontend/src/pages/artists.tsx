@@ -14,8 +14,8 @@ export default function ArtistsPage() {
   const { data: artists, isFetching } = useQuery<ArtistProps[]>({
     queryKey: ["all-artists"],
     queryFn: async () => {
-      const response = await api.get("/artists");
-      return response.data;
+      const { data } = await api.get("/artists");
+      return data;
     },
     staleTime: 1000 * 60,
   });

@@ -44,13 +44,13 @@ export default function PlayerPage() {
   return (
     currentMusic && (
       <div className="px-5 xs:px-9 lg:px-14 h-screen">
-        <Meta path="/player" title="Player" />
+        <Meta path="/player" title="Player" index={false} follow={false} />
         <div
           className="absolute inset-0 bg-center bg-cover bg-no-repeat z-[-1] blur-xl opacity-20 transition-all duration-1000"
           style={{ backgroundImage: `url(${currentMusic.cover})` }}
         />
         <nav className="h-[72px] fixed inset-x-0 z-10">
-          <div className="px-10 flex items-center h-full">
+          <div className="px-4 lg:px-10 flex items-center h-full">
             <button
               type="button"
               onClick={() => router.back()}
@@ -66,7 +66,7 @@ export default function PlayerPage() {
             <Image
               src={currentMusic.cover}
               alt={currentMusic.title}
-              className="rounded-lg object-cover aspect-square"
+              className="rounded-lg object-cover aspect-square bg-black/50"
               width={500}
               height={500}
               priority

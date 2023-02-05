@@ -51,14 +51,14 @@ export function MusicCard({ music }: MusicCardProps) {
                 <Image
                   src="/musicPlaying.gif"
                   alt="Música tocando"
-                  className="group-hover:hidden flex"
+                  className="flex group-hover:hidden group-focus:hidden"
                   height={32}
                   width={32}
                 />
                 <Pause
                   size={32}
                   weight="fill"
-                  className="hidden group-hover:flex"
+                  className="hidden group-hover:flex group-focus:flex"
                 />
               </>
             ) : (

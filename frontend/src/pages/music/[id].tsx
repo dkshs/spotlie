@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMusic } from "@/hooks/useMusic";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -16,9 +16,8 @@ import { Pause, Play, User } from "phosphor-react";
 
 export default function MusicPage() {
   const { playMusic, pauseMusic, musicState, currentMusic } = useMusic();
-  const router = useRouter();
   const [musicDuration, setMusicDuration] = useState("");
-
+  const router = useRouter();
   const { id } = router.query;
 
   const {
@@ -31,19 +30,23 @@ export default function MusicPage() {
       if (!id) return null;
       try {
         const { data } = await api.get<MusicProps>(`/music/${id}`);
-        if (data) {
-          const audio = new Audio(data.audio);
-          audio.onloadedmetadata = () => {
-            setMusicDuration(musicTimeFormatter(audio).musicDurationTime);
-          };
-        }
         return data;
       } catch (error) {
         return null;
       }
     },
-    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60,
   });
+
+  useEffect(() => {
+    if (music) {
+      const audio = new Audio(music.audio);
+      audio.onloadedmetadata = () => {
+        const duration = musicTimeFormatter(audio).musicDurationTime;
+        setMusicDuration(duration);
+      };
+    }
+  }, [music]);
 
   return (
     <div className="px-4 sm:px-9 mt-20">

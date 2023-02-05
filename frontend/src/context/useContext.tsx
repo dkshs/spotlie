@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "usehooks-ts";
 import { api } from "@/lib/axios";
 import { musicTimeFormatter } from "@/utils/formatter";
@@ -130,28 +131,44 @@ export function MusicContextProvider(props: PropsWithChildren) {
     }
   }, [localMusicRepeat, localMusicShuffle]);
 
-  const verifyMusic = useCallback(
-    async (music: MusicProps | null) => {
-      if (music) {
-        try {
-          const { data } = await api.get(`/music/${music.id}`);
+  useQuery<MusicProps | null>({
+    queryKey: ["verify-music"],
+    queryFn: async () => {
+      try {
+        if (localCurrentMusic) {
+          const { data } = await api.get(`/music/${localCurrentMusic.id}`);
           if (data) {
             setCurrentMusic(data);
+            setLocalCurrentMusic(data);
+            const audio = new Audio(data.audio);
+            audio.onloadedmetadata = () => {
+              const duration = audio.duration;
+              const { musicDurationTime } = musicTimeFormatter(audio);
+
+              setMusicAudio(audio);
+              setTime((prev) => {
+                return {
+                  ...prev,
+                  duration: musicDurationTime,
+                  durationNumber: duration,
+                };
+              });
+            };
           } else {
-            setCurrentMusic(null);
+            throw Error("");
           }
-        } catch (e) {
-          setCurrentMusic(null);
-          setLocalCurrentMusic(null);
+          return data || null;
+        } else {
+          throw Error("");
         }
+      } catch (err) {
+        setCurrentMusic(null);
+        setLocalCurrentMusic(null);
+        return null;
       }
     },
-    [setLocalCurrentMusic],
-  );
-
-  useEffect(() => {
-    verifyMusic(localCurrentMusic);
-  }, [localCurrentMusic, verifyMusic]);
+    staleTime: 1000 * 60,
+  });
 
   const playMusic = useCallback(
     async (music: MusicProps, musics?: MusicProps[]) => {
@@ -217,10 +234,12 @@ export function MusicContextProvider(props: PropsWithChildren) {
       const musicDuration = musicAudio.duration;
       const musicCurrentTime = musicAudio.currentTime;
       const musicProgress = (musicCurrentTime * 100) / musicDuration;
+      const { musicCurrentTime: musicCurrentTimeFormatted, musicDurationTime } =
+        musicTimeFormatter(musicAudio);
 
       setTime({
-        currentTime: musicTimeFormatter(musicAudio).musicCurrentTime,
-        duration: musicTimeFormatter(musicAudio).musicDurationTime,
+        currentTime: musicCurrentTimeFormatted,
+        duration: musicDurationTime,
         percentage: Math.floor(musicProgress),
         durationNumber: musicDuration,
       });
