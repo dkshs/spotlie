@@ -167,7 +167,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
         return null;
       }
     },
-    staleTime: 1000 * 60,
+    refetchOnWindowFocus: false,
   });
 
   const playMusic = useCallback(
