@@ -74,7 +74,7 @@ export default function ArtistPage() {
               className="absolute bg-cover inset-0 bg-center bg-no-repeat md:h-96 z-[-1] blur-3xl opacity-50"
               style={{ backgroundImage: `url(${artist.data.image})` }}
             ></div>
-            <Meta title={artist.data.name} path={`/music/${id}`} />
+            <Meta title={artist.data.name} path={`/artist/${id}`} />
             <div className="self-center md:mr-8 rounded-full bg-black/50 md:min-h-[280px] flex justify-center">
               <Image
                 src={artist.data.image}

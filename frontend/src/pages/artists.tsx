@@ -32,7 +32,7 @@ export default function ArtistsPage() {
 
   return (
     <>
-      <Meta title="Cantores" path="/singers" />
+      <Meta title="Artistas" path="/artists" />
       <div className="px-4 sm:px-9 mt-6">
         <div className="flex gap-2 flex-wrap justify-between items-center">
           <h1 className="text-2xl font-bold">Artistas</h1>

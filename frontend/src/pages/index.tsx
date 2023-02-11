@@ -39,7 +39,12 @@ export default function Home() {
 
   return (
     <>
-      <Meta path="/" title="Home" />
+      <Meta
+        path="/"
+        title="Home"
+        description="Navegue e ouça agora suas músicas e podcasts favoritos no navegador da Web."
+        image={{ src: "/logo.png", alt: "Logo do Spotify0" }}
+      />
       <ListMusics musics={musics} isFetching={isFetchingMusics} />
       <ListArtists artists={artists} isFetching={isFetchingArtists} />
     </>
