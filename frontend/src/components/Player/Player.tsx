@@ -15,7 +15,7 @@ import {
   SpeakerHigh,
   SpeakerLow,
   SpeakerSlash,
-} from "phosphor-react";
+} from "@phosphor-icons/react";
 
 export function Player() {
   const {
@@ -23,16 +23,15 @@ export function Player() {
     playMusic,
     musicState,
     pauseMusic,
-    time,
-    isRepeat,
+    musicTime,
     repeatMusic,
+    toggleRepeatMusic,
     skipMusic,
     previousMusic,
-    isShuffle,
-    shuffleMusics,
-    musics,
+    shufflePlaylist,
+    toggleShufflePlaylist,
     handleMusicVolume,
-    isMuted,
+    mutatedMusic,
     handleMusicTime,
     musicVolume,
   } = useMusic();
@@ -54,15 +53,15 @@ export function Player() {
         </div>
         <div className="h-0.5 bg-zinc-600">
           <div className="opacity-0 absolute translate-y-4 flex group-hover/time:opacity-100 group-hover/time:translate-y-0 justify-between inset-x-0 -top-6 max-w-[1600px] mx-auto px-4 duration-300">
-            <span className="text-xs opacity-75">{time.currentTime}</span>
-            <span className="text-xs opacity-75">{time.duration}</span>
+            <span className="text-xs opacity-75">{musicTime.currentTime}</span>
+            <span className="text-xs opacity-75">{musicTime.duration}</span>
           </div>
           <Slider.Root
             defaultValue={[0]}
             max={100}
             step={1}
             aria-label="Progresso da música"
-            value={[time.percentage]}
+            value={[musicTime.progress]}
             onValueChange={(value) => handleMusicTime(value[0])}
             className="max-w-[1600px] mx-auto w-full flex items-center select-none touch-auto h-0.5 relative"
           >
@@ -117,10 +116,12 @@ export function Player() {
           <div className="flex items-center justify-center gap-3 sm:w-[40%]">
             <button
               type="button"
-              onClick={() => shuffleMusics()}
-              title={`${isShuffle ? "Desativar" : "Ativar"} a ordem aleatória`}
+              onClick={() => toggleShufflePlaylist()}
+              title={`${
+                shufflePlaylist ? "Desativar" : "Ativar"
+              } a ordem aleatória`}
               className={`hidden xs:inline-flex p-2.5 ${
-                isShuffle && "text-blue-600"
+                shufflePlaylist && "text-blue-600"
               } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
             >
               <Shuffle size={24} weight="fill" />
@@ -139,7 +140,7 @@ export function Player() {
               onClick={() =>
                 musicState === "playing"
                   ? pauseMusic()
-                  : playMusic(currentMusic, musics)
+                  : playMusic(currentMusic)
               }
               className="p-2.5 bg-zinc-800 rounded-full hover:scale-110 hover:bg-zinc-900 hover:text-blue-400 duration-300 active:opacity-70 active:scale-100 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300"
             >
@@ -159,13 +160,13 @@ export function Player() {
             </button>
             <button
               type="button"
-              title={`${isRepeat ? "Não repetir" : "Repetir"}`}
-              onClick={() => repeatMusic()}
+              title={`${repeatMusic ? "Não repetir" : "Repetir"}`}
+              onClick={() => toggleRepeatMusic()}
               className={`hidden xs:inline-flex p-2.5 ${
-                isRepeat && "text-blue-600"
+                repeatMusic && "text-blue-600"
               } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
             >
-              {isRepeat ? (
+              {repeatMusic ? (
                 <RepeatOnce size={24} weight="fill" />
               ) : (
                 <Repeat size={24} weight="fill" />
@@ -175,11 +176,11 @@ export function Player() {
           <div className="hidden sm:flex justify-end group w-[30%] items-center gap-2 group/volume">
             <button
               type="button"
-              title={isMuted ? "Com som" : "Mudo"}
+              title={mutatedMusic ? "Com som" : "Mudo"}
               onClick={() => handleMusicVolume()}
               className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
             >
-              {isMuted ? (
+              {mutatedMusic ? (
                 <SpeakerSlash size={24} />
               ) : musicVolume <= 0.5 ? (
                 <SpeakerLow size={24} />

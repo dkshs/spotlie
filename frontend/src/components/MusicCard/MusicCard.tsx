@@ -4,13 +4,14 @@ import type { MusicProps } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Pause, Play } from "phosphor-react";
+import { Pause, Play } from "@phosphor-icons/react";
 
 interface MusicCardProps {
   music: MusicProps;
+  playlist?: MusicProps[];
 }
 
-export function MusicCard({ music }: MusicCardProps) {
+export function MusicCard({ music, playlist }: MusicCardProps) {
   const { playMusic, musicState, currentMusic, pauseMusic } = useMusic();
 
   return (
@@ -25,7 +26,7 @@ export function MusicCard({ music }: MusicCardProps) {
         onClick={() =>
           musicState === "playing" && music.id === currentMusic?.id
             ? pauseMusic()
-            : playMusic(music)
+            : playMusic(music, playlist)
         }
         className="relative rounded-lg overflow-hidden block min-h-[178px] min-w-[178px] group outline-none focus-visible:ring ring-purple-600 duration-200"
       >
@@ -39,8 +40,7 @@ export function MusicCard({ music }: MusicCardProps) {
         />
         <div
           className={`absolute justify-center items-center inset-0 ${
-            (musicState === "playing" && music.id === currentMusic?.id) ||
-            (musicState === "paused" && music.id === currentMusic?.id)
+            music.id === currentMusic?.id
               ? "flex bg-black/50"
               : "hidden group-hover:flex group-hover:bg-black/50 group-focus-visible:flex group-focus-visible:bg-black/50"
           }`}

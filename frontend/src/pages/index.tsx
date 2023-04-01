@@ -1,40 +1,43 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
-import type { MusicProps, ArtistProps } from "@/utils/types";
 
-import { Meta } from "@/components/Meta";
-import { ListMusics } from "@/components/ListMusics";
+import type { ArtistProps, MusicProps } from "@/utils/types";
+
 import { ListArtists } from "@/components/ListArtists";
+import { ListMusics } from "@/components/ListMusics";
+import { Meta } from "@/components/Meta";
 
 export default function Home() {
   const { data: musics, isFetching: isFetchingMusics } = useQuery<MusicProps[]>(
     {
-      queryKey: ["musics"],
+      queryKey: ["home-musics"],
       queryFn: async () => {
         try {
           const { data } = await api.get("/musics?limit=10");
-          return data;
+          return data || [];
         } catch (err) {
+          console.error(err);
           return [];
         }
       },
-      staleTime: 1000 * 60,
+      staleTime: 1000 * 60 * 5,
     },
   );
 
   const { data: artists, isFetching: isFetchingArtists } = useQuery<
     ArtistProps[]
   >({
-    queryKey: ["artists"],
+    queryKey: ["home-artists"],
     queryFn: async () => {
       try {
         const { data } = await api.get("/artists?limit=10");
-        return data;
+        return data || [];
       } catch (err) {
+        console.error(err);
         return [];
       }
     },
-    staleTime: 1000 * 60,
+    staleTime: 1000 * 60 * 5,
   });
 
   return (
@@ -50,9 +53,3 @@ export default function Home() {
     </>
   );
 }
-
-// <div className="relative">
-//   <div>
-//     <div className="absolute h-[332px] w-full bg-purple-800 z-[-1] bg-gradient-to-b from-black/60 to-zinc-900 duration-300"></div>
-//   </div>
-// </div>

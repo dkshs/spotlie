@@ -5,16 +5,18 @@ import type { MusicProps } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Pause, Play } from "phosphor-react";
+import { Pause, Play } from "@phosphor-icons/react";
 
 interface SimpleMusicCardProps {
   music: MusicProps;
   showArtist?: boolean;
+  playlist?: MusicProps[];
 }
 
 export function SimpleMusicCard({
   music,
   showArtist = true,
+  playlist,
 }: SimpleMusicCardProps) {
   const { currentMusic, playMusic, pauseMusic, musicState } = useMusic();
 
@@ -30,12 +32,12 @@ export function SimpleMusicCard({
         if (e.key !== "Enter" && e.key !== " ") return;
         musicState === "playing" && currentMusic?.id === music.id
           ? pauseMusic()
-          : playMusic(music);
+          : playMusic(music, playlist);
       }}
       onDoubleClick={() =>
         musicState === "playing" && currentMusic?.id === music.id
           ? pauseMusic()
-          : playMusic(music)
+          : playMusic(music, playlist)
       }
       className={`flex items-center px-4 py-2 rounded-md gap-3 ${
         musicState === "playing" && music.id === currentMusic?.id
@@ -55,8 +57,7 @@ export function SimpleMusicCard({
         />
         <div
           className={`absolute rounded-lg justify-center items-center inset-0 ${
-            (musicState === "playing" && music.id === currentMusic?.id) ||
-            (musicState === "paused" && music.id === currentMusic?.id)
+            music.id === currentMusic?.id
               ? "flex bg-black/50"
               : "hidden group-hover:flex group-hover:bg-black/50 group-focus-visible:flex group-focus-visible:bg-black/50"
           }`}

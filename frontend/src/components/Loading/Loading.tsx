@@ -1,10 +1,14 @@
-import { Spinner } from "phosphor-react";
+import { Spinner } from "@phosphor-icons/react";
 
-export function Loading() {
+interface LoadingProps {
+  text?: string;
+}
+
+export function Loading({ text }: LoadingProps) {
   return (
     <div className="flex items-center gap-1.5">
       <Spinner size={24} weight="bold" className="animate-spin" />
-      Carregando
+      {text && <span>{text}</span>}
     </div>
   );
 }

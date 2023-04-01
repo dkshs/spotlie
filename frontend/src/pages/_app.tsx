@@ -1,7 +1,7 @@
-import "../styles/global.css";
+import "@/styles/globals.css";
 
 import { QueryClientProvider } from "@tanstack/react-query";
-import { MusicContextProvider } from "@/context/useContext";
+import { MusicContextProvider } from "@/context/MusicContext";
 import { useRouter } from "next/router";
 import { queryClient } from "@/lib/queryClient";
 

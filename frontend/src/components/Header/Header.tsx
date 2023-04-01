@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { House, SpotifyLogo } from "phosphor-react";
+import { House, SpotifyLogo } from "@phosphor-icons/react";
 
 export function Header() {
   const router = useRouter();

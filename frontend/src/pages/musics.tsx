@@ -8,16 +8,19 @@ import { Meta } from "@/components/Meta";
 import { SimpleMusicCard } from "@/components/MusicCard";
 
 export default function MusicsPage() {
-  const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [query, setQuery] = useState("");
+  const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const { data: musics, isFetching } = useQuery<MusicProps[]>({
-    queryKey: ["all-musics"],
+    queryKey: ["musics"],
     queryFn: async () => {
-      const { data } = await api.get("/musics");
-      return data;
+      try {
+        const { data } = await api.get("/musics");
+        return data || [];
+      } catch (err) {
+        return [];
+      }
     },
-    staleTime: 1000 * 60,
   });
 
   const filteredMusics =

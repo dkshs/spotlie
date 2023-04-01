@@ -2,7 +2,7 @@ import type { ArtistProps } from "@/utils/types";
 
 import Image from "next/image";
 import Link from "next/link";
-import { User } from "phosphor-react";
+import { User } from "@phosphor-icons/react";
 
 interface ArtistCardProps {
   artist: ArtistProps;

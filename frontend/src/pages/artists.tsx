@@ -12,12 +12,15 @@ export default function ArtistsPage() {
   const [query, setQuery] = useState("");
 
   const { data: artists, isFetching } = useQuery<ArtistProps[]>({
-    queryKey: ["all-artists"],
+    queryKey: ["musics"],
     queryFn: async () => {
-      const { data } = await api.get("/artists");
-      return data;
+      try {
+        const { data } = await api.get("/artists");
+        return data || [];
+      } catch (err) {
+        return [];
+      }
     },
-    staleTime: 1000 * 60,
   });
 
   const filteredArtists =

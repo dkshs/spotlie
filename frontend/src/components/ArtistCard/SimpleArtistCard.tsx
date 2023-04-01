@@ -3,7 +3,7 @@ import type { ArtistProps } from "@/utils/types";
 import Link from "next/link";
 import Image from "next/image";
 
-import { User } from "phosphor-react";
+import { User } from "@phosphor-icons/react";
 
 interface SimpleArtistCardProps {
   artist: ArtistProps;
@@ -16,10 +16,10 @@ export function SimpleArtistCard({ artist }: SimpleArtistCardProps) {
       title={artist.name}
       className="flex px-4 py-2 rounded-md gap-3 hover:bg-black/30 focus:outline-none focus:bg-black/50 focus:ring-2 ring-purple-600 duration-200"
     >
-      <div className="relative rounded-lg min-w-[50px] min-h-[50px] bg-black/40 hover:opacity-80 duration-300">
+      <div className="relative rounded-lg min-w-[50px] min-h-[50px] bg-black/40 hover:opacity-70 duration-300">
         {artist.image ? (
           <Image
-            className="aspect-square rounded-lg object-cover shadow-lg bg-black/40 hover:opacity-70 duration-200"
+            className="aspect-square rounded-lg object-cover shadow-lg bg-black/40 hover:opacity-80 duration-200"
             src={artist.image}
             alt={artist.name}
             width={50}

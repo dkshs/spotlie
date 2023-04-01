@@ -4,6 +4,7 @@ import Head from "next/head";
 export interface MetaProps {
   title: string;
   path: string;
+  baseUrl?: string;
   description?: string;
   siteName?: string;
   image?: {
@@ -25,6 +26,7 @@ export const Meta: FC<PropsWithChildren<MetaProps>> = ({
   title,
   description,
   path,
+  baseUrl = process.env.SITE_BASEURL,
   siteName = process.env.SITE_NAME,
   type = "website",
   image,
@@ -35,7 +37,7 @@ export const Meta: FC<PropsWithChildren<MetaProps>> = ({
   twitter,
   children,
 }) => {
-  const canonicalUrl = `${process.env.SITE_BASEURL}${path}`;
+  const canonicalUrl = `${baseUrl}${path}`;
 
   const indexString = index ? "index" : "noindex";
   const followString = follow ? "follow" : "nofollow";
@@ -44,23 +46,28 @@ export const Meta: FC<PropsWithChildren<MetaProps>> = ({
     <Head>
       {/* SEO */}
       <title>{`${title} · ${siteName}`}</title>
+      <meta name="title" content={`${title} · ${siteName}`}></meta>
       {description && <meta name="description" content={description} />}
       <meta name="robots" content={`${indexString} ${followString}`} />
       <link rel="canonical" href={canonicalUrl} />
 
       {/* Facebook */}
-      <meta property="og:site_name" content={siteName} />
       <meta property="og:title" content={title} />
+      <meta property="og:site_name" content={siteName} />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:locale" content={locale} />
       {description && <meta property="og:description" content={description} />}
-      {image && <meta property="og:image" content={image.src} />}
+      {image && <meta property="og:image" content={`${baseUrl}${image.src}`} />}
       {image && <meta property="og:image:alt" content={image.alt} />}
       {updatedAt && <meta property="og:updated" content={updatedAt} />}
 
       {/* Twitter */}
       {twitter && <meta name="twitter:site" content={`@${twitter}`} />}
+      <meta property="twitter:url" content={canonicalUrl} />
+      <meta property="twitter:title" content={`${title} · ${siteName}`} />
+      <meta property="twitter:description" content={description} />
+      {image && <meta name="twitter:image" content={image.src} />}
       {image && <meta name="twitter:image:alt" content={image.alt} />}
       <meta
         name="twitter:card"

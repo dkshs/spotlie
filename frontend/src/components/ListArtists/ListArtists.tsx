@@ -18,12 +18,12 @@ export function ListArtists({ artists, isFetching }: ListArtistsProps) {
         <Link
           href="/artists"
           title="Ver mais artistas"
-          className="bg-purple-800 py-1.5 px-4 rounded-3xl hover:scale-105 hover:bg-purple-600 focus:outline-none focus:ring-2 ring-blue-300 active:bg-purple-600/20 duration-200"
+          className="bg-purple-800 py-1.5 px-4 rounded-3xl hover:scale-105 hover:bg-purple-600 focus:outline-none focus:ring-2 ring-purple-300 active:bg-purple-600/20 duration-200"
         >
           <span className="uppercase text-sm font-bold">Ver mais</span>
         </Link>
       </header>
-      <div className="pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
+      <div className="px-1 pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
         {!artists || isFetching
           ? skeletonItems.map((i) => (
               <div

@@ -23,8 +23,8 @@ body::-webkit-scrollbar-thumb {
 *::-webkit-scrollbar {
   @apply w-3 h-3;
 }
-::-webkit-scrollbar-track {
-  @apply bg-violet-600 bg-gradient-to-l from-black/60 to-zinc-900;
+*::-webkit-scrollbar-track {
+  @apply rounded-md bg-violet-600 bg-gradient-to-l from-black/60 to-zinc-900;
 }
 *::-webkit-scrollbar-thumb {
   @apply rounded-md bg-zinc-400/50 hover:bg-zinc-500/50 backdrop-blur;

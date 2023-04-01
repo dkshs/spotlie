@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useMusic } from "@/hooks/useMusic";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
-import { musicTimeFormatter } from "@/utils/formatter";
+import { musicTimeFormatter } from "@/utils/formatters";
 
 import type { MusicProps } from "@/utils/types";
 
-import { Meta } from "@/components/Meta";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { Meta } from "@/components/Meta";
 
-import { Pause, Play, User } from "phosphor-react";
+import { Pause, Play, User } from "@phosphor-icons/react";
 
 export default function MusicPage() {
   const { playMusic, pauseMusic, musicState, currentMusic } = useMusic();
@@ -27,11 +27,11 @@ export default function MusicPage() {
   } = useQuery<MusicProps | null>({
     queryKey: [`music-${id}`],
     queryFn: async () => {
-      if (!id) return null;
       try {
-        const { data } = await api.get<MusicProps>(`/music/${id}`);
-        return data;
-      } catch (error) {
+        const { data } = await api.get(`/music/${id}`);
+        return data || null;
+      } catch (err) {
+        console.error(err);
         return null;
       }
     },
@@ -46,7 +46,7 @@ export default function MusicPage() {
         setMusicDuration(duration);
       };
     }
-  }, [music]);
+  }, [id, music]);
 
   return (
     <div className="px-4 sm:px-9 mt-20">
@@ -81,7 +81,16 @@ export default function MusicPage() {
             className="absolute bg-cover inset-0 bg-center bg-no-repeat md:h-80 z-[-1] blur-3xl opacity-50"
             style={{ backgroundImage: `url(${music.cover})` }}
           ></div>
-          <Meta title={music.title} path={`/music/${id}`} />
+          <Meta
+            title={music.title}
+            path={`/music/${id}`}
+            description={`Ouça a música ${music.title}.`}
+            baseUrl=""
+            image={{
+              src: music.cover || "",
+              alt: music.title,
+            }}
+          />
           <div className="self-center md:mr-8 rounded-md bg-black/50 md:min-h-[280px] flex justify-center">
             <Image
               src={music.cover}

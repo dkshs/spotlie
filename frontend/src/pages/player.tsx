@@ -1,9 +1,10 @@
 import { useMusic } from "@/hooks/useMusic";
 import { useRouter } from "next/router";
 
+import * as Slider from "@radix-ui/react-slider";
 import Image from "next/image";
 import Link from "next/link";
-import * as Slider from "@radix-ui/react-slider";
+import { Meta } from "@/components/Meta";
 
 import {
   CaretDown,
@@ -17,25 +18,23 @@ import {
   SpeakerHigh,
   SpeakerLow,
   SpeakerSlash,
-} from "phosphor-react";
-import { Meta } from "@/components/Meta";
+} from "@phosphor-icons/react";
 
 export default function PlayerPage() {
   const {
     playMusic,
     pauseMusic,
-    shuffleMusics,
+    toggleShufflePlaylist,
     previousMusic,
     skipMusic,
     musicState,
-    isShuffle,
-    isRepeat,
-    currentMusic,
+    shufflePlaylist,
     repeatMusic,
-    time,
-    musics,
+    toggleRepeatMusic,
+    currentMusic,
+    musicTime,
     handleMusicVolume,
-    isMuted,
+    mutatedMusic,
     handleMusicTime,
     musicVolume,
   } = useMusic();
@@ -84,7 +83,7 @@ export default function PlayerPage() {
             </div>
             <div>
               <Link
-                href={`/singer/${currentMusic.artist.id}`}
+                href={`/artist/${currentMusic.artist.id}`}
                 title={currentMusic.artist.name}
                 className="focus:outline-none focus:underline focus:text-purple-400 hover:text-purple-400 decoration-purple-400 truncate text-lg font-light duration-300"
               >
@@ -97,15 +96,17 @@ export default function PlayerPage() {
           <div className="min-h-[90px] relative h-full py-6 gap-6 sm:p-6 flex-col sm:flex-row flex items-center justify-between flex-wrap">
             <div className="absolute top-0 h-0.5 bg-transparent inset-x-0 px-5 xs:px-9 lg:px-12">
               <div className="absolute flex justify-between inset-x-0 -top-6 px-7 xs:px-12 lg:px-14">
-                <span className="text-xs opacity-75">{time.currentTime}</span>
-                <span className="text-xs opacity-75">{time.duration}</span>
+                <span className="text-xs opacity-75">
+                  {musicTime.currentTime}
+                </span>
+                <span className="text-xs opacity-75">{musicTime.duration}</span>
               </div>
               <Slider.Root
                 defaultValue={[0]}
                 max={100}
                 step={1}
                 aria-label="Progresso da música"
-                value={[time.percentage]}
+                value={[musicTime.progress]}
                 onValueChange={(value) => handleMusicTime(value[0])}
                 className="w-full flex items-center select-none touch-auto h-0.5 relative"
               >
@@ -120,15 +121,19 @@ export default function PlayerPage() {
             <div className="flex items-center justify-center gap-3 flex-wrap w-full">
               <button
                 type="button"
-                onClick={() => shuffleMusics()}
+                onClick={() => toggleShufflePlaylist()}
+                title={`${
+                  shufflePlaylist ? "Desativar" : "Ativar"
+                } a ordem aleatória`}
                 className={`p-2.5 ${
-                  isShuffle && "text-blue-600"
+                  shufflePlaylist && "text-blue-600"
                 } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
               >
                 <Shuffle size={26} weight="fill" />
               </button>
               <button
                 type="button"
+                title="Voltar"
                 onClick={() => previousMusic()}
                 className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
               >
@@ -136,10 +141,11 @@ export default function PlayerPage() {
               </button>
               <button
                 type="button"
+                title={`${musicState === "playing" ? "Pausar" : "Play"}`}
                 onClick={() =>
                   musicState === "playing"
                     ? pauseMusic()
-                    : playMusic(currentMusic, musics)
+                    : playMusic(currentMusic)
                 }
                 className="p-2.5 bg-zinc-800 rounded-full hover:scale-110 hover:bg-zinc-900 hover:text-blue-400 duration-300 active:opacity-70 active:scale-100 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300"
               >
@@ -151,6 +157,7 @@ export default function PlayerPage() {
               </button>
               <button
                 type="button"
+                title="Avançar"
                 onClick={() => skipMusic()}
                 className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
               >
@@ -158,12 +165,13 @@ export default function PlayerPage() {
               </button>
               <button
                 type="button"
-                onClick={() => repeatMusic()}
+                title={`${repeatMusic ? "Não repetir" : "Repetir"}`}
+                onClick={() => toggleRepeatMusic()}
                 className={`p-2.5 ${
-                  isRepeat && "text-blue-600"
+                  repeatMusic && "text-blue-600"
                 } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
               >
-                {isRepeat ? (
+                {repeatMusic ? (
                   <RepeatOnce size={26} weight="fill" />
                 ) : (
                   <Repeat size={26} weight="fill" />
@@ -173,11 +181,11 @@ export default function PlayerPage() {
             <div className="hidden sm:flex absolute gap-2 right-0 mr-5 xs:mr-9 lg:mr-14 items-center group/volume">
               <button
                 type="button"
-                title={isMuted ? "Com som" : "Mudo"}
+                title={mutatedMusic ? "Com som" : "Mudo"}
                 onClick={() => handleMusicVolume()}
                 className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
               >
-                {isMuted ? (
+                {mutatedMusic ? (
                   <SpeakerSlash size={26} />
                 ) : musicVolume <= 0.5 ? (
                   <SpeakerLow size={26} />
