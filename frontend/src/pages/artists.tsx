@@ -21,6 +21,7 @@ export default function ArtistsPage() {
         return [];
       }
     },
+    staleTime: 1000 * 60,
   });
 
   const filteredArtists =

@@ -65,6 +65,7 @@ export const MusicContext = createContext<MusicContextProps>(ctxInitialValues);
 export function MusicContextProvider(props: PropsWithChildren) {
   const [playlist, setPlaylist] = useState<MusicProps[]>([]);
   const [currentMusic, setCurrentMusic] = useState<MusicProps | null>(null);
+  const [musicStateAux, setMusicStateAux] = useState(0);
   const [musicState, setMusicState] = useLocalStorage<MusicStateProps>(
     "musicState",
     "paused",
@@ -90,13 +91,10 @@ export function MusicContextProvider(props: PropsWithChildren) {
     false,
   );
 
-  useEffect(() => {
-    setMusicState("paused");
-  }, [setMusicState]);
-
   useQuery<MusicProps | null>({
     queryKey: ["verify-music"],
     queryFn: async () => {
+      setMusicState("paused");
       try {
         if (!localCurrentMusic) throw Error("");
         const { data } = await api.get(`/music/${localCurrentMusic.id}`);
@@ -246,8 +244,8 @@ export function MusicContextProvider(props: PropsWithChildren) {
   }, [setLocalShufflePlaylist, shufflePlaylist, shufflePlaylists]);
 
   const updateMusicTime = useCallback(() => {
+    musicStateAux === 0 ? setMusicStateAux(1) : setMusicState("playing");
     if (musicAudio) {
-      setMusicState("playing");
       const musicDuration = musicAudio.duration;
       const musicCurrentTime = musicAudio.currentTime;
       const musicProgress = (musicCurrentTime * 100) / musicDuration;
@@ -262,7 +260,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
         durationNum: musicDuration,
       });
     }
-  }, [musicAudio, setMusicState, setMusicTime]);
+  }, [musicAudio, musicStateAux, setMusicState, setMusicTime]);
 
   const musicEnded = useCallback(() => {
     if (repeatMusic) {

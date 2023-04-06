@@ -21,6 +21,7 @@ export default function MusicsPage() {
         return [];
       }
     },
+    staleTime: 1000 * 60,
   });
 
   const filteredMusics =
