@@ -49,7 +49,7 @@ export default function ArtistPage() {
   });
 
   return (
-    <div className="px-4 sm:px-9 my-20">
+    <div className="px-4 sm:px-9 mt-10 md:mt-20 mb-20">
       {isFetching || isLoading ? (
         <div className="flex flex-col justify-center text-center md:justify-start md:text-start md:flex-row md:min-h-[280px]">
           <div className="self-center md:mr-8 rounded-full bg-black/50 md:min-h-[280px] flex justify-center animate-pulse">

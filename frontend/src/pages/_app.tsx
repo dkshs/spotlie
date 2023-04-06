@@ -16,6 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <MusicContextProvider>
+        <div className="bg-violet-900 bg-gradient-to-b from-black/60 to-black fixed inset-0 -z-[1]" />
         <div
           className={`${
             router.pathname !== "/player" &&
