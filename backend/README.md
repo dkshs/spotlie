@@ -1,6 +1,6 @@
-# Spotify Zero - Backend
+# SpotLie - Backend
 
-Backend do Spotify Zero.
+Backend do SpotLie.
 
 ## Executar o Backend
 
@@ -9,13 +9,13 @@ Para executar o projeto você precisa ter o [Git](https://git-scm.com) e o [Dock
 ### 1. Clone esse repositório
 
 ```bash
-git clone https://github.com/ShadowsS01/spotify-zero.git
+git clone https://github.com/ShadowsS01/spotlie.git
 ```
 
 ### 2. Acesse a pasta do projeto
 
 ```bash
-cd spotify-zero/backend
+cd spotlie/backend
 ```
 
 ### 3. Variáveis de ambiente
@@ -83,4 +83,4 @@ python manage.py createsuperuser
 
 Este projeto esta sob a licença [MIT](../LICENSE).
 
-🔝[Voltar para o topo](#spotify-zero---backend)
+🔝[Voltar para o topo](#spotlie---backend)

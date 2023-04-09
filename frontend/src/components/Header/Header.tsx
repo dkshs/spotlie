@@ -32,7 +32,7 @@ export function Header() {
             <SpotifyLogo
               weight="fill"
               size={50}
-              className="text-green-500 group-focus:ring-2 ring-purple-400 rounded-full duration-200"
+              className="text-violet-600 group-focus:ring-2 ring-purple-400 rounded-full duration-200"
             />
           </Link>
         </li>

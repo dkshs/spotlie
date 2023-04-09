@@ -1,6 +1,6 @@
-# Spotify Zero - Frontend
+# SpotLie - Frontend
 
-Frontend do Spotify Zero
+Frontend do SpotLie
 
 ## Executar o Frontend
 
@@ -9,13 +9,13 @@ Para executar o projeto você precisa ter o [Git](https://git-scm.com) e o [Node
 ### 1. Clone esse repositório
 
 ```bash
-git clone https://github.com/ShadowsS01/spotify-zero.git
+git clone https://github.com/ShadowsS01/spotlie.git
 ```
 
 ### 2. Acesse a pasta do projeto
 
 ```bash
-cd spotify-zero/frontend
+cd spotlie/frontend
 ```
 
 ### 3. Instalando as dependências
@@ -51,4 +51,4 @@ npm run dev
 
 Este projeto esta sob a licença [MIT](../LICENSE).
 
-🔝[Voltar para o topo](#spotify-zero---frontend)
+🔝[Voltar para o topo](#spotlie---frontend)

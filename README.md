@@ -1,10 +1,8 @@
-# Spotify Zero ![Logo](./.github/media/logo.png)
+# SpotLie ![Logo](./.github/media/logo.png)
 
 [![license mit](https://img.shields.io/badge/licence-MIT-blue)](LICENSE)
 
 App de músicas.
-
-> Este projeto contém duas branch, a [master](https://github.com/ShadowsS01/spotify-zero/tree/master) sendo o projeto com o Backend feito em Python e a branch [supabase](https://github.com/ShadowsS01/spotify-zero/tree/supabase) sendo só o Frontend utilizando o [Supabase](https://supabase.com/).
 
 ## Tecnologias utilizadas
 
@@ -21,9 +19,7 @@ App de músicas.
 
 ## Demo
 
-Demo do projeto pode ser encontrada aqui: <https://spotify0.vercel.app/>
-
-## Executar o projeto
+Demo do projeto pode ser encontrada aqui: <https://spotlie.vercel.app/>
 
 ### Ferramentas necessárias
 
