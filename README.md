@@ -1,6 +1,6 @@
 # SpotLie ![Logo](./.github/media/logo.png)
 
-[![license mit](https://img.shields.io/badge/licence-MIT-blue)](LICENSE)
+[![license mit](https://img.shields.io/badge/licence-MIT-blueviolet)](LICENSE)
 
 App de músicas.
 
