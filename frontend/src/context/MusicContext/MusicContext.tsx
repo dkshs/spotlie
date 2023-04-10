@@ -138,7 +138,8 @@ export function MusicContextProvider(props: PropsWithChildren) {
         return [];
       }
     },
-    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
 
   useEffect(() => {
@@ -184,7 +185,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
 
       musicAudio?.pause();
       const audio = new Audio(music.audio);
-      if (musicAudio?.src === music.audio) {
+      if (musicAudio?.src === music.audio && !repeatMusic) {
         audio.currentTime = musicTime.currentTimeNum;
       }
       setMusicAudio(audio);
@@ -196,6 +197,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
       DBPlaylist,
       musicAudio,
       musicTime.currentTimeNum,
+      repeatMusic,
       setLocalCurrentMusic,
       setMusicState,
     ],
