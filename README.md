@@ -13,6 +13,7 @@ App de músicas.
   - [Docker](https://www.docker.com/)
 - [Frontend](/frontend/)
   - [Next.Js](https://nextjs.org/)
+  - [Clerk](https://clerk.com/)
   - [TailwindCSS](https://tailwindcss.com/)
   - [TanStack Query](https://tanstack.com/query/latest/)
   - [Axios](https://axios-http.com/)
