@@ -43,6 +43,9 @@ Fazendo isso não será necessário a alteração das variáveis!
 ```env
 NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api
 NEXT_PUBLIC_IMG_DOMAINS=127.0.0.1
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=YOUR_CLERK_PUBLISHABLE_KEY
+CLERK_SECRET_KEY=YOUR_CLERK_SECRET_KEY
 ```
 
 ### 6. Execute a Aplicação
