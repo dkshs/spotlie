@@ -38,7 +38,7 @@ Copie o arquivo `.env.local.example` neste diretório para `.env.local` *(que se
 cp .env.local.example .env.local
 ```
 
-Fazendo isso não será necessário a alteração das variáveis!
+Altera as variáveis do [Clerk](https://dashboard.clerk.com/) de acordo com o seu projeto.
 
 ```env
 NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api
