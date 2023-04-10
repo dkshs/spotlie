@@ -20,8 +20,9 @@ interface ArtistRequestProps {
 
 export default function ArtistPage() {
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
-  const router = useRouter();
-  const { id } = router.query;
+  const {
+    query: { id },
+  } = useRouter();
 
   const {
     data: artist,

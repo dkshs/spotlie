@@ -17,8 +17,9 @@ import { Pause, Play, User } from "@phosphor-icons/react";
 export default function MusicPage() {
   const { playMusic, pauseMusic, musicState, currentMusic } = useMusic();
   const [musicDuration, setMusicDuration] = useState("");
-  const router = useRouter();
-  const { id } = router.query;
+  const {
+    query: { id },
+  } = useRouter();
 
   const {
     data: music,

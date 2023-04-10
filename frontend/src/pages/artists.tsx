@@ -12,7 +12,7 @@ export default function ArtistsPage() {
   const [query, setQuery] = useState("");
 
   const { data: artists, isFetching } = useQuery<ArtistProps[]>({
-    queryKey: ["musics"],
+    queryKey: ["artists"],
     queryFn: async () => {
       try {
         const { data } = await api.get("/artists");
