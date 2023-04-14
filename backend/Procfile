@@ -1,0 +1,1 @@
+web: ./deploy.sh && gunicorn 'backend.wsgi'

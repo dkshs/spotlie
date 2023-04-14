@@ -1,6 +1,8 @@
 from pathlib import Path
 from decouple import config
 import os
+import dj_database_url
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,7 +20,14 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(",")]
 )
+CSRF_TRUSTED_ORIGINS = config(
+    "CSRF_TRUSTED_ORIGINS", cast=lambda v: [s.strip() for s in v.split(",")]
+)
+CORS_ALLOWED_ORIGINS = config(
+    "CORS_ALLOWED_ORIGINS", cast=lambda v: [s.strip() for s in v.split(",")]
+)
 
+BASE_URL = config("BASE_URL", default="http://127.0.0.1:8000", cast=str)
 
 # Application definition
 
@@ -30,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "corsheaders",
+    "django_cleanup.apps.CleanupConfig",
     "music",
 ]
 
@@ -42,6 +52,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     # My Middleware
     "backend.middleware.process_put_patch",
 ]
@@ -72,14 +83,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_PG_NAME"),
-        "USER": config("DB_PG_USER"),
-        "PASSWORD": config("DB_PG_PASSWORD"),
-        "HOST": config("DB_PG_HOST"),
-        "PORT": config("DB_PG_PORT"),
-    }
+    "default": dj_database_url.config(default=config("DB_PG_URL"), conn_max_age=1800),
 }
 
 # Password validation
@@ -116,20 +120,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_URL = "/media/"
+
+STATIC_URL = "static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# CORS
 if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
+    MEDIA_URL = "/media/"
 else:
-    CORS_ALLOWED_ORIGINS = config(
-        "CORS_ALLOWED_ORIGINS", cast=lambda v: [s.strip() for s in v.split(",")]
+    GS_PROJECT_ID = config("GS_PROJECT_ID")
+    GS_BUCKET_NAME = config("GS_BUCKET_NAME")
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        os.path.join(BASE_DIR, "gcpCredentials.json"),
     )
+    DEFAULT_FILE_STORAGE = "backend.storage_backends.GoogleCloudMediaStorage"
+    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"

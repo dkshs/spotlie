@@ -1,7 +1,6 @@
-from decouple import config
+from django.conf import settings
 
-
-URL_COMPLETED = config("BASE_URL", default="http://127.0.0.1:8000", cast=str)
+URL_COMPLETED = settings.BASE_URL if settings.DEBUG else ""
 
 
 def artist_query_formatter(query):
