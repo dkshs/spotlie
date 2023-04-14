@@ -141,4 +141,4 @@ else:
         os.path.join(BASE_DIR, "gcpCredentials.json"),
     )
     DEFAULT_FILE_STORAGE = "backend.storage_backends.GoogleCloudMediaStorage"
-    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
+    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
