@@ -46,7 +46,7 @@ export default function Home() {
         path="/"
         title="Home"
         description="Navegue e ouça agora suas músicas e podcasts favoritos no navegador da Web."
-        image={{ src: "/logo.png", alt: "Logo do Spotify0" }}
+        image={{ src: "/logo.png", alt: "Logo do SpotLie" }}
       />
       <ListMusics musics={musics} isFetching={isFetchingMusics} />
       <ListArtists artists={artists} isFetching={isFetchingArtists} />

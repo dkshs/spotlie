@@ -67,7 +67,9 @@ export const Meta: FC<PropsWithChildren<MetaProps>> = ({
       <meta property="twitter:url" content={canonicalUrl} />
       <meta property="twitter:title" content={`${title} · ${siteName}`} />
       <meta property="twitter:description" content={description} />
-      {image && <meta name="twitter:image" content={image.src} />}
+      {image && (
+        <meta name="twitter:image" content={`${baseUrl}${image.src}`} />
+      )}
       {image && <meta name="twitter:image:alt" content={image.alt} />}
       <meta
         name="twitter:card"
