@@ -38,10 +38,11 @@ Copie o arquivo `.env.local.example` neste diretório para `.env.local` *(que se
 cp .env.local.example .env.local
 ```
 
-Altera as variáveis do [Clerk](https://dashboard.clerk.com/) de acordo com o seu projeto.
+Altera as variáveis do [Clerk](https://dashboard.clerk.com/) de acordo com o seu projeto. E altere a variável `NEXT_PUBLIC_API_KEY` com a variável criada no [backend](../backend/).
 
 ```env
 NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api
+NEXT_PUBLIC_API_KEY=YOUR_BACKEND_API_KEY
 NEXT_PUBLIC_IMG_DOMAINS=127.0.0.1
 
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=YOUR_CLERK_PUBLISHABLE_KEY

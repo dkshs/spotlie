@@ -26,10 +26,11 @@ Copie o arquivo `.env.example` neste diretório para `.env` *(que será ignorado
 cp .env.example .env
 ```
 
-Fazendo isso será necessário alterar, caso queira, somente a `SECRET_KEY`.
+A variável `API_KEY` é a variável de autenticação para uso da api do backend. Ela deverá ser utilizado no [frontend](../frontend/) para fazer requisições.
 
 ```env
 SECRET_KEY=YOUR_SECRET_KEY
+API_KEY=YOUR_API_KEY
 DEBUG=True
 ALLOWED_HOSTS=localhost:8000,127.0.0.1
 
@@ -40,11 +41,7 @@ CORS_ALLOWED_ORIGINS=http://localhost:8000,http://localhost:3000
 BASE_URL=http://127.0.0.1:8000
 
 # DATABASE PG
-DB_PG_NAME=postgres
-DB_PG_USER=postgres
-DB_PG_PASSWORD=postgresw
-DB_PG_HOST=postgres
-DB_PG_PORT=5432
+DB_PG_URL=postgresql://postgres:postgresw@postgres:5432/postgres
 ```
 
 ### 4. Execute a Aplicação
