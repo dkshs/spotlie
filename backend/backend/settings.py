@@ -14,6 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
 API_KEY = config("API_KEY")
+ENDPOINT_KEY = config("ENDPOINT_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_cleanup.apps.CleanupConfig",
     "music",
+    "users",
 ]
 
 MIDDLEWARE = [

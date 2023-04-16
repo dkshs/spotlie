@@ -1,18 +1,12 @@
 from ninja import NinjaAPI
-from django.conf import settings
-from ninja.security import HttpBearer
+from .api_auth import AuthBearerGlobal, AuthBearerEndpoint
 from django.contrib.admin.views.decorators import staff_member_required
 from music.api import router as music_router
+from users.api import router as users_router
 
 import orjson
 from ninja.parser import Parser
 from django.http import HttpRequest
-
-
-class AuthBearer(HttpBearer):
-    def authenticate(self, request, token):
-        if token == settings.API_KEY:
-            return token
 
 
 class ORJSONParser(Parser):
@@ -22,4 +16,5 @@ class ORJSONParser(Parser):
 
 api = NinjaAPI(parser=ORJSONParser(), docs_decorator=staff_member_required)
 
-api.add_router("/", music_router, auth=AuthBearer())
+api.add_router("/", music_router, auth=AuthBearerGlobal())
+api.add_router("/", users_router, auth=AuthBearerEndpoint())
