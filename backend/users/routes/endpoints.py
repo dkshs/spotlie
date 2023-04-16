@@ -2,7 +2,7 @@ from django.http import HttpRequest
 from ninja import Router, Schema
 from typing import List
 from ..models import User
-from music.error import exception_message_handler
+from music.error import exception_message_handler, exception_handler
 from secrets import token_hex
 
 router = Router()
@@ -28,7 +28,7 @@ class EndpointSchema(Schema):
 def clerk_endpoint(request: HttpRequest, evt: EndpointSchema):
     try:
         if evt.type not in ["user.created", "user.updated"]:
-            return exception_message_handler(status=400, message="Invalid request")
+            return exception_handler(400, "Invalid request")
 
         identifier = evt.data.id
         email = evt.data.email_addresses[0].email_address
@@ -61,7 +61,7 @@ class EndpointDeletedUserSchema(Schema):
 def user_deleted_clerk_endpoint(request, evt: EndpointDeletedUserSchema):
     try:
         if evt.type != "user.deleted":
-            return exception_message_handler(status=400, message="Invalid request")
+            return exception_handler(400, "Invalid request")
 
         identifier = evt.data.id
         user = User.objects.filter(identifier=identifier)
