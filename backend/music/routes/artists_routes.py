@@ -7,7 +7,7 @@ from ..formatter import artist_query_formatter
 router = Router()
 
 
-@router.get("/artists", tags=["artists"])
+@router.get("/artists")
 def get_artists(
     request, id: str = None, name: str = None, orderBy: str = None, limit: int = None
 ):
@@ -50,7 +50,7 @@ def get_artists(
         return exception_message_handler(e.args)
 
 
-@router.get("/artist/{str:artist_id}", tags=["artists"])
+@router.get("/artist/{str:artist_id}")
 def get_artist(request, artist_id: UUID):
     try:
         artist = Artist.objects.filter(pk=artist_id)
@@ -67,7 +67,7 @@ class ArtistRequest(Schema):
     name: str
 
 
-@router.post("/artist", tags=["artists"])
+@router.post("/artist")
 def create_artist(request, artist: ArtistRequest, image: UploadedFile = None):
     try:
         a = artist.dict()
@@ -79,7 +79,7 @@ def create_artist(request, artist: ArtistRequest, image: UploadedFile = None):
         return exception_message_handler(e.args)
 
 
-@router.patch("/artist/{str:artist_id}", tags=["artists"])
+@router.patch("/artist/{str:artist_id}")
 def update_artist(
     request, artist_id: UUID, artist: ArtistRequest = None, image: UploadedFile = None
 ):
@@ -108,7 +108,7 @@ def update_artist(
         return exception_message_handler(e.args)
 
 
-@router.delete("/artist/{str:artist_id}", tags=["artists"])
+@router.delete("/artist/{str:artist_id}")
 def delete_artist(request, artist_id: UUID):
     try:
         artist = Artist.objects.get(pk=artist_id)

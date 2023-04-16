@@ -4,5 +4,5 @@ from .routes.artists_routes import router as artists_routes
 
 router = Router()
 
-router.add_router("/", musics_routes)
-router.add_router("/", artists_routes)
+router.add_router("/", musics_routes, tags=["musics"])
+router.add_router("/", artists_routes, tags=["artists"])

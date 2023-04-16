@@ -9,7 +9,7 @@ from ..formatter import artist_query_formatter, music_query_formatter
 router = Router()
 
 
-@router.get("/musics", tags=["musics"])
+@router.get("/musics")
 def get_musics(
     request,
     id: str = None,
@@ -73,7 +73,7 @@ def get_musics(
         return exception_message_handler(e.args)
 
 
-@router.get("/music/{str:music_id}", tags=["musics"])
+@router.get("/music/{str:music_id}")
 def get_music(request, music_id: UUID):
     music = Music.objects.filter(pk=music_id)
     if not music.exists():
@@ -90,7 +90,7 @@ class MusicCreateRequest(Schema):
     participants: List[Dict] = []
 
 
-@router.post("/music", tags=["musics"])
+@router.post("/music")
 def create_music(
     request, music: MusicCreateRequest, cover: UploadedFile, audio: UploadedFile
 ):
@@ -154,7 +154,7 @@ class MusicUpdateRequest(Schema):
     letters: str = ""
 
 
-@router.patch("/music/{str:music_id}", tags=["musics"])
+@router.patch("/music/{str:music_id}")
 def update_music(
     request,
     music_id: UUID,
@@ -199,7 +199,7 @@ class MusicUpdateParticipantsRequest(Schema):
     participants: List[Dict]
 
 
-@router.patch("/music/{str:music_id}/participants", tags=["musics"])
+@router.patch("/music/{str:music_id}/participants")
 def update_music_participants(
     request, music_id: UUID, participants: MusicUpdateParticipantsRequest
 ):
@@ -233,7 +233,7 @@ def update_music_participants(
         return exception_message_handler(e.args)
 
 
-@router.delete("/music/{str:music_id}", tags=["musics"])
+@router.delete("/music/{str:music_id}")
 def delete_music(request, music_id: UUID):
     try:
         music = Music.objects.get(pk=music_id)
