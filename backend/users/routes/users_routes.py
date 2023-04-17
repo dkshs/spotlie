@@ -1,7 +1,6 @@
-from uuid import UUID
 from ninja import Router
 from ..models import User
-from ..formatter import user_query_formatter
+from ..formatter import users_query_formatter, user_query_formatter
 from music.error import exception_message_handler
 
 router = Router()
@@ -38,14 +37,14 @@ def get_users(
         if limit is not None:
             users = users[:limit]
 
-        return [user_query_formatter(user) for user in users]
+        return [users_query_formatter(user) for user in users]
     except Exception as e:
         return exception_message_handler(e.args)
 
 
-@router.get("/user/{str:user_id}")
-def get_user(request, user_id: UUID):
-    user = User.objects.filter(pk=user_id)
+@router.get("/user/{str:user_identifier}")
+def get_user(request, user_identifier: str):
+    user = User.objects.filter(identifier=user_identifier)
     if not user.exists():
         return {}
 
