@@ -48,8 +48,10 @@ export default function Home() {
         description="Navegue e ouça agora suas músicas e podcasts favoritos no navegador da Web."
         image={{ src: "/logo.png", alt: "Logo do SpotLie" }}
       />
-      <ListMusics musics={musics} isFetching={isFetchingMusics} />
-      <ListArtists artists={artists} isFetching={isFetchingArtists} />
+      <div className="my-8 flex flex-col gap-8">
+        <ListMusics musics={musics} isFetching={isFetchingMusics} />
+        <ListArtists artists={artists} isFetching={isFetchingArtists} />
+      </div>
     </>
   );
 }

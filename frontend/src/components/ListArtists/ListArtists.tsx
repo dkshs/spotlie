@@ -12,7 +12,7 @@ export function ListArtists({ artists, isFetching }: ListArtistsProps) {
   const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
-    <section className="px-9 mt-8">
+    <section className="px-9">
       <header className="flex justify-between mb-4 items-center">
         <h1 className="font-bold text-xl">Artistas</h1>
         <Link

@@ -163,7 +163,6 @@ export default function MusicPage() {
               </button>
             </div>
           </div>
-          <div className="px-9 mt-8"></div>
         </div>
       ) : (
         <div className="flex flex-col justify-center text-center md:justify-start md:text-start md:flex-row md:min-h-[280px]">

@@ -37,7 +37,7 @@ export default function MusicsPage() {
   return (
     <>
       <Meta title="Músicas" path="/musics" />
-      <div className="px-4 sm:px-9 mt-6">
+      <div className="px-4 sm:px-9 mt-6 mb-8">
         <div className="flex gap-2 flex-wrap justify-between items-center">
           <h1 className="text-2xl font-bold">Músicas</h1>
           <label className="sr-only" htmlFor="searchForMusic">
