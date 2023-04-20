@@ -55,7 +55,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     # My Middleware
     "backend.middleware.process_put_patch",
 ]
@@ -126,7 +125,6 @@ USE_TZ = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
@@ -136,12 +134,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 if DEBUG:
+    STATIC_URL = "/static/"
     MEDIA_URL = "/media/"
 else:
     GS_PROJECT_ID = config("GS_PROJECT_ID")
-    GS_BUCKET_NAME = config("GS_BUCKET_NAME")
+    GS_MEDIA_BUCKET_NAME = config("GS_MEDIA_BUCKET_NAME")
+    GS_STATIC_BUCKET_NAME = config("GS_STATIC_BUCKET_NAME")
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
         os.path.join(BASE_DIR, "gcpCredentials.json"),
     )
+    STATICFILES_STORAGE = "backend.storage_backends.GoogleCloudStaticStorage"
     DEFAULT_FILE_STORAGE = "backend.storage_backends.GoogleCloudMediaStorage"
-    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    STATIC_URL = f"https://storage.googleapis.com/{GS_STATIC_BUCKET_NAME}/"
+    MEDIA_URL = f"https://storage.googleapis.com/{GS_MEDIA_BUCKET_NAME}/"
