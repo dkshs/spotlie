@@ -3,15 +3,20 @@ from ninja import Router, Schema, UploadedFile
 from ..models import Artist
 from ..error import exception_message_handler
 from ..formatter import artist_query_formatter
+from backend.api_auth import token_is_valid
 
 router = Router()
 
 
 @router.get("/artists")
 def get_artists(
-    request, id: str = None, name: str = None, orderBy: str = None, limit: int = None
+    request, pk: str = None, name: str = None, orderBy: str = None, limit: int = None
 ):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            limit = 10
+            pk, name, orderBy = None, None, None
         artists = Artist.objects.all()
 
         if orderBy is not None:
@@ -28,9 +33,9 @@ def get_artists(
                 else artists.order_by(f"-{column}")
             )
 
-        if id is not None:
-            list_id = id.rsplit(",")
-            artists = [artists.filter(pk=id) for id in list_id]
+        if pk is not None:
+            list_id = pk.rsplit(",")
+            artists = [artists.filter(pk=pk) for pk in list_id]
             artists = [i[0] if i.exists() else None for i in artists]
             if None in artists:
                 return []
@@ -53,6 +58,10 @@ def get_artists(
 @router.get("/artist/{str:artist_id}")
 def get_artist(request, artist_id: UUID):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
+
         artist = Artist.objects.filter(pk=artist_id)
         if not artist.exists():
             return {}
@@ -70,6 +79,10 @@ class ArtistRequest(Schema):
 @router.post("/artist")
 def create_artist(request, artist: ArtistRequest, image: UploadedFile = None):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
+
         a = artist.dict()
         artist = Artist(**a, image=image)
         artist.save()
@@ -84,6 +97,10 @@ def update_artist(
     request, artist_id: UUID, artist: ArtistRequest = None, image: UploadedFile = None
 ):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
+
         a = artist.dict() if artist != None else None
         artist = Artist.objects.get(pk=artist_id)
         is_changed = False
@@ -111,6 +128,10 @@ def update_artist(
 @router.delete("/artist/{str:artist_id}")
 def delete_artist(request, artist_id: UUID):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
+
         artist = Artist.objects.get(pk=artist_id)
         artist.delete()
 

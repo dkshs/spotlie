@@ -92,6 +92,9 @@ def exception_message_handler(exception_arg, message: str = None, status: int = 
     if exception_arg[0] == "Artist matching query does not exist.":
         message = "The artists do not exist."
         status = 404
+    if exception_arg[0] == "You are not logged in!":
+        message = exception_arg[0]
+        status = 401
 
     return exception_handler(
         status_code=status, message=message, full_message=exception_arg

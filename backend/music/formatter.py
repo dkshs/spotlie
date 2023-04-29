@@ -1,25 +1,26 @@
+from .models import Artist, Music
 from django.conf import settings
 
 URL_COMPLETED = settings.BASE_URL if settings.DEBUG else ""
 
 
-def artist_query_formatter(query):
+def artist_query_formatter(artist: Artist):
     return {
-        "id": query.id,
-        "name": query.name,
-        "image": f"{URL_COMPLETED}{query.image.url}" if query.image else None,
+        "id": artist.id,
+        "name": artist.name,
+        "image": f"{URL_COMPLETED}{artist.image.url}" if artist.image else None,
     }
 
 
-def music_query_formatter(query):
+def music_query_formatter(music: Music):
     return {
-        "id": query.id,
-        "title": query.title,
-        "artist": artist_query_formatter(query.artist),
+        "id": music.id,
+        "title": music.title,
+        "artist": artist_query_formatter(music.artist),
         "participants": [
-            artist_query_formatter(singer) for singer in query.participants.all()
+            artist_query_formatter(singer) for singer in music.participants.all()
         ],
-        "letters": query.letters,
-        "cover": f"{URL_COMPLETED}{query.cover.url}",
-        "audio": f"{URL_COMPLETED}{query.audio.url}",
+        "letters": music.letters,
+        "cover": f"{URL_COMPLETED}{music.cover.url}",
+        "audio": f"{URL_COMPLETED}{music.audio.url}",
     }

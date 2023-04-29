@@ -30,6 +30,7 @@ CORS_ALLOWED_ORIGINS = config(
 )
 
 BASE_URL = config("BASE_URL", default="http://127.0.0.1:8000", cast=str)
+JWKS_URL = config("JWKS_URL")
 
 # Application definition
 

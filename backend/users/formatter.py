@@ -1,13 +1,9 @@
-def users_query_formatter(query):
-    return {
-        "username": query.username,
-        "image": query.image,
-    }
+from .models import User
 
 
-def user_query_formatter(query):
+def user_query_formatter(user: User):
     return {
-        "id": query.id,
-        "username": query.username,
-        "image": query.image,
+        "id": user.id,
+        "username": user.username,
+        "image": user.image,
     }

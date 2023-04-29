@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from ..error import exception_message_handler
 from typing import List, Dict
 from ..formatter import artist_query_formatter, music_query_formatter
+from backend.api_auth import token_is_valid
 
 router = Router()
 
@@ -12,7 +13,7 @@ router = Router()
 @router.get("/musics")
 def get_musics(
     request,
-    id: str = None,
+    pk: str = None,
     title: str = None,
     artist: str = None,
     participants: str = None,
@@ -20,6 +21,10 @@ def get_musics(
     limit: int = None,
 ):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            limit = 10
+            pk, title, artist, participants, orderBy = None, None, None, None, None
         musics = Music.objects.all()
 
         if orderBy is not None:
@@ -30,18 +35,15 @@ def get_musics(
             if column not in ["title", "artist"]:
                 raise ValueError("Fields that can be sorted are 'title' and 'artist'")
 
-            if column == "artist":
-                column = "artist"
-
             musics = (
                 musics.order_by(column)
                 if order.startswith("asc")
                 else musics.order_by(f"-{column}")
             )
 
-        if id is not None:
-            list_id = id.rsplit(",")
-            musics = [musics.filter(pk=id) for id in list_id]
+        if pk is not None:
+            list_id = pk.rsplit(",")
+            musics = [musics.filter(pk=pk) for pk in list_id]
             musics = [i[0] if i.exists() else None for i in musics]
             if None in musics:
                 return []
@@ -75,12 +77,19 @@ def get_musics(
 
 @router.get("/music/{str:music_id}")
 def get_music(request, music_id: UUID):
-    music = Music.objects.filter(pk=music_id)
-    if not music.exists():
-        return {}
+    try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
 
-    music = music.first()
-    return music_query_formatter(music)
+        music = Music.objects.filter(pk=music_id)
+        if not music.exists():
+            return {}
+
+        music = music.first()
+        return music_query_formatter(music)
+    except Exception as e:
+        return exception_message_handler(e.args)
 
 
 class MusicCreateRequest(Schema):
@@ -95,6 +104,10 @@ def create_music(
     request, music: MusicCreateRequest, cover: UploadedFile, audio: UploadedFile
 ):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
+
         if not cover.content_type.startswith("image/"):
             raise ValueError("Cover must be an image.")
         if not audio.content_type.startswith("audio/"):
@@ -163,6 +176,10 @@ def update_music(
     audio: UploadedFile = None,
 ):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
+
         m = music.dict() if music != None else None
         music = Music.objects.get(pk=music_id)
         is_changed = False
@@ -204,6 +221,10 @@ def update_music_participants(
     request, music_id: UUID, participants: MusicUpdateParticipantsRequest
 ):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
+
         music = get_object_or_404(Music, pk=music_id)
         music_artist = music.artist
 
@@ -236,6 +257,10 @@ def update_music_participants(
 @router.delete("/music/{str:music_id}")
 def delete_music(request, music_id: UUID):
     try:
+        is_authenticated = token_is_valid(request)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
+
         music = Music.objects.get(pk=music_id)
         music.delete()
 

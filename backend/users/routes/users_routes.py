@@ -1,52 +1,19 @@
 from ninja import Router
-from ..models import User
-from ..formatter import users_query_formatter, user_query_formatter
+from ..formatter import user_query_formatter
+from backend.api_auth import token_is_valid
 from music.error import exception_message_handler
 
 router = Router()
 
 
-@router.get("/users")
-def get_users(
-    request,
-    username: str = None,
-    orderBy: str = None,
-    limit: int = None,
-):
+@router.get("/user")
+def get_user(request):
     try:
-        users = User.objects.all()
+        is_authenticated = token_is_valid(request, True)
+        if not is_authenticated.is_valid:
+            raise ValueError("You are not logged in!", is_authenticated.message)
 
-        if orderBy is not None:
-            order = orderBy if orderBy == "asc" else "desc"
-
-            users = (
-                users.order_by("username")
-                if order.startswith("asc")
-                else users.order_by("-username")
-            )
-
-        if username is not None:
-            usernames = username.rsplit(",")
-            users = [
-                users.filter(username__icontains=username) for username in usernames
-            ]
-            users = [user[0] if user.exists() else None for user in users]
-            if None in users:
-                return []
-
-        if limit is not None:
-            users = users[:limit]
-
-        return [users_query_formatter(user) for user in users]
+        user = is_authenticated.user
+        return user_query_formatter(user) if user else {}
     except Exception as e:
         return exception_message_handler(e.args)
-
-
-@router.get("/user/{str:user_identifier}")
-def get_user(request, user_identifier: str):
-    user = User.objects.filter(identifier=user_identifier)
-    if not user.exists():
-        return {}
-
-    user = user.first()
-    return user_query_formatter(user)
