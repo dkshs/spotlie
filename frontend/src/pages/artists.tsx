@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
+import { useApi } from "@/hooks/useApi";
 
 import type { ArtistProps } from "@/utils/types";
 
@@ -8,6 +8,7 @@ import { Meta } from "@/components/Meta";
 import { SimpleArtistCard } from "@/components/ArtistCard";
 
 export default function ArtistsPage() {
+  const { libApi } = useApi();
   const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [query, setQuery] = useState("");
 
@@ -15,7 +16,9 @@ export default function ArtistsPage() {
     queryKey: ["artists"],
     queryFn: async () => {
       try {
-        const { data } = await api.get("/artists");
+        const { data } = await libApi
+          .from("artists")
+          .select<ArtistProps[]>("*");
         return data || [];
       } catch (err) {
         return [];

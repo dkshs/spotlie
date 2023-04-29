@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMusic } from "@/hooks/useMusic";
 import { useRouter } from "next/router";
-import { api } from "@/lib/axios";
+import { useApi } from "@/hooks/useApi";
 
 import type { MusicProps, ArtistProps } from "@/utils/types";
 
@@ -19,6 +19,7 @@ interface ArtistRequestProps {
 }
 
 export default function ArtistPage() {
+  const { libApi } = useApi();
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
   const {
     query: { id },
@@ -33,11 +34,18 @@ export default function ArtistPage() {
     queryFn: async () => {
       try {
         let artistMusics: MusicProps[] = [];
-        const { data: artist } = await api.get(`/artist/${id}`);
+        const { data: artist } = await libApi
+          .from("artists")
+          .select<ArtistProps>("*", {
+            eq: { column: "id", value: id as string },
+          });
         if (artist) {
-          const { data: musics } = await api.get(
-            `/musics?artist=${artist.name}&limit=10`,
-          );
+          const { data: musics } = await libApi
+            .from("musics")
+            .select<MusicProps[]>("*", {
+              like: { column: "artist", value: artist.name },
+              limit: 10,
+            });
           artistMusics = musics || [];
         }
         return { artist, artistMusics };

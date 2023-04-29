@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
+import { useApi } from "@/hooks/useApi";
 
 import type { MusicProps } from "@/utils/types";
 
@@ -8,6 +8,7 @@ import { Meta } from "@/components/Meta";
 import { SimpleMusicCard } from "@/components/MusicCard";
 
 export default function MusicsPage() {
+  const { libApi } = useApi();
   const [query, setQuery] = useState("");
   const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -15,7 +16,7 @@ export default function MusicsPage() {
     queryKey: ["musics"],
     queryFn: async () => {
       try {
-        const { data } = await api.get("/musics");
+        const { data } = await libApi.from("musics").select<MusicProps[]>("*");
         return data || [];
       } catch (err) {
         return [];

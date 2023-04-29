@@ -7,7 +7,7 @@ import {
 } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "usehooks-ts";
-import { api } from "@/lib/axios";
+import { useApi } from "@/hooks/useApi";
 
 import type {
   MusicContextProps,
@@ -63,6 +63,7 @@ const ctxInitialValues: MusicContextProps = {
 export const MusicContext = createContext<MusicContextProps>(ctxInitialValues);
 
 export function MusicContextProvider(props: PropsWithChildren) {
+  const { libApi } = useApi();
   const [playlist, setPlaylist] = useState<MusicProps[]>([]);
   const [currentMusic, setCurrentMusic] = useState<MusicProps | null>(null);
   const [musicStateAux, setMusicStateAux] = useState(0);
@@ -97,7 +98,9 @@ export function MusicContextProvider(props: PropsWithChildren) {
       setMusicState("paused");
       try {
         if (!localCurrentMusic) throw Error("");
-        const { data } = await api.get(`/music/${localCurrentMusic.id}`);
+        const { data } = await libApi.from("musics").select<MusicProps>("*", {
+          eq: { column: "id", value: localCurrentMusic.id },
+        });
         if (!data) throw Error("");
         setCurrentMusic(data);
         setLocalCurrentMusic(data);
@@ -130,7 +133,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
     queryKey: ["DBPlaylist"],
     queryFn: async () => {
       try {
-        const { data } = await api.get("/musics");
+        const { data } = await libApi.from("musics").select<MusicProps[]>("*");
         setPlaylist(data || []);
         return data || [];
       } catch (err) {

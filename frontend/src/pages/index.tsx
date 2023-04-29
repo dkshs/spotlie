@@ -1,5 +1,5 @@
+import { useApi } from "@/hooks/useApi";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
 
 import type { ArtistProps, MusicProps } from "@/utils/types";
 
@@ -8,12 +8,16 @@ import { ListMusics } from "@/components/ListMusics";
 import { Meta } from "@/components/Meta";
 
 export default function Home() {
+  const { libApi } = useApi();
+
   const { data: musics, isFetching: isFetchingMusics } = useQuery<MusicProps[]>(
     {
       queryKey: ["home-musics"],
       queryFn: async () => {
         try {
-          const { data } = await api.get("/musics?limit=10");
+          const { data } = await libApi
+            .from("musics")
+            .select<MusicProps[]>("*", { limit: 10 });
           return data || [];
         } catch (err) {
           console.error(err);
@@ -30,7 +34,9 @@ export default function Home() {
     queryKey: ["home-artists"],
     queryFn: async () => {
       try {
-        const { data } = await api.get("/artists?limit=10");
+        const { data } = await libApi
+          .from("artists")
+          .select<ArtistProps[]>("*", { limit: 10 });
         return data || [];
       } catch (err) {
         console.error(err);

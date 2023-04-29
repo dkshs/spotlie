@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useMusic } from "@/hooks/useMusic";
+import { useApi } from "@/hooks/useApi";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
 import { musicTimeFormatter } from "@/utils/formatters";
 
 import type { MusicProps } from "@/utils/types";
@@ -15,6 +15,7 @@ import { Meta } from "@/components/Meta";
 import { Pause, Play, User } from "@phosphor-icons/react";
 
 export default function MusicPage() {
+  const { libApi } = useApi();
   const { playMusic, pauseMusic, musicState, currentMusic } = useMusic();
   const [musicDuration, setMusicDuration] = useState("");
   const {
@@ -29,7 +30,9 @@ export default function MusicPage() {
     queryKey: [`music-${id}`],
     queryFn: async () => {
       try {
-        const { data } = await api.get(`/music/${id}`);
+        const { data } = await libApi.from("musics").select<MusicProps>("*", {
+          eq: { column: "id", value: id as string },
+        });
         return data || null;
       } catch (err) {
         console.error(err);
