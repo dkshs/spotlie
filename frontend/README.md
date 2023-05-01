@@ -8,7 +8,7 @@ Para executar o projeto você precisa ter o [Git](https://git-scm.com) e o [Node
 
 ### 1. Configurando o [Clerk](https://clerk.com/)
 
-- Faça login e crie um projeto no [Clerk](https://dashboard.clerk.com/). Recomendo utilizar somente o *"Email address"* e o *"Username"* como algo inicial.
+- Faça login e crie um projeto no [Clerk](https://dashboard.clerk.com/). Recomendo utilizar somente o _"Email address"_ e o _"Username"_ como algo inicial.
 
 - Na página inicial de seu projeto, aparecerá o ícone do Next.Js, passe o mouse em cima e copie as variáveis, será necessário no [passo 5](#5-variáveis-de-ambiente).
 
@@ -32,7 +32,7 @@ npm install
 
 ### 5. Variáveis de ambiente
 
-Copie o arquivo `.env.local.example` neste diretório para `.env.local` *(que será ignorado pelo Git)*:
+Copie o arquivo `.env.local.example` neste diretório para `.env.local` _(que será ignorado pelo Git)_:
 
 ```bash
 cp .env.local.example .env.local

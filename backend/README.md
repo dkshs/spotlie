@@ -31,14 +31,19 @@ A variável `API_KEY` é a variável de autenticação para uso da api do backen
 ```env
 SECRET_KEY=YOUR_SECRET_KEY
 API_KEY=YOUR_API_KEY
+ENDPOINT_KEY=YOUR_ENDPOINT_KEY
 DEBUG=True
 ALLOWED_HOSTS=localhost:8000,127.0.0.1
+
+# CSRF token
+CSRF_TRUSTED_ORIGINS=http://127.0.0.1:8000,http://localhost:8000
 
 # CORS
 CORS_ALLOWED_ORIGINS=http://localhost:8000,http://localhost:3000
 
 # URLS
 BASE_URL=http://127.0.0.1:8000
+JWKS_URL=YOUR_JWKS_URL
 
 # DATABASE PG
 DB_PG_URL=postgresql://postgres:postgresw@postgres:5432/postgres
