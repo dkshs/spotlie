@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-import type { MusicCardIconProps } from "./types";
+import type { MusicCardIconProps } from "../types";
 
 import { Pause, Play } from "@phosphor-icons/react";
 
