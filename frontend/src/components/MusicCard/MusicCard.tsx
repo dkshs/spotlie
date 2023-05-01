@@ -32,14 +32,11 @@ export function MusicCard({
       className="py-1 max-w-[178px] snap-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.3 }}
     >
       <motion.button
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.02 }}
-        whileFocus={{ scale: 1.02 }}
         onHoverStart={() => setMusicSelected && setMusicSelected(music.id)}
         onHoverEnd={() => setMusicSelected && setMusicSelected(null)}
         onFocus={() => setMusicSelected && setMusicSelected(music.id)}

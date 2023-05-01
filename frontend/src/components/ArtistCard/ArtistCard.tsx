@@ -18,14 +18,13 @@ export function ArtistCard({ artist }: ArtistCardProps) {
       className="py-1 max-w-[178px] snap-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.3 }}
     >
       <MotionLink
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.02, opacity: 0.7 }}
-        whileFocus={{ scale: 1.02, opacity: 0.7 }}
+        whileHover={{ opacity: 0.6 }}
+        whileFocus={{ opacity: 0.6 }}
         transition={{ duration: 0.3 }}
         href={`/artist/${artist.id}`}
         title={artist.name}
