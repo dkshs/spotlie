@@ -5,7 +5,7 @@ autoload -U colors
 colors
 
 # # To do the migrations
-# python manage.py migrate
+python manage.py migrate
 
 echo "$bold_color$fg[green]Aplicação iniciada${reset_color}"
 echo "$bold_color$fg[yellow]Acesse: http://localhost:8000/ \n${reset_color}"
