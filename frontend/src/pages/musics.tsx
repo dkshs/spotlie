@@ -6,9 +6,11 @@ import type { MusicProps } from "@/utils/types";
 
 import { Meta } from "@/components/Meta";
 import { SimpleMusicCard } from "@/components/MusicCard";
+import { motion } from "framer-motion";
 
 export default function MusicsPage() {
   const { libApi } = useApi();
+  const [musicSelected, setMusicSelected] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -35,6 +37,26 @@ export default function MusicsPage() {
             .includes(query.toLowerCase().replace(/\s+/g, "")),
         );
 
+  const musicCardContainer = {
+    hidden: { opacity: 1, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        delayChildren: 0.1,
+        staggerChildren: 0.05,
+        duration: 0.2,
+      },
+    },
+  };
+  const musicCard = {
+    hidden: { x: -60, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+    },
+  };
+
   return (
     <>
       <Meta title="Músicas" path="/musics" />
@@ -52,7 +74,10 @@ export default function MusicsPage() {
             onChange={(event) => setQuery(event.target.value)}
           />
         </div>
-        <div
+        <motion.div
+          variants={musicCardContainer}
+          initial="hidden"
+          animate="visible"
           className={`${
             filteredMusics?.length === 0 && query !== "" ? "flex" : "grid"
           } grid-cols-1 sm:grid-cols-2 gap-1 pt-6`}
@@ -80,10 +105,20 @@ export default function MusicsPage() {
             </div>
           ) : (
             filteredMusics.map((music) => (
-              <SimpleMusicCard key={music.id} music={music} />
+              <motion.div
+                key={music.id}
+                variants={musicCard}
+                className="w-full"
+              >
+                <SimpleMusicCard
+                  music={music}
+                  musicSelected={musicSelected}
+                  setMusicSelected={setMusicSelected}
+                />
+              </motion.div>
             ))
           )}
-        </div>
+        </motion.div>
       </div>
     </>
   );

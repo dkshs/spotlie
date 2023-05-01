@@ -1,27 +1,44 @@
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useMusic } from "@/hooks/useMusic";
 
 import type { MusicProps } from "@/utils/types";
 
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
-import { Pause, Play } from "@phosphor-icons/react";
+import { SimpleMusicCardIcon } from "./IconContainer";
 
 interface SimpleMusicCardProps {
   music: MusicProps;
   showArtist?: boolean;
   playlist?: MusicProps[];
+  musicSelected?: string | null;
+  setMusicSelected?: Dispatch<SetStateAction<string | null>>;
 }
 
 export function SimpleMusicCard({
   music,
   showArtist = true,
   playlist,
+  musicSelected = null,
+  setMusicSelected,
 }: SimpleMusicCardProps) {
   const { currentMusic, playMusic, pauseMusic, musicState } = useMusic();
 
+  useEffect(() => {
+    setMusicSelected &&
+      setMusicSelected(currentMusic?.id ? currentMusic.id : null);
+  }, [currentMusic?.id, setMusicSelected]);
+
   return (
-    <button
+    <motion.button
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      onHoverStart={() => setMusicSelected && setMusicSelected(music.id)}
+      onHoverEnd={() => setMusicSelected && setMusicSelected(null)}
+      onFocus={() => setMusicSelected && setMusicSelected(music.id)}
+      onBlur={() => setMusicSelected && setMusicSelected(null)}
       type="button"
       title={`${
         musicState === "playing" && currentMusic?.id === music.id
@@ -39,7 +56,7 @@ export function SimpleMusicCard({
           ? pauseMusic()
           : playMusic(music, playlist)
       }
-      className={`flex items-center px-4 py-2 rounded-md gap-3 ${
+      className={`flex items-center px-4 py-2 rounded-md gap-3 w-full ${
         musicState === "playing" && music.id === currentMusic?.id
           ? "bg-black/40"
           : musicState === "paused" &&
@@ -55,38 +72,21 @@ export function SimpleMusicCard({
           width={50}
           height={50}
         />
-        <div
-          className={`absolute rounded-lg justify-center items-center inset-0 ${
-            music.id === currentMusic?.id
-              ? "flex bg-black/50"
-              : "hidden group-hover:flex group-hover:bg-black/50 group-focus-visible:flex group-focus-visible:bg-black/50"
-          }`}
-        >
-          <div className="rounded-full duration-200">
-            {musicState === "playing" && currentMusic?.id === music.id ? (
-              <>
-                <Image
-                  src="/musicPlaying.gif"
-                  alt="Música tocando"
-                  className="group-hover:hidden flex"
-                  height={24}
-                  width={24}
-                />
-                <Pause
-                  size={24}
-                  weight="fill"
-                  className="hidden hover:text-purple-400 group-hover:flex duration-300"
-                />
-              </>
-            ) : (
-              <Play
-                size={24}
-                weight="fill"
-                className="hover:text-purple-400 duration-300"
-              />
-            )}
-          </div>
-        </div>
+        <AnimatePresence>
+          {musicSelected === music.id ? (
+            <SimpleMusicCardIcon
+              musicState={musicState}
+              currentMusic={currentMusic}
+              music={music}
+            />
+          ) : currentMusic?.id === music.id ? (
+            <SimpleMusicCardIcon
+              musicState={musicState}
+              currentMusic={currentMusic}
+              music={music}
+            />
+          ) : null}
+        </AnimatePresence>
       </div>
       <div className="flex flex-col gap-0.5 text-base font-normal truncate text-start">
         <Link
@@ -109,6 +109,6 @@ export function SimpleMusicCard({
           </div>
         )}
       </div>
-    </button>
+    </motion.button>
   );
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useMusic } from "@/hooks/useMusic";
 import { useRouter } from "next/router";
@@ -10,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
 import { SimpleMusicCard } from "@/components/MusicCard";
+import { motion } from "framer-motion";
 
 import { Pause, Play } from "@phosphor-icons/react";
 
@@ -21,6 +23,7 @@ interface ArtistRequestProps {
 export default function ArtistPage() {
   const { libApi } = useApi();
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
+  const [musicSelected, setMusicSelected] = useState<string | null>(null);
   const {
     query: { id },
   } = useRouter();
@@ -57,6 +60,26 @@ export default function ArtistPage() {
     staleTime: 1000 * 60,
   });
 
+  const musicCardContainer = {
+    hidden: { opacity: 1, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        delayChildren: 0.3,
+        staggerChildren: 0.2,
+        duration: 0.3,
+      },
+    },
+  };
+  const musicCard = {
+    hidden: { x: -60, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+    },
+  };
+
   return (
     <div className="px-4 sm:px-9 mt-10 md:mt-20 mb-20">
       {isFetching || isLoading ? (
@@ -80,7 +103,7 @@ export default function ArtistPage() {
         <>
           <div className="flex flex-col justify-center text-center md:justify-start md:text-start md:flex-row md:min-h-[280px]">
             <div
-              className="absolute bg-cover inset-0 bg-center bg-no-repeat md:h-96 z-[-1] blur-3xl opacity-50"
+              className="absolute bg-cover inset-0 bg-center bg-no-repeat md:h-80 z-[-1] blur-3xl opacity-50"
               style={
                 artist.artist.image
                   ? {
@@ -156,20 +179,32 @@ export default function ArtistPage() {
             <header className="flex justify-between items-center">
               <h1 className="font-bold text-xl">Músicas</h1>
             </header>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 pt-6">
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 gap-1 pt-6"
+              variants={musicCardContainer}
+              initial="hidden"
+              animate="visible"
+            >
               {artist.artistMusics && artist.artistMusics.length > 0 ? (
                 artist.artistMusics.map((music) => (
-                  <SimpleMusicCard
+                  <motion.div
+                    variants={musicCard}
                     key={music.id}
-                    music={music}
-                    showArtist={false}
-                    playlist={artist.artistMusics}
-                  />
+                    className="w-full"
+                  >
+                    <SimpleMusicCard
+                      music={music}
+                      showArtist={false}
+                      playlist={artist.artistMusics}
+                      musicSelected={musicSelected}
+                      setMusicSelected={setMusicSelected}
+                    />
+                  </motion.div>
                 ))
               ) : (
                 <p>O artista {artist.artist.name} não tem músicas!</p>
               )}
-            </div>
+            </motion.div>
           </section>
         </>
       ) : (

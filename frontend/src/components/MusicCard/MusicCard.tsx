@@ -1,22 +1,49 @@
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useMusic } from "@/hooks/useMusic";
 import type { MusicProps } from "@/utils/types";
 
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
-import { Pause, Play } from "@phosphor-icons/react";
+import { MusicCardIcon } from "./IconContainer";
 
 interface MusicCardProps {
   music: MusicProps;
   playlist?: MusicProps[];
+  musicSelected?: string | null;
+  setMusicSelected?: Dispatch<SetStateAction<string | null>>;
 }
 
-export function MusicCard({ music, playlist }: MusicCardProps) {
+export function MusicCard({
+  music,
+  playlist,
+  musicSelected,
+  setMusicSelected,
+}: MusicCardProps) {
   const { playMusic, musicState, currentMusic, pauseMusic } = useMusic();
 
+  useEffect(() => {
+    setMusicSelected && setMusicSelected(currentMusic?.id || null);
+  }, [currentMusic?.id, setMusicSelected]);
+
   return (
-    <div className="py-1 max-w-[178px] snap-center">
-      <button
+    <motion.div
+      className="py-1 max-w-[178px] snap-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.button
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.02 }}
+        whileFocus={{ scale: 1.02 }}
+        onHoverStart={() => setMusicSelected && setMusicSelected(music.id)}
+        onHoverEnd={() => setMusicSelected && setMusicSelected(null)}
+        onFocus={() => setMusicSelected && setMusicSelected(music.id)}
+        onBlur={() => setMusicSelected && setMusicSelected(null)}
         type="button"
         title={`${
           musicState === "playing" && currentMusic?.id === music.id
@@ -38,35 +65,22 @@ export function MusicCard({ music, playlist }: MusicCardProps) {
           height={178}
           priority
         />
-        <div
-          className={`absolute justify-center items-center inset-0 ${
-            music.id === currentMusic?.id
-              ? "flex bg-black/50"
-              : "hidden group-hover:flex group-hover:bg-black/50 group-focus-visible:flex group-focus-visible:bg-black/50"
-          }`}
-        >
-          <div className="p-3 bg-purple-600/40 backdrop-blur-sm rounded-full hover:scale-110 duration-200">
-            {musicState === "playing" && currentMusic?.id === music.id ? (
-              <>
-                <Image
-                  src="/musicPlaying.gif"
-                  alt="Música tocando"
-                  className="flex group-hover:hidden group-focus:hidden"
-                  height={32}
-                  width={32}
-                />
-                <Pause
-                  size={32}
-                  weight="fill"
-                  className="hidden group-hover:flex group-focus:flex"
-                />
-              </>
-            ) : (
-              <Play size={32} weight="fill" />
-            )}
-          </div>
-        </div>
-      </button>
+        <AnimatePresence>
+          {musicSelected === music.id ? (
+            <MusicCardIcon
+              musicState={musicState}
+              currentMusic={currentMusic}
+              music={music}
+            />
+          ) : currentMusic?.id === music.id ? (
+            <MusicCardIcon
+              musicState={musicState}
+              currentMusic={currentMusic}
+              music={music}
+            />
+          ) : null}
+        </AnimatePresence>
+      </motion.button>
       <div className="flex flex-col mt-2 gap-0.5 text-base font-normal truncate">
         <Link
           href={`/music/${music.id}`}
@@ -86,6 +100,6 @@ export function MusicCard({ music, playlist }: MusicCardProps) {
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -6,6 +6,7 @@ import type { ArtistProps } from "@/utils/types";
 
 import { Meta } from "@/components/Meta";
 import { SimpleArtistCard } from "@/components/ArtistCard";
+import { motion } from "framer-motion";
 
 export default function ArtistsPage() {
   const { libApi } = useApi();
@@ -37,6 +38,26 @@ export default function ArtistsPage() {
             .includes(query.toLowerCase().replace(/\s+/g, "")),
         );
 
+  const artistCardContainer = {
+    hidden: { opacity: 1, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        delayChildren: 0.1,
+        staggerChildren: 0.05,
+        duration: 0.2,
+      },
+    },
+  };
+  const artistCard = {
+    hidden: { x: -60, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+    },
+  };
+
   return (
     <>
       <Meta title="Artistas" path="/artists" />
@@ -54,7 +75,10 @@ export default function ArtistsPage() {
             onChange={(event) => setQuery(event.target.value)}
           />
         </div>
-        <div
+        <motion.div
+          variants={artistCardContainer}
+          initial="hidden"
+          animate="visible"
           className={`${
             filteredArtists?.length === 0 && query !== "" ? "flex" : "grid"
           } grid-cols-1 sm:grid-cols-2 gap-1 pt-6`}
@@ -79,10 +103,16 @@ export default function ArtistsPage() {
             </div>
           ) : (
             filteredArtists.map((artist) => (
-              <SimpleArtistCard key={artist.id} artist={artist} />
+              <motion.div
+                key={artist.id}
+                variants={artistCard}
+                className="w-full"
+              >
+                <SimpleArtistCard artist={artist} />
+              </motion.div>
             ))
           )}
-        </div>
+        </motion.div>
       </div>
     </>
   );

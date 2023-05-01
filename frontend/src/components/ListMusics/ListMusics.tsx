@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { MusicProps } from "@/utils/types";
 
 import Link from "next/link";
@@ -9,6 +10,7 @@ interface ListMusicsProps {
 }
 
 export function ListMusics({ musics, isFetching }: ListMusicsProps) {
+  const [musicSelected, setMusicSelected] = useState<string | null>(null);
   const skeletonItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
@@ -23,7 +25,7 @@ export function ListMusics({ musics, isFetching }: ListMusicsProps) {
           <span className="uppercase text-sm font-bold">Ver mais</span>
         </Link>
       </header>
-      <div className="px-1 pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
+      <div className="px-1.5 pt-1 pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
         {!musics || isFetching
           ? skeletonItems.map((i) => (
               <div
@@ -39,7 +41,14 @@ export function ListMusics({ musics, isFetching }: ListMusicsProps) {
                 </div>
               </div>
             ))
-          : musics.map((music) => <MusicCard key={music.id} music={music} />)}
+          : musics.map((music) => (
+              <MusicCard
+                key={music.id}
+                music={music}
+                musicSelected={musicSelected}
+                setMusicSelected={setMusicSelected}
+              />
+            ))}
       </div>
     </section>
   );

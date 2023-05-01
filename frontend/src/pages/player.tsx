@@ -5,6 +5,7 @@ import * as Slider from "@radix-ui/react-slider";
 import Image from "next/image";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
+import { motion } from "framer-motion";
 
 import {
   CaretDown,
@@ -40,9 +41,49 @@ export default function PlayerPage() {
   } = useMusic();
   const router = useRouter();
 
+  const playerContainer = {
+    hidden: { opacity: 1, translateY: 88 },
+    visible: {
+      opacity: 1,
+      translateY: 0,
+      transition: {
+        delayChildren: 0.3,
+        staggerChildren: 0.2,
+        duration: 0.3,
+      },
+    },
+  };
+  const playerItem = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  };
+  const playerVisibleBar = {
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+    },
+  };
+  const playerSoundBar = {
+    hidden: { x: 40, opacity: 0 },
+    visible: playerVisibleBar,
+  };
+  const playerProgressBar = {
+    hidden: { x: -100, opacity: 0 },
+    visible: playerVisibleBar,
+  };
+
   return (
     currentMusic && (
-      <div className="px-5 xs:px-9 lg:px-14 h-screen">
+      <motion.div
+        className="px-5 xs:px-9 lg:px-14 h-screen"
+        initial={{ opacity: 0, translateY: 88 }}
+        animate={{ opacity: 1, translateY: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <Meta path="/player" title="Player" index={false} follow={false} />
         <div
           className="absolute inset-0 bg-center bg-cover bg-no-repeat z-[-1] blur-xl opacity-20 transition-all duration-1000"
@@ -92,7 +133,12 @@ export default function PlayerPage() {
             </div>
           </div>
         </div>
-        <div className="fixed bottom-0 inset-x-0 bg-black/50 backdrop-blur-2xl z-10 group">
+        <motion.div
+          className="fixed bottom-0 inset-x-0 bg-black/50 backdrop-blur-2xl z-10 group"
+          variants={playerContainer}
+          initial="hidden"
+          animate="visible"
+        >
           <div className="min-h-[90px] relative h-full py-6 gap-6 sm:p-6 flex-col sm:flex-row flex items-center justify-between flex-wrap">
             <div className="absolute top-0 h-0.5 bg-transparent inset-x-0 px-5 xs:px-9 lg:px-12">
               <div className="absolute flex justify-between inset-x-0 -top-6 px-7 xs:px-12 lg:px-14">
@@ -101,25 +147,28 @@ export default function PlayerPage() {
                 </span>
                 <span className="text-xs opacity-75">{musicTime.duration}</span>
               </div>
-              <Slider.Root
-                defaultValue={[0]}
-                max={100}
-                step={1}
-                aria-label="Progresso da música"
-                value={[musicTime.progress]}
-                onValueChange={(value) => handleMusicTime(value[0])}
-                className="w-full flex items-center select-none touch-auto h-0.5 relative"
-              >
-                <div className="h-4 w-full relative flex items-center cursor-pointer">
-                  <Slider.Track className="bg-white/20 grow w-full h-0.5 absolute">
-                    <Slider.Range className="bg-white h-full absolute" />
-                  </Slider.Track>
-                  <Slider.Thumb className="block cursor-grab h-1 w-1 group-hover:h-4 group-hover:w-4 bg-white rounded-full focus:outline-none focus:w-4 focus:h-4 focus:ring-2 ring-purple-400 ring-offset-4 ring-offset-black duration-300" />
-                </div>
-              </Slider.Root>
+              <motion.div variants={playerProgressBar}>
+                <Slider.Root
+                  defaultValue={[0]}
+                  max={100}
+                  step={1}
+                  aria-label="Progresso da música"
+                  value={[musicTime.progress]}
+                  onValueChange={(value) => handleMusicTime(value[0])}
+                  className="w-full flex items-center select-none touch-auto h-0.5 relative"
+                >
+                  <div className="h-4 w-full relative flex items-center cursor-pointer">
+                    <Slider.Track className="bg-white/20 grow w-full h-0.5 absolute">
+                      <Slider.Range className="bg-white h-full absolute" />
+                    </Slider.Track>
+                    <Slider.Thumb className="block cursor-grab h-1 w-1 group-hover:h-4 group-hover:w-4 bg-white rounded-full focus:outline-none focus:w-4 focus:h-4 focus:ring-2 ring-purple-400 ring-offset-4 ring-offset-black duration-300" />
+                  </div>
+                </Slider.Root>
+              </motion.div>
             </div>
             <div className="flex items-center justify-center gap-3 flex-wrap w-full">
-              <button
+              <motion.button
+                variants={playerItem}
                 type="button"
                 onClick={() => toggleShufflePlaylist()}
                 title={`${
@@ -130,16 +179,18 @@ export default function PlayerPage() {
                 } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
               >
                 <Shuffle size={26} weight="fill" />
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                variants={playerItem}
                 type="button"
                 title="Voltar"
                 onClick={() => previousMusic()}
                 className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
               >
                 <SkipBack size={26} weight="fill" />
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                variants={playerItem}
                 type="button"
                 title={`${musicState === "playing" ? "Pausar" : "Play"}`}
                 onClick={() =>
@@ -154,16 +205,18 @@ export default function PlayerPage() {
                 ) : (
                   <Play size={26} weight="fill" />
                 )}
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                variants={playerItem}
                 type="button"
                 title="Avançar"
                 onClick={() => skipMusic()}
                 className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
               >
                 <SkipForward size={26} weight="fill" />
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                variants={playerItem}
                 type="button"
                 title={`${repeatMusic ? "Não repetir" : "Repetir"}`}
                 onClick={() => toggleRepeatMusic()}
@@ -176,10 +229,11 @@ export default function PlayerPage() {
                 ) : (
                   <Repeat size={26} weight="fill" />
                 )}
-              </button>
+              </motion.button>
             </div>
             <div className="hidden sm:flex absolute gap-2 right-0 mr-5 xs:mr-9 lg:mr-14 items-center group/volume">
-              <button
+              <motion.button
+                variants={playerItem}
                 type="button"
                 title={mutatedMusic ? "Com som" : "Mudo"}
                 onClick={() => handleMusicVolume()}
@@ -192,27 +246,29 @@ export default function PlayerPage() {
                 ) : (
                   <SpeakerHigh size={26} />
                 )}
-              </button>
-              <Slider.Root
-                defaultValue={[1]}
-                max={1}
-                step={0.1}
-                value={[musicVolume]}
-                aria-label="Volume"
-                onValueChange={(value) => handleMusicVolume(value[0])}
-                className="hidden md:flex w-24 lg:w-28 rounded-3xl h-1.5 items-center relative"
-              >
-                <div className="h-4 w-full relative flex items-center">
-                  <Slider.Track className="bg-white/20 grow w-full h-1.5 absolute rounded-3xl">
-                    <Slider.Range className="group-hover/volume:bg-blue-600 bg-white/50 h-full absolute rounded-3xl duration-300" />
-                  </Slider.Track>
-                  <Slider.Thumb className="block cursor-grab h-0 w-0 group-hover/volume:h-3 group-hover/volume:w-3 bg-blue-400 rounded-full focus:outline-none focus:w-3 focus:h-3 focus:ring-2 ring-blue-400 ring-offset-4 ring-offset-black duration-300" />
-                </div>
-              </Slider.Root>
+              </motion.button>
+              <motion.div variants={playerSoundBar}>
+                <Slider.Root
+                  defaultValue={[1]}
+                  max={1}
+                  step={0.1}
+                  value={[musicVolume]}
+                  aria-label="Volume"
+                  onValueChange={(value) => handleMusicVolume(value[0])}
+                  className="hidden md:flex w-24 lg:w-28 rounded-3xl h-1.5 items-center relative"
+                >
+                  <div className="h-4 w-full relative flex items-center">
+                    <Slider.Track className="bg-white/20 grow w-full h-1.5 absolute rounded-3xl">
+                      <Slider.Range className="group-hover/volume:bg-blue-600 bg-white/50 h-full absolute rounded-3xl duration-300" />
+                    </Slider.Track>
+                    <Slider.Thumb className="block cursor-grab h-0 w-0 group-hover/volume:h-3 group-hover/volume:w-3 bg-blue-400 rounded-full focus:outline-none focus:w-3 focus:h-3 focus:ring-2 ring-blue-400 ring-offset-4 ring-offset-black duration-300" />
+                  </div>
+                </Slider.Root>
+              </motion.div>
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     )
   );
 }

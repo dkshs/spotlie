@@ -18,6 +18,7 @@ import type { AppProps } from "next/app";
 
 import { Header } from "@/components/Header";
 import { Player } from "@/components/Player";
+import { motion, AnimatePresence } from "framer-motion";
 
 const publicPages = ["/", "/sign-in/[[...index]]", "/sign-up/[[...index]]"];
 
@@ -25,6 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
 
   const isPublicPage = publicPages.includes(pathname);
+  const isPlayerPage = pathname === "/player";
 
   return (
     <ClerkProvider
@@ -39,30 +41,43 @@ export default function App({ Component, pageProps }: AppProps) {
         <ApiContextProvider>
           <MusicContextProvider>
             <div className="bg-violet-900 bg-gradient-to-b from-black/60 to-black fixed inset-0 -z-[1]" />
-            <div
-              className={`${
-                pathname !== "/player" && "max-w-[1600px] min-w-[320px] m-auto"
-              }`}
-            >
-              {pathname !== "/player" && <Header />}
+            <AnimatePresence mode="wait">
               <div
-                className={`${pathname !== "/player" && "pt-[72px] pb-[90px]"}`}
+                className={`${
+                  !isPlayerPage && "max-w-[1600px] min-w-[320px] m-auto"
+                }`}
               >
-                {isPublicPage ? (
-                  <Component {...pageProps} />
-                ) : (
-                  <>
-                    <SignedIn>
+                {!isPlayerPage && <Header />}
+                <motion.div
+                  key={pathname}
+                  initial={{
+                    opacity: 0,
+                    translateY: isPlayerPage ? 88 : 0,
+                  }}
+                  animate={{ opacity: 1, translateY: 0 }}
+                  exit={{
+                    opacity: 0,
+                    translateY: isPlayerPage ? -88 : 0,
+                  }}
+                >
+                  <div className={`${!isPlayerPage && "pt-[72px] pb-[90px]"}`}>
+                    {isPublicPage ? (
                       <Component {...pageProps} />
-                    </SignedIn>
-                    <SignedOut>
-                      <RedirectToSignIn />
-                    </SignedOut>
-                  </>
-                )}
+                    ) : (
+                      <>
+                        <SignedIn>
+                          <Component {...pageProps} />
+                        </SignedIn>
+                        <SignedOut>
+                          <RedirectToSignIn />
+                        </SignedOut>
+                      </>
+                    )}
+                  </div>
+                </motion.div>
+                {!isPlayerPage && <Player />}
               </div>
-              {pathname !== "/player" && <Player />}
-            </div>
+            </AnimatePresence>
           </MusicContextProvider>
         </ApiContextProvider>
       </QueryClientProvider>
