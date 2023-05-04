@@ -25,7 +25,7 @@ export function ListMusics({ musics, isFetching }: ListMusicsProps) {
           <span className="uppercase text-sm font-bold">Ver mais</span>
         </Link>
       </header>
-      <div className="px-1.5 pt-1 pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
+      <div className="px-1 pb-3 flex flex-1 gap-8 overflow-x-auto w-[calc(100% - 20px)] snap-x snap-mandatory">
         {!musics || isFetching
           ? skeletonItems.map((i) => (
               <div

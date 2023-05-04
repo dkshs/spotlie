@@ -11,7 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
 import { SimpleMusicCard } from "@/components/MusicCard";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { Pause, Play } from "@phosphor-icons/react";
 
@@ -102,24 +102,33 @@ export default function ArtistPage() {
       ) : artist && artist.artist ? (
         <>
           <div className="flex flex-col justify-center text-center md:justify-start md:text-start md:flex-row md:min-h-[280px]">
-            <div
-              className="absolute bg-cover inset-0 bg-center bg-no-repeat md:h-80 z-[-1] blur-3xl opacity-50"
-              style={
-                artist.artist.image
-                  ? {
-                      backgroundImage: `url(${artist.artist.image})`,
-                    }
-                  : {}
-              }
-            ></div>
+            <AnimatePresence>
+              {artist.artist.image && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.5 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3, delay: 0.3 }}
+                  className="absolute inset-0 md:h-80 z-[-1] bg-center"
+                >
+                  <Image
+                    className="bg-cover object-cover aspect-square bg-center bg-no-repeat blur-3xl"
+                    src={artist.artist.image}
+                    alt={artist.artist.name}
+                    fill
+                    priority
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
             <Meta
               title={artist.artist.name}
               path={`/artist/${id}`}
               description={`Ouça as músicas de ${artist.artist.name}.`}
-              baseUrl=""
               image={{
                 src: artist.artist.image || "",
                 alt: artist.artist.name,
+                isExternalImage: true,
               }}
             />
             <div className="self-center md:mr-8 rounded-full bg-black/50 md:min-h-[280px] flex justify-center">

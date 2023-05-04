@@ -5,7 +5,7 @@ import * as Slider from "@radix-ui/react-slider";
 import Image from "next/image";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import {
   CaretDown,
@@ -85,10 +85,25 @@ export default function PlayerPage() {
         transition={{ duration: 0.3 }}
       >
         <Meta path="/player" title="Player" index={false} follow={false} />
-        <div
-          className="absolute inset-0 bg-center bg-cover bg-no-repeat z-[-1] blur-xl opacity-20 transition-all duration-1000"
-          style={{ backgroundImage: `url(${currentMusic.cover})` }}
-        />
+        <AnimatePresence>
+          {currentMusic.cover && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 z-[-1] bg-center"
+            >
+              <Image
+                className="bg-cover object-cover aspect-square bg-center bg-no-repeat blur-xl opacity-40"
+                src={currentMusic.cover}
+                alt={currentMusic.title}
+                fill
+                priority
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <nav className="h-[72px] fixed inset-x-0 z-10">
           <div className="px-4 lg:px-10 flex items-center h-full">
             <button

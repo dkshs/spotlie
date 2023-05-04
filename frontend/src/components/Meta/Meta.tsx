@@ -10,6 +10,7 @@ export interface MetaProps {
   image?: {
     src: string;
     alt: string;
+    isExternalImage?: boolean;
   };
   type?: string;
   updatedAt?: string;
@@ -58,7 +59,12 @@ export const Meta: FC<PropsWithChildren<MetaProps>> = ({
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:locale" content={locale} />
       {description && <meta property="og:description" content={description} />}
-      {image && <meta property="og:image" content={`${baseUrl}${image.src}`} />}
+      {image && (
+        <meta
+          property="og:image"
+          content={`${image.isExternalImage ? "" : baseUrl}${image.src}`}
+        />
+      )}
       {image && <meta property="og:image:alt" content={image.alt} />}
       {updatedAt && <meta property="og:updated" content={updatedAt} />}
 
@@ -68,7 +74,10 @@ export const Meta: FC<PropsWithChildren<MetaProps>> = ({
       <meta property="twitter:title" content={`${title} · ${siteName}`} />
       <meta property="twitter:description" content={description} />
       {image && (
-        <meta name="twitter:image" content={`${baseUrl}${image.src}`} />
+        <meta
+          name="twitter:image"
+          content={`${image.isExternalImage ? "" : baseUrl}${image.src}`}
+        />
       )}
       {image && <meta name="twitter:image:alt" content={image.alt} />}
       <meta

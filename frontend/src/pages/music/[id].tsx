@@ -11,6 +11,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { Pause, Play, User } from "@phosphor-icons/react";
 
@@ -81,18 +82,33 @@ export default function MusicPage() {
         </div>
       ) : music ? (
         <div className="flex flex-col justify-center text-center md:justify-start md:text-start md:flex-row md:min-h-[280px]">
-          <div
-            className="absolute bg-cover inset-0 bg-center bg-no-repeat md:h-80 z-[-1] blur-3xl opacity-50"
-            style={{ backgroundImage: `url(${music.cover})` }}
-          ></div>
+          <AnimatePresence>
+            {music.cover && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+                className="absolute inset-0 md:h-80 z-[-1] bg-center"
+              >
+                <Image
+                  className="bg-cover object-cover aspect-square bg-center bg-no-repeat blur-3xl"
+                  src={music.cover}
+                  alt={music.title}
+                  fill
+                  priority
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
           <Meta
             title={music.title}
             path={`/music/${id}`}
-            description={`Ouça a música ${music.title}.`}
-            baseUrl=""
+            description={`Ouça a música ${music.title} de ${music.artist.name}.`}
             image={{
-              src: music.cover || "",
+              src: music.cover,
               alt: music.title,
+              isExternalImage: true,
             }}
           />
           <div className="self-center md:mr-8 rounded-md bg-black/50 md:min-h-[280px] flex justify-center">

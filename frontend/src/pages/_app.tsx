@@ -50,15 +50,9 @@ export default function App({ Component, pageProps }: AppProps) {
                 {!isPlayerPage && <Header />}
                 <motion.div
                   key={pathname}
-                  initial={{
-                    opacity: 0,
-                    translateY: isPlayerPage ? 88 : 0,
-                  }}
+                  initial={{ opacity: 0, translateY: -10 }}
                   animate={{ opacity: 1, translateY: 0 }}
-                  exit={{
-                    opacity: 0,
-                    translateY: isPlayerPage ? -88 : 0,
-                  }}
+                  exit={{ opacity: 0, translateY: -10 }}
                 >
                   <div className={`${!isPlayerPage && "pt-[72px] pb-[90px]"}`}>
                     {isPublicPage ? (
