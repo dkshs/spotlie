@@ -66,7 +66,6 @@ export function MusicContextProvider(props: PropsWithChildren) {
   const { libApi } = useApi();
   const [playlist, setPlaylist] = useState<MusicProps[]>([]);
   const [currentMusic, setCurrentMusic] = useState<MusicProps | null>(null);
-  const [musicStateAux, setMusicStateAux] = useState(0);
   const [musicState, setMusicState] = useLocalStorage<MusicStateProps>(
     "musicState",
     "paused",
@@ -249,7 +248,6 @@ export function MusicContextProvider(props: PropsWithChildren) {
   }, [setLocalShufflePlaylist, shufflePlaylist, shufflePlaylists]);
 
   const updateMusicTime = useCallback(() => {
-    musicStateAux === 0 ? setMusicStateAux(1) : setMusicState("playing");
     if (musicAudio) {
       const musicDuration = musicAudio.duration;
       const musicCurrentTime = musicAudio.currentTime;
@@ -265,7 +263,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
         durationNum: musicDuration,
       });
     }
-  }, [musicAudio, musicStateAux, setMusicState, setMusicTime]);
+  }, [musicAudio, setMusicTime]);
 
   const musicEnded = useCallback(() => {
     if (repeatMusic) {

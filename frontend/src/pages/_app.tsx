@@ -17,7 +17,7 @@ import { ptBR } from "@clerk/localizations";
 import type { AppProps } from "next/app";
 
 import { Header } from "@/components/Header";
-import { Player } from "@/components/Player";
+import { MiniPlayer } from "@/components/Player";
 import { motion, AnimatePresence } from "framer-motion";
 
 const publicPages = ["/", "/sign-in/[[...index]]", "/sign-up/[[...index]]"];
@@ -69,7 +69,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     )}
                   </div>
                 </motion.div>
-                {!isPlayerPage && <Player />}
+                {!isPlayerPage && <MiniPlayer />}
               </div>
             </AnimatePresence>
           </MusicContextProvider>

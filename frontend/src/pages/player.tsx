@@ -1,25 +1,13 @@
 import { useMusic } from "@/hooks/useMusic";
 import { useRouter } from "next/router";
 
-import * as Slider from "@radix-ui/react-slider";
 import Image from "next/image";
 import Link from "next/link";
 import { Meta } from "@/components/Meta";
+import { PlayerComponents, animation } from "@/components/Player";
 import { AnimatePresence, motion } from "framer-motion";
 
-import {
-  CaretDown,
-  Pause,
-  Play,
-  Repeat,
-  RepeatOnce,
-  Shuffle,
-  SkipBack,
-  SkipForward,
-  SpeakerHigh,
-  SpeakerLow,
-  SpeakerSlash,
-} from "@phosphor-icons/react";
+import { CaretDown } from "@phosphor-icons/react";
 
 export default function PlayerPage() {
   const {
@@ -41,40 +29,7 @@ export default function PlayerPage() {
   } = useMusic();
   const router = useRouter();
 
-  const playerContainer = {
-    hidden: { opacity: 1, translateY: 88 },
-    visible: {
-      opacity: 1,
-      translateY: 0,
-      transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.2,
-        duration: 0.3,
-      },
-    },
-  };
-  const playerItem = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-    },
-  };
-  const playerVisibleBar = {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-    },
-  };
-  const playerSoundBar = {
-    hidden: { x: 40, opacity: 0 },
-    visible: playerVisibleBar,
-  };
-  const playerProgressBar = {
-    hidden: { x: -100, opacity: 0 },
-    visible: playerVisibleBar,
-  };
+  const { Control } = PlayerComponents;
 
   return (
     currentMusic && (
@@ -149,8 +104,8 @@ export default function PlayerPage() {
           </div>
         </div>
         <motion.div
-          className="fixed bottom-0 inset-x-0 bg-black/50 backdrop-blur-2xl z-10 group"
-          variants={playerContainer}
+          className="fixed bottom-0 inset-x-0 bg-black/50 backdrop-blur-2xl z-10 group/time"
+          variants={animation.playerContainer}
           initial="hidden"
           animate="visible"
         >
@@ -162,124 +117,44 @@ export default function PlayerPage() {
                 </span>
                 <span className="text-xs opacity-75">{musicTime.duration}</span>
               </div>
-              <motion.div variants={playerProgressBar}>
-                <Slider.Root
-                  defaultValue={[0]}
-                  max={100}
-                  step={1}
-                  aria-label="Progresso da música"
-                  value={[musicTime.progress]}
-                  onValueChange={(value) => handleMusicTime(value[0])}
-                  className="w-full flex items-center select-none touch-auto h-0.5 relative"
-                >
-                  <div className="h-4 w-full relative flex items-center cursor-pointer">
-                    <Slider.Track className="bg-white/20 grow w-full h-0.5 absolute">
-                      <Slider.Range className="bg-white h-full absolute" />
-                    </Slider.Track>
-                    <Slider.Thumb className="block cursor-grab h-1 w-1 group-hover:h-4 group-hover:w-4 bg-white rounded-full focus:outline-none focus:w-4 focus:h-4 focus:ring-2 ring-purple-400 ring-offset-4 ring-offset-black duration-300" />
-                  </div>
-                </Slider.Root>
-              </motion.div>
+              <PlayerComponents.MusicProgressBar
+                progress={musicTime.progress}
+                handleMusicTime={handleMusicTime}
+              />
             </div>
             <div className="flex items-center justify-center gap-3 flex-wrap w-full">
-              <motion.button
-                variants={playerItem}
-                type="button"
+              <Control.ShufflePlaylist
+                shufflePlaylist={shufflePlaylist}
                 onClick={() => toggleShufflePlaylist()}
-                title={`${
-                  shufflePlaylist ? "Desativar" : "Ativar"
-                } a ordem aleatória`}
-                className={`p-2.5 ${
-                  shufflePlaylist && "text-blue-600"
-                } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
-              >
-                <Shuffle size={26} weight="fill" />
-              </motion.button>
-              <motion.button
-                variants={playerItem}
-                type="button"
-                title="Voltar"
+              />
+              <Control.PreviousNextMusic
                 onClick={() => previousMusic()}
-                className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
-              >
-                <SkipBack size={26} weight="fill" />
-              </motion.button>
-              <motion.button
-                variants={playerItem}
-                type="button"
-                title={`${musicState === "playing" ? "Pausar" : "Play"}`}
+                isPreviousMusicControl
+              />
+              <Control.PlayPause
+                musicState={musicState}
                 onClick={() =>
                   musicState === "playing"
                     ? pauseMusic()
                     : playMusic(currentMusic)
                 }
-                className="p-2.5 bg-zinc-800 rounded-full hover:scale-110 hover:bg-zinc-900 hover:text-blue-400 duration-300 active:opacity-70 active:scale-100 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300"
-              >
-                {musicState === "playing" ? (
-                  <Pause size={26} weight="fill" />
-                ) : (
-                  <Play size={26} weight="fill" />
-                )}
-              </motion.button>
-              <motion.button
-                variants={playerItem}
-                type="button"
-                title="Avançar"
-                onClick={() => skipMusic()}
-                className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
-              >
-                <SkipForward size={26} weight="fill" />
-              </motion.button>
-              <motion.button
-                variants={playerItem}
-                type="button"
-                title={`${repeatMusic ? "Não repetir" : "Repetir"}`}
+              />
+              <Control.PreviousNextMusic onClick={() => skipMusic()} />
+              <Control.RepeatMusic
+                repeatMusic={repeatMusic}
                 onClick={() => toggleRepeatMusic()}
-                className={`p-2.5 ${
-                  repeatMusic && "text-blue-600"
-                } hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full`}
-              >
-                {repeatMusic ? (
-                  <RepeatOnce size={26} weight="fill" />
-                ) : (
-                  <Repeat size={26} weight="fill" />
-                )}
-              </motion.button>
+              />
             </div>
             <div className="hidden sm:flex absolute gap-2 right-0 mr-5 xs:mr-9 lg:mr-14 items-center group/volume">
-              <motion.button
-                variants={playerItem}
-                type="button"
-                title={mutatedMusic ? "Com som" : "Mudo"}
+              <Control.Volume
+                musicVolume={musicVolume}
+                mutatedMusic={mutatedMusic}
                 onClick={() => handleMusicVolume()}
-                className="p-2.5 hover:text-blue-400 duration-300 active:opacity-70 focus:outline-none focus:text-blue-400 focus:ring-2 ring-blue-300 rounded-full"
-              >
-                {mutatedMusic ? (
-                  <SpeakerSlash size={26} />
-                ) : musicVolume <= 0.5 ? (
-                  <SpeakerLow size={26} />
-                ) : (
-                  <SpeakerHigh size={26} />
-                )}
-              </motion.button>
-              <motion.div variants={playerSoundBar}>
-                <Slider.Root
-                  defaultValue={[1]}
-                  max={1}
-                  step={0.1}
-                  value={[musicVolume]}
-                  aria-label="Volume"
-                  onValueChange={(value) => handleMusicVolume(value[0])}
-                  className="hidden md:flex w-24 lg:w-28 rounded-3xl h-1.5 items-center relative"
-                >
-                  <div className="h-4 w-full relative flex items-center">
-                    <Slider.Track className="bg-white/20 grow w-full h-1.5 absolute rounded-3xl">
-                      <Slider.Range className="group-hover/volume:bg-blue-600 bg-white/50 h-full absolute rounded-3xl duration-300" />
-                    </Slider.Track>
-                    <Slider.Thumb className="block cursor-grab h-0 w-0 group-hover/volume:h-3 group-hover/volume:w-3 bg-blue-400 rounded-full focus:outline-none focus:w-3 focus:h-3 focus:ring-2 ring-blue-400 ring-offset-4 ring-offset-black duration-300" />
-                  </div>
-                </Slider.Root>
-              </motion.div>
+              />
+              <PlayerComponents.MusicVolumeSlider
+                handleMusicVolume={handleMusicVolume}
+                musicVolume={musicVolume}
+              />
             </div>
           </div>
         </motion.div>

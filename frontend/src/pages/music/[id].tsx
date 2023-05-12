@@ -153,9 +153,19 @@ export default function MusicPage() {
                   >
                     {music.artist.name}
                   </Link>
-                  <span className="before:content-['•'] before:mr-1.5">
-                    {musicDuration}
-                  </span>
+                  <AnimatePresence>
+                    {musicDuration && (
+                      <motion.span
+                        className="before:content-['•'] before:mr-1.5"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {musicDuration}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
