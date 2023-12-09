@@ -1,10 +1,10 @@
 # SpotLie ![Logo](./.github/media/logo.png)
 
-[![license mit](https://img.shields.io/badge/licence-MIT-blueviolet)](LICENSE)
+[![license mit](https://img.shields.io/badge/licence-MIT-7C3AED)](LICENSE)
 
-App de músicas.
+Music app.
 
-## Tecnologias utilizadas
+## Technologies used
 
 - [Backend](/backend/)
   - [Python](https://www.python.org/)
@@ -20,14 +20,14 @@ App de músicas.
 
 ## Demo
 
-Demo do projeto pode ser encontrada aqui: <https://spotlie.vercel.app/>
+Demo of the project can be found here: <https://spotlie.railway.app/>
 
-### Ferramentas necessárias
+### Required tools
 
-Você precisará ter o [Git](https://git-scm.com) para clonar o repositório e um editor de código, exemplo: [VSCode](https://code.visualstudio.com).
+You will need to have [Git](https://git-scm.com) to clone the repository.
 
-Para rodar o Backend será necessário ter o [Docker](https://www.docker.com/) instalado. Para o [Frontend](/frontend/) será necessário o [Node.Js](https://nodejs.org/).
+To run the Backend you will need to have [Docker](https://www.docker.com/) installed. For the [Frontend](/frontend/) you will need [Node.Js](https://nodejs.org/).
 
-### Executar
+### To execute
 
-Para executar o projeto, você precisará seguir o [README](/backend/README.md) do [Backend](/backend/) primeiro, e com o Backend rodando, poderá executar o [Frontend](/frontend/).
+To run the project, you will need to follow the backend [README](/backend/README.md) first, and with the Backend running, you can run the [Frontend](/frontend/).
