@@ -1,0 +1,25 @@
+# Django
+# ------------------------------------------------------------------------------
+DJANGO_SETTINGS_MODULE="config.settings.production"
+DJANGO_SECRET_KEY="$*v2bRvHvKJJ!8KYD4o$tL&9g#bw7k*WuVQ*!JEn5Ygm6mDJGw%*5urYc@Sw^Ui3"
+DJANGO_ADMIN_URL="UL88526#48@*nQL8q^2nvT%E8e*kvZ^@"
+DJANGO_ALLOWED_HOSTS=".spotlie-backend.railway.app"
+
+# Security
+# ------------------------------------------------------------------------------
+# TIP: better off using DNS, however, redirect is OK too
+DJANGO_SECURE_SSL_REDIRECT=False
+
+# Email
+# ------------------------------------------------------------------------------
+DJANGO_SERVER_EMAIL=""
+SENDINBLUE_API_KEY=""
+
+# GCP
+# ------------------------------------------------------------------------------
+GOOGLE_APPLICATION_CREDENTIALS=""
+DJANGO_GCP_STORAGE_BUCKET_NAME=""
+
+# Gunicorn
+# ------------------------------------------------------------------------------
+WEB_CONCURRENCY=4

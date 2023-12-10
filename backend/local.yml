@@ -1,0 +1,45 @@
+version: "3.8"
+
+volumes:
+  backend_local_postgres_data: {}
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: backend_local_django
+    container_name: backend_local_django
+    env_file:
+      - ./.envs/.local/.postgres
+      - ./.envs/.local/.django
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app:z
+    depends_on:
+      - postgres
+      - mailpit
+    command: "/start"
+
+  postgres:
+    image: postgres:latest
+    volumes:
+      - backend_local_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.envs/.local/.postgres
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: backend_local_mailpit
+    ports:
+      - "8025:8025"
+
+  pg_admin:
+    image: dpage/pgadmin4:latest
+    container_name: backend_local_pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=postgres@email.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres
+    ports:
+      - 5050:80
