@@ -1,9 +1,8 @@
-from django.contrib.admin.views.decorators import staff_member_required
-from ninja import NinjaAPI
-
 import orjson
-from ninja.parser import Parser
+from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpRequest
+from ninja import NinjaAPI
+from ninja.parser import Parser
 
 
 class ORJSONParser(Parser):

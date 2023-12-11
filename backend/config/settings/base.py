@@ -6,7 +6,6 @@ from pathlib import Path
 import dj_database_url
 from decouple import config
 
-
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # backend/
 APPS_DIR = BASE_DIR / "backend"
@@ -29,9 +28,7 @@ USE_TZ = True
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    "default": dj_database_url.config(
-        default=config("DATABASE_URL"), conn_max_age=1800
-    ),
+    "default": dj_database_url.config(default=config("DATABASE_URL"), conn_max_age=1800),
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
@@ -74,9 +71,7 @@ PASSWORD_HASHERS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},

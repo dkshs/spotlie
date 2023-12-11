@@ -37,15 +37,11 @@ CSRF_COOKIE_SECURE = True
 # TODO: set this to 60 seconds first and then to 518400 once you prove the former works
 SECURE_HSTS_SECONDS = 60
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
-SECURE_HSTS_INCLUDE_SUBDOMAINS = config(
-    "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", cast=bool, default=True
-)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", cast=bool, default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
 SECURE_HSTS_PRELOAD = config("DJANGO_SECURE_HSTS_PRELOAD", cast=bool, default=True)
 # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
-SECURE_CONTENT_TYPE_NOSNIFF = config(
-    "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", cast=bool, default=True
-)
+SECURE_CONTENT_TYPE_NOSNIFF = config("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", cast=bool, default=True)
 
 # STORAGES
 # ------------------------------------------------------------------------------
@@ -56,13 +52,19 @@ GS_DEFAULT_ACL = "publicRead"
 
 # STATIC
 # ------------------------------------------------------------------------------
-STATICFILES_STORAGE = "backend.utils.storages.StaticGoogleCloudStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "backend.utils.storages.MediaGoogleCloudStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "backend.utils.storages.StaticGoogleCloudStorage",
+    },
+}
 COLLECTFAST_STRATEGY = "collectfast.strategies.gcloud.GoogleCloudStrategy"
 STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
 
 # MEDIA
 # ------------------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = "backend.utils.storages.MediaGoogleCloudStorage"
 MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
 
 # EMAIL
@@ -95,9 +97,7 @@ INSTALLED_APPS += ["anymail"]  # noqa: F405
 EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
 ANYMAIL = {
     "SENDINBLUE_API_KEY": config("SENDINBLUE_API_KEY"),
-    "SENDINBLUE_API_URL": config(
-        "SENDINBLUE_API_URL", default="https://api.sendinblue.com/v3/"
-    ),
+    "SENDINBLUE_API_URL": config("SENDINBLUE_API_URL", default="https://api.sendinblue.com/v3/"),
 }
 
 # Collectfast
