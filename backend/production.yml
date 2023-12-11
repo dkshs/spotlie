@@ -2,6 +2,7 @@ version: "3.8"
 
 volumes:
   production_postgres_data: {}
+  production_postgres_data_backups: {}
 
 services:
   django:
@@ -14,11 +15,17 @@ services:
     env_file:
       - ./.envs/.production/.django
       - ./.envs/.production/.postgres
+    ports:
+      - 5000:5000
     command: /start
 
   postgres:
-    image: postgres:latest
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: backend_production_postgres
     volumes:
-      - backend_local_postgres_data:/var/lib/postgresql/data
+      - production_postgres_data:/var/lib/postgresql/data
+      - production_postgres_data_backups:/backups
     env_file:
-      - ./.envs/.local/.postgres
+      - ./.envs/.production/.postgres

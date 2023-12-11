@@ -1,7 +1,7 @@
 # PostgreSQL
 # ------------------------------------------------------------------------------
-POSTGRES_HOST="postgres"
+POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
-POSTGRES_DB="backend"
-POSTGRES_USER="&62Ks3p733P6#c5V!T%E%cT64fh*@UppxqN&SY%2^yLN3HX@7Y&*i3@3zVnL6PFT"
-POSTGRES_PASSWORD="gPjG^4bCn7##4$2@V!eSZ!L*4M56b3@UjWygpweV5thQQkwn9qceG$q9u%Gie&o!"
+POSTGRES_DB=backend
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgresw

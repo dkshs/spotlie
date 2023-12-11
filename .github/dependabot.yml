@@ -40,6 +40,16 @@ updates:
           - "version-update:semver-major"
           - "version-update:semver-minor"
 
+  - package-ecosystem: "docker"
+    directory: "backend/compose/production/postgres/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "update"
+    commit-message:
+      include: scope
+      prefix: update
+
   # Enable version updates for Python/Pip - Production
   - package-ecosystem: "pip"
     # Look for a `requirements.txt` in the `backend` directory
