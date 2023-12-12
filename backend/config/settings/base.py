@@ -24,6 +24,10 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
+# Clerk WebHook
+# ------------------------------------------------------------------------------
+WEBHOOK_SECRET = config("WEBHOOK_SECRET")
+
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -55,7 +59,9 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "django_cleanup.apps.CleanupConfig",
 ]
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "backend.users",
+]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

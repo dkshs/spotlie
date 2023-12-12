@@ -11,6 +11,10 @@ CORS_ALLOWED_ORIGINS="https://example.com"
 # TIP: better off using DNS, however, redirect is OK too
 DJANGO_SECURE_SSL_REDIRECT=False
 
+# Clerk WebHook
+# ------------------------------------------------------------------------------
+WEBHOOK_SECRET=""
+
 # Email
 # ------------------------------------------------------------------------------
 DJANGO_SERVER_EMAIL=""

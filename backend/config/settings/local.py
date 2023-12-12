@@ -11,7 +11,7 @@ SECRET_KEY = config(
     default="k*zpSb*jMcXatzx!hfmepS^k@^^@9$tgVK7H5KirTt34Q$3!CtZ*zns6bfSyZZ",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "notable-primarily-guppy.ngrok-free.app"]
 
 # EMAIL
 # ------------------------------------------------------------------------------
