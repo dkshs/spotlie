@@ -1,6 +1,7 @@
-from django.db import models
 import uuid
 from secrets import token_hex
+
+from django.db import models
 
 
 class User(models.Model):

@@ -1,9 +1,11 @@
-from django.http import HttpRequest
-from django.conf import settings
-from svix.webhooks import Webhook, WebhookVerificationError
-from ninja import Router, Schema
-from ..models import User
 from secrets import token_hex
+
+from django.conf import settings
+from django.http import HttpRequest
+from ninja import Router, Schema
+from svix.webhooks import Webhook, WebhookVerificationError
+
+from ..models import User
 
 
 class Response(Schema):

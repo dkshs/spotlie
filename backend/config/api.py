@@ -3,6 +3,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpRequest
 from ninja import NinjaAPI
 from ninja.parser import Parser
+
 from backend.users.api import router as users_router
 
 

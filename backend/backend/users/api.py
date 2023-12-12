@@ -1,4 +1,5 @@
 from ninja import Router
+
 from .routes.webhook import router as webhook_router
 
 router = Router()

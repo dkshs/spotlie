@@ -6,7 +6,7 @@
   "init": true,
   "mounts": [
     {
-      "source": "./.devcontainer/zsh_history",
+      "source": "./.devcontainer/.zsh_history",
       "target": "/home/dev-user/.zsh_history",
       "type": "bind"
     },
