@@ -10,7 +10,7 @@ class User(models.Model):
     external_id = models.CharField(max_length=32, unique=True, null=False, blank=False, editable=False)
     username = models.CharField(max_length=64, unique=True, null=False, blank=False)
     email = models.EmailField(null=False, blank=False)
-    image = models.URLField(default="https://img.clerk.com/preview.png")
+    image = models.URLField(blank=True, default="https://img.clerk.com/preview.png")
     public_metadata = models.JSONField(default=dict, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
