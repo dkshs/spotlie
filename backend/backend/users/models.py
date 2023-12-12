@@ -1,5 +1,7 @@
 import uuid
 
+import requests
+from django.conf import settings
 from django.db import models
 
 
@@ -10,6 +12,15 @@ class User(models.Model):
     email = models.EmailField(null=False, blank=False)
     image = models.URLField(default="https://img.clerk.com/preview.png")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def update_public_metadata(self, public_metadata: dict):
+        requests.patch(
+            f"https://api.clerk.com/v1/users/{self.external_id}/metadata",
+            headers={"Authorization": f"Bearer {settings.CLERK_SECRET_KEY}"},
+            json={
+                "public_metadata": public_metadata,
+            },
+        )
 
     def __str__(self):
         return self.username

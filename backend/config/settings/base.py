@@ -24,9 +24,10 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
-# Clerk WebHook
+# Clerk
 # ------------------------------------------------------------------------------
 WEBHOOK_SECRET = config("WEBHOOK_SECRET")
+CLERK_SECRET_KEY = config("CLERK_SECRET_KEY")
 
 # DATABASES
 # ------------------------------------------------------------------------------
