@@ -38,11 +38,17 @@ def webhook(request: HttpRequest):
             image = data["profile_image_url"]
             if image == "https://www.gravatar.com/avatar?d=mp":
                 image = "https://img.clerk.com/preview.png"
+            public_metadata = data["public_metadata"]
 
             user = User.objects.filter(external_id=external_id)
             if user.exists():
                 user_f = user.first()
-                if user_f.email == email and user_f.username == username and user_f.image == image:
+                if (
+                    user_f.email == email
+                    and user_f.username == username
+                    and user_f.image == image
+                    and user_f.public_metadata == public_metadata
+                ):
                     return 200, {"message": "ok"}
             user.update_or_create(
                 external_id=external_id,
@@ -53,10 +59,9 @@ def webhook(request: HttpRequest):
                 },
             )
             if event_type == "user.created":
-                public_metadata = data["public_metadata"]
                 is_artist = public_metadata["is_artist"] if "is_artist" in public_metadata else False
                 public_metadata = {"is_artist": is_artist}
-                user.first().update_public_metadata(public_metadata)
+            user.first().update_public_metadata(public_metadata)
         elif event_type == "user.deleted":
             user = User.objects.filter(external_id=external_id)
             user.delete()
