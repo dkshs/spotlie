@@ -36,15 +36,7 @@ def webhook(request: HttpRequest):
             email = data["email_addresses"][0]["email_address"]
             username = data["username"] if data["username"] else f"user_{token_hex(8)}"
             image = data["profile_image_url"]
-        if event_type == "user.created":
-            user = User.objects.create(
-                external_id=external_id,
-                email=email,
-                username=username,
-                image=image,
-            )
-            user.save()
-        elif event_type == "user.updated":
+
             user = User.objects.filter(external_id=external_id)
             user.update_or_create(
                 external_id=external_id,
