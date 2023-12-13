@@ -5,6 +5,8 @@ from django.http import HttpRequest
 from ninja import Router, Schema
 from svix.webhooks import Webhook, WebhookVerificationError
 
+from backend.artists.models import Artist
+
 from ..models import User
 
 
@@ -41,6 +43,10 @@ def webhook(request: HttpRequest):
             public_metadata = data["public_metadata"]
 
             user = User.objects.filter(external_id=external_id)
+            artist = Artist.objects.filter(external_id=external_id)
+            if artist.exists():
+                user.delete() if user.exists() else None
+                user = artist
             if user.exists():
                 user_f = user.first()
                 if (
@@ -64,7 +70,9 @@ def webhook(request: HttpRequest):
             user.first().update_public_metadata(public_metadata)
         elif event_type == "user.deleted":
             user = User.objects.filter(external_id=external_id)
-            user.delete()
+            artist = Artist.objects.filter(external_id=external_id)
+            user.delete() if user.exists() else None
+            artist.delete() if artist.exists() else None
         else:
             return 400, {"message": f"invalid event type: {event_type}"}
     except Exception as e:
