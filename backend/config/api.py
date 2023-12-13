@@ -4,6 +4,7 @@ from django.http import HttpRequest
 from ninja import NinjaAPI
 from ninja.parser import Parser
 
+from backend.artists.api import router as artists_router
 from backend.users.api import router as users_router
 
 
@@ -21,3 +22,4 @@ api = NinjaAPI(
 )
 
 api.add_router("/", users_router)
+api.add_router("/", artists_router)
