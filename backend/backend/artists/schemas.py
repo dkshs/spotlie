@@ -1,6 +1,7 @@
-from ninja import Schema
-from uuid import UUID
 from datetime import datetime
+from uuid import UUID
+
+from ninja import Schema
 
 
 class ArtistSchemaOut(Schema):
@@ -13,9 +14,6 @@ class ArtistSchemaOut(Schema):
 
 class ArtistSchemaIn(Schema):
     external_id: str
-    username: str
-    email: str
-    image: str = None
 
 
 class ArtistSchemaUpdateIn(Schema):

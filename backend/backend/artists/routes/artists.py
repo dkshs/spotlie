@@ -17,7 +17,7 @@ def get_artists(request, limit: int = 10, offset: int = 0, orderBy: str = None):
         artists = Artist.objects.all()
         if orderBy:
             artists = artists.order_by(*orderBy.split(","))
-        return 200, artists[offset : offset + limit]
+        return 200, artists[offset : offset + limit]  # noqa: E203
     except Exception as e:
         return 500, {"status": 500, "message": "Internal server error", "full_message": str(e)}
 

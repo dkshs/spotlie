@@ -1,4 +1,5 @@
 from ninja import Router
+
 from .routes.artists import router as artists_router
 
 router = Router()
