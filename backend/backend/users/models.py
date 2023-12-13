@@ -5,14 +5,15 @@ from django.conf import settings
 from django.db import models
 
 
-class User(models.Model):
+class AbstractUser(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    external_id = models.CharField(max_length=32, unique=True, null=False, blank=False, editable=False)
-    username = models.CharField(max_length=64, unique=True, null=False, blank=False)
-    email = models.EmailField(null=False, blank=False)
-    image = models.URLField(blank=True, default="https://img.clerk.com/preview.png")
+    external_id = models.CharField(max_length=32, unique=True, editable=False)
+    username = models.CharField(max_length=64, unique=True)
+    email = models.EmailField()
+    image = models.URLField(blank=True, null=True, default="https://img.clerk.com/preview.png")
     public_metadata = models.JSONField(default=dict, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def update_public_metadata(self, public_metadata: dict):
         public_metadata = public_metadata or {}
@@ -30,5 +31,10 @@ class User(models.Model):
         )
         self.save()
 
+    class Meta:
+        abstract = True
+
+
+class User(AbstractUser):
     def __str__(self):
         return self.username
