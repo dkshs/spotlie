@@ -7,9 +7,14 @@ from ninja import Schema
 class ArtistSchemaOut(Schema):
     id: UUID
     username: str
+    about: str | None
+    twitter_link: str | None
+    instagram_link: str | None
     image: str | None
-    created_at: datetime
     cover: str | None
+    is_verified: bool
+    created_at: datetime
+    updated_at: datetime
 
 
 class ArtistSchemaIn(Schema):
@@ -17,6 +22,7 @@ class ArtistSchemaIn(Schema):
 
 
 class ArtistSchemaUpdateIn(Schema):
-    username: str = None
-    email: str = None
-    image: str = None
+    about: str = None
+    twitter_link: str = None
+    instagram_link: str = None
+    is_verified: bool = None

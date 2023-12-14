@@ -1,5 +1,6 @@
 import uuid
 
+from django.forms.models import model_to_dict
 from ninja import Router, UploadedFile
 
 from backend.users.models import User
@@ -37,13 +38,18 @@ def get_artist(request, id: uuid.UUID):
 def create_artist(request, payload: ArtistSchemaIn, cover: UploadedFile = None):
     try:
         external_id = payload.dict()["external_id"]
-        user = User.objects.filter(external_id=external_id).first()
+        user = User.objects.get(external_id=external_id)
+        user_dict = model_to_dict(user)
+        user.delete()
         artist = Artist.objects.create(
-            external_id=external_id, cover=cover, username=user.username, email=user.email, image=user.image
+            external_id=external_id,
+            cover=cover,
+            **user_dict,
         )
-        user.delete() if user else None
         artist.update_public_metadata({"is_artist": True})
         return 201, artist
+    except User.DoesNotExist:
+        return 400, {"status": 400, "message": "Bad request", "full_message": "User not found"}
     except Exception as e:
         return 400, {"status": 400, "message": "Bad request", "full_message": str(e)}
 
