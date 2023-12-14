@@ -36,7 +36,7 @@ def webhook(request: HttpRequest):
         external_id = data["id"]
         if event_type in ["user.created", "user.updated"]:
             email = data["email_addresses"][0]["email_address"]
-            username = data["username"] if data["username"] else f"user_{token_hex(8)}"
+            username = data["username"] or f"user_{token_hex(8)}"
             image = data["profile_image_url"]
             if image == "https://www.gravatar.com/avatar?d=mp":
                 image = "https://img.clerk.com/preview.png"

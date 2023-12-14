@@ -27,8 +27,7 @@ def get_artists(request, limit: int = 10, offset: int = 0, orderBy: str = None):
 @router.get("/{id}", response={200: ArtistSchemaOut, 404: ErrorSchema, 500: ErrorSchema})
 def get_artist(request, id: uuid.UUID):
     try:
-        artist = Artist.objects.get(id=id)
-        return artist
+        return Artist.objects.get(id=id)
     except Artist.DoesNotExist:
         return 404, {"status": 404, "message": "Artist not found", "full_message": "Artist not found"}
     except Exception as e:

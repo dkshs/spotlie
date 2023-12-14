@@ -25,7 +25,7 @@ class AbstractUser(models.Model):
         public_metadata = public_metadata or {}
         # remove unchanged values
         public_metadata = {k: v for k, v in public_metadata.items() if v != self.public_metadata.get(k)}
-        if public_metadata == {}:
+        if not public_metadata:
             return
         self.public_metadata = public_metadata
         requests.patch(

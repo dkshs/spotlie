@@ -43,7 +43,7 @@ def create_playlist(request, playlist: PlaylistSchemaIn, image: UploadedFile = N
         owner_is_artist = payload_dict.pop("owner_is_artist")
         payload_dict["object_id"] = payload_dict.pop("owner_id")
         owner_type = "artist" if owner_is_artist else "user"
-        payload_dict["content_type"] = ContentType.objects.get(app_label=owner_type + "s", model=owner_type)
+        payload_dict["content_type"] = ContentType.objects.get(app_label=f"{owner_type}s", model=owner_type)
         playlist = Playlist.objects.create(
             **payload_dict,
             image=image,
