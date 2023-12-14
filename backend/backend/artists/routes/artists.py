@@ -1,5 +1,6 @@
 import uuid
 
+from django.contrib.contenttypes.models import ContentType
 from django.forms.models import model_to_dict
 from ninja import Router, UploadedFile
 
@@ -40,12 +41,16 @@ def create_artist(request, payload: ArtistSchemaIn, cover: UploadedFile = None):
         external_id = payload.dict()["external_id"]
         user = User.objects.get(external_id=external_id)
         user_dict = model_to_dict(user)
-        user.delete()
+        playlists = user.get_playlists()
         artist = Artist.objects.create(
             external_id=external_id,
             cover=cover,
             **user_dict,
         )
+        playlists.update(
+            content_type=ContentType.objects.get(app_label="artists", model="artist"), object_id=artist.id
+        )
+        user.delete()
         artist.update_public_metadata({"is_artist": True})
         return 201, artist
     except User.DoesNotExist:
