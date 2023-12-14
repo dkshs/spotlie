@@ -2,6 +2,7 @@ import uuid
 
 import requests
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 
@@ -14,6 +15,11 @@ class AbstractUser(models.Model):
     public_metadata = models.JSONField(default=dict, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_playlists(self):
+        return ContentType.objects.get(app_label="playlists", model="playlist").get_all_objects_for_this_type(
+            object_id=self.id
+        )
 
     def update_public_metadata(self, public_metadata: dict):
         public_metadata = public_metadata or {}
