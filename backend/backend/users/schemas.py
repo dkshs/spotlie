@@ -4,7 +4,7 @@ from uuid import UUID
 from ninja import Schema
 
 
-class UserSchema(Schema):
+class UserSchemaOut(Schema):
     id: UUID
     username: str
     image: str | None

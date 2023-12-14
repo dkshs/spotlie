@@ -4,7 +4,7 @@ from uuid import UUID
 from ninja import Schema
 
 from backend.musics.schemas import MusicSchemaOut
-from backend.users.schemas import UserSchema
+from backend.users.schemas import UserSchemaOut
 
 
 class PlaylistSchemaOut(Schema):
@@ -13,7 +13,7 @@ class PlaylistSchemaOut(Schema):
     description: str | None
     image: str | None
     musics: list[MusicSchemaOut]
-    owner: UserSchema
+    owner: UserSchemaOut
     is_public: bool
     created_at: datetime
     updated_at: datetime
