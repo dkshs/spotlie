@@ -1,8 +1,9 @@
 from datetime import datetime
 from uuid import UUID
-from backend.artists.schemas import ArtistSchemaOut
 
 from ninja import Schema
+
+from backend.artists.schemas import ArtistSchemaOut
 
 
 class MusicSchemaOut(Schema):

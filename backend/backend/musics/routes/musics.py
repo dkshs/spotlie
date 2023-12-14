@@ -1,8 +1,11 @@
 import uuid
-from backend.utils.schemas import ErrorSchema
+
 from ninja import Router, UploadedFile
-from ..schemas import MusicSchemaOut, MusicSchemaIn, MusicSchemaUpdateIn
+
+from backend.utils.schemas import ErrorSchema
+
 from ..models import Music
+from ..schemas import MusicSchemaIn, MusicSchemaOut, MusicSchemaUpdateIn
 
 router = Router()
 
@@ -13,7 +16,7 @@ def get_musics(request, limit: int = 10, offset: int = 0, orderBy: str = None):
         musics = Music.objects.all()
         if orderBy:
             musics = musics.order_by(*orderBy.split(","))
-        musics = musics[offset : offset + limit]
+        musics = musics[offset : offset + limit]  # noqa: E203
         return 200, musics
     except Exception as e:
         return 500, {"status": 500, "message": "Internal server error", "full_message": str(e)}
