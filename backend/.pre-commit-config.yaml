@@ -1,4 +1,4 @@
-exclude: "/migrations/|devcontainer.json"
+exclude: "/migrations/|devcontainer.json|frontend"
 default_stages: [commit]
 
 default_language_version:
