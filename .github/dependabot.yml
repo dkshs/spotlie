@@ -15,6 +15,18 @@ updates:
       include: scope
       prefix: update
 
+  # Enable version updates for NPM
+  - package-ecosystem: "npm"
+    directory: "frontend/"
+    # Every weekday
+    schedule:
+      interval: "daily"
+    labels:
+      - "update"
+    commit-message:
+      include: scope
+      prefix: update
+
   # Enable version updates for Docker
   # We need to specify each Dockerfile in a separate entry because Dependabot doesn't
   # support wildcards or recursively checking subdirectories. Check this issue for updates:
