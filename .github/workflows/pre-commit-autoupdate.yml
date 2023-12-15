@@ -29,10 +29,7 @@ jobs:
       - name: Install pre-commit
         run: pip install pre-commit
 
-      - name: Autoupdate template
-        run: pre-commit autoupdate
-
-      - name: Autoupdate generated projects
+      - name: Autoupdate hooks
         working-directory: "backend"
         run: pre-commit autoupdate
 
