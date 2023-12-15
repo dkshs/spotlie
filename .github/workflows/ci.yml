@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: ["master", "main"]
+  pull_request:
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  SKIP_ENV_VALIDATION: true
+
+jobs:
+  frontend-lint-styles:
+    name: Lint Styles - Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: "pnpm"
+          node-version: "18"
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Running lint
+        run: pnpm lint
+
+  backend-pre-commit:
+    name: Pre-Commit - Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: python -m pip install pre-commit
+      - run: python -m pip freeze --local
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-3|${{ hashFiles('.pre-commit-config.yaml') }}
+      - run: pre-commit run --show-diff-on-failure --color=always --all-files

@@ -7,6 +7,6 @@
     @apply scroll-smooth;
   }
   body {
-    @apply font-merriweatherSans flex h-screen w-full flex-col items-center justify-center;
+    @apply flex h-screen w-full flex-col items-center justify-center font-merriweatherSans;
   }
 }
