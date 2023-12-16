@@ -27,7 +27,7 @@ class AbstractUser(models.Model):
         public_metadata = {k: v for k, v in public_metadata.items() if v != self.public_metadata.get(k)}
         if not public_metadata:
             return
-        self.public_metadata = public_metadata
+        self.public_metadata.update(public_metadata)
         requests.patch(
             f"https://api.clerk.com/v1/users/{self.external_id}/metadata",
             headers={"Authorization": f"Bearer {settings.CLERK_SECRET_KEY}"},

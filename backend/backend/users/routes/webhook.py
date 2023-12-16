@@ -45,6 +45,7 @@ def webhook(request: HttpRequest):
             user = User.objects.filter(external_id=external_id)
             artist = Artist.objects.filter(external_id=external_id)
             if artist.exists():
+                public_metadata["is_artist"] = True
                 user.delete() if user.exists() else None
                 user = artist
             if user.exists():
@@ -66,7 +67,8 @@ def webhook(request: HttpRequest):
             )
             if event_type == "user.created":
                 is_artist = public_metadata["is_artist"] if "is_artist" in public_metadata else False
-                public_metadata = {"is_artist": is_artist}
+                public_metadata["is_artist"] = is_artist
+            public_metadata["external_id"] = user.first().id.hex
             user.first().update_public_metadata(public_metadata)
         elif event_type == "user.deleted":
             user = User.objects.filter(external_id=external_id)
