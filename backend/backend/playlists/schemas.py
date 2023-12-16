@@ -22,8 +22,6 @@ class PlaylistSchemaOut(Schema):
 class PlaylistSchemaIn(Schema):
     name: str
     description: str = None
-    owner_id: UUID
-    owner_is_artist: bool = False
     musics: list[UUID] = None
     is_public: bool = False
 

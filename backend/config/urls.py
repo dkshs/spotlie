@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views import defaults as default_views
 
-from .api import api
+from .api.main import api
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),

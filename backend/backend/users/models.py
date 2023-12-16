@@ -37,6 +37,9 @@ class AbstractUser(models.Model):
         )
         self.save()
 
+    def is_artist(self) -> bool:
+        return self.public_metadata.get("is_artist", False)
+
     class Meta:
         abstract = True
 

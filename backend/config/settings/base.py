@@ -28,6 +28,7 @@ USE_TZ = True
 # ------------------------------------------------------------------------------
 WEBHOOK_SECRET = config("WEBHOOK_SECRET")
 CLERK_SECRET_KEY = config("CLERK_SECRET_KEY")
+JWKS_URL = config("JWKS_URL")
 
 # DATABASES
 # ------------------------------------------------------------------------------

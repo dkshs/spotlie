@@ -17,10 +17,6 @@ class ArtistSchemaOut(Schema):
     updated_at: datetime
 
 
-class ArtistSchemaIn(Schema):
-    external_id: str
-
-
 class ArtistSchemaUpdateIn(Schema):
     about: str = None
     twitter_link: str = None

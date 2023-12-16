@@ -18,11 +18,9 @@ class MusicSchemaOut(Schema):
 
 class MusicSchemaIn(Schema):
     title: str
-    artist_id: UUID
-    release_date: datetime | None
+    release_date: datetime = None
 
 
 class MusicSchemaUpdateIn(Schema):
     title: str = None
-    artist_id: UUID = None
     release_date: datetime | None = None
