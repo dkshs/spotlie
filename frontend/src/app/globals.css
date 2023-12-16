@@ -3,10 +3,47 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 210 20% 98%;
+
+    --card: 0, 0%, 0%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 0, 0%, 0%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 262 83% 60%;
+    --primary-foreground: 210 20% 98%;
+
+    --secondary: 240 6% 10%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 240 6% 10%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+
+    --accent: 240 6% 10%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 240 6% 10%;
+    --input: 240 6% 10%;
+    --ring: 262 83% 60%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border selection:bg-primary/30;
+  }
   html {
     @apply scroll-smooth;
   }
   body {
-    @apply flex h-screen w-full flex-col items-center justify-center font-merriweatherSans;
+    @apply bg-background font-merriweatherSans text-foreground;
   }
 }
