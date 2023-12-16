@@ -36,7 +36,7 @@ def get_artist(request, id: uuid.UUID):
 
 
 @router.get("/turn_into_artist/", response={201: ArtistSchemaOut, 400: ErrorSchema, 401: ErrorSchema})
-def create_artist(request, cover: UploadedFile = None):
+def create_artist(request):
     try:
         is_authenticated = token_is_valid(request, True)
         if not is_authenticated.is_valid:
@@ -45,7 +45,6 @@ def create_artist(request, cover: UploadedFile = None):
         user_dict = model_to_dict(user)
         playlists = user.get_playlists()
         artist = Artist.objects.create(
-            cover=cover,
             external_id=user.external_id,
             **user_dict,
         )
