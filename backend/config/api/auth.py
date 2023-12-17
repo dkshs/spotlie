@@ -6,15 +6,6 @@ from backend.artists.models import Artist
 from backend.users.models import User
 
 
-class InvalidTokenException(Exception):
-    def __init__(self, message: str):
-        self.message = message
-        super().__init__(message)
-
-    def __str__(self):
-        return self.message
-
-
 class TokenIsValidReturn:
     def __init__(self, is_valid: bool, message: str, user: User = None):
         self.is_valid = is_valid
