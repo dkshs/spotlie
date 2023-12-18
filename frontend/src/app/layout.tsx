@@ -12,7 +12,7 @@ import {
 
 import { Header } from "@/components/Header";
 
-export const clerkTheme = unstableCreateTheme({
+const clerkTheme = unstableCreateTheme({
   baseTheme: dark,
   elements: {
     card: "bg-card border border-primary/50",
