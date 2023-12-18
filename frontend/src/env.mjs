@@ -12,6 +12,16 @@ export const env = createEnv({
       .default("development"),
     // Clerk
     CLERK_SECRET_KEY: z.string().min(1),
+    // these variables are used for the site's SEO
+    SITE_NAME: z.string().default("SpotLie"),
+    SITE_LOCALE: z.string().default("en_US"),
+    SITE_BASEURL: z.preprocess(
+      // This makes Vercel deployments not fail if you don't set SITE_BASEURL
+      (str) => process.env.VERCEL_URL ?? str,
+      process.env.VERCEL_URL // Vercel deployments will set this env var.
+        ? z.string().transform((str) => `https://${str}`)
+        : z.string().url().default("http://localhost:3000"),
+    ),
   },
 
   /**
@@ -20,7 +30,6 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
     // Clerk
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
     // Clerk URLs
@@ -38,10 +47,13 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     // Clerk
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    // SEO
+    SITE_NAME: process.env.SITE_NAME,
+    SITE_LOCALE: process.env.SITE_LOCALE,
+    SITE_BASEURL: process.env.SITE_BASEURL,
 
     // Client
     // ----------------------------
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     // Clerk
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,

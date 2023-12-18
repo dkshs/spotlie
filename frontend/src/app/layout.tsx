@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Merriweather_Sans as MerriweatherSans } from "next/font/google";
 
+import { env } from "@/env.mjs";
 import { ClerkProvider } from "@clerk/nextjs";
 import {
   unstable_createTheme as unstableCreateTheme,
@@ -87,9 +88,45 @@ const merriweatherSans = MerriweatherSans({
 });
 
 export const metadata: Metadata = {
-  title: "SpotLie",
+  metadataBase: new URL(env.SITE_BASEURL),
+  title: {
+    default: env.SITE_NAME,
+    template: `%s • ${env.SITE_NAME}`,
+  },
   description:
     "Browse and listen to your favorite music in your web browser now.",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  openGraph: {
+    title: {
+      default: env.SITE_NAME,
+      template: `%s • ${env.SITE_NAME}`,
+    },
+    description:
+      "Browse and listen to your favorite music in your web browser now.",
+    siteName: env.SITE_NAME,
+    type: "website",
+    url: "/",
+    locale: env.SITE_LOCALE,
+  },
+  twitter: {
+    title: {
+      default: env.SITE_NAME,
+      template: `%s • ${env.SITE_NAME}`,
+    },
+    description:
+      "Browse and listen to your favorite music in your web browser now.",
+    card: "summary",
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -97,6 +134,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <ClerkProvider appearance={{ baseTheme: clerkTheme }}>
       <html lang="en" className={merriweatherSans.variable}>
         <body className="m-auto min-w-[320px] max-w-[1600px]">
+          <div className="fixed inset-0 -z-[1] bg-primary/60 bg-gradient-to-b from-background/60 to-background" />
           <Header />
           <div className="pt-[72px]">{children}</div>
         </body>

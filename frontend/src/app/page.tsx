@@ -1,3 +1,3 @@
 export default function HomePage() {
-  return <h1 className="text-3xl font-bold underline">Hello World</h1>;
+  return <div className="my-8 flex flex-col gap-8"></div>;
 }
