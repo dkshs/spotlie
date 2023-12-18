@@ -61,6 +61,7 @@ export const clerkTheme = unstableCreateTheme({
     userButtonPopoverActionButtonText: "text-foreground/60",
     userButtonPopoverActionButtonIconBox: "[&_*]:text-foreground/40",
     userButtonPopoverFooter: "hidden",
+    userButtonTrigger: "focus:ring focus:ring-ring",
     profileSectionTitle: "border-b border-border",
     profileSectionTitleText: "text-foreground",
     profileSectionContent:
