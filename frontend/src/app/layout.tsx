@@ -5,15 +5,11 @@ import { Merriweather_Sans as MerriweatherSans } from "next/font/google";
 
 import { env } from "@/env.mjs";
 import { ClerkProvider } from "@clerk/nextjs";
-import {
-  unstable_createTheme as unstableCreateTheme,
-  dark,
-} from "@clerk/themes";
+import { unstable_createTheme as unstableCreateTheme } from "@clerk/themes";
 
 import { Header } from "@/components/Header";
 
 const clerkTheme = unstableCreateTheme({
-  baseTheme: dark,
   elements: {
     card: "bg-card border border-primary/50",
     modalCloseButton:
@@ -134,7 +130,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <ClerkProvider appearance={{ baseTheme: clerkTheme }}>
       <html lang="en" className={merriweatherSans.variable}>
         <body className="m-auto min-w-[320px] max-w-[1600px]">
-          <div className="fixed inset-0 -z-[1] bg-primary/60 bg-gradient-to-b from-background/60 to-background" />
           <Header />
           <div className="pt-[72px]">{children}</div>
         </body>

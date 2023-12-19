@@ -34,7 +34,7 @@ export function Header() {
   ];
 
   return (
-    <header className="fixed inset-x-0 z-[9999] h-[72px] border-b bg-background/50 backdrop-blur-md">
+    <header className="fixed inset-x-0 z-[9999] h-[72px] border-b bg-secondary/60 backdrop-blur-md">
       <ul className="m-auto flex h-full w-full max-w-[1600px] items-center justify-between gap-2 px-6">
         <div className="flex">
           <li className="mr-3">
