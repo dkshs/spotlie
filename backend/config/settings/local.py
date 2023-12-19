@@ -15,6 +15,8 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "notable-primarily-guppy.n
 # https://github.com/adamchainz/django-cors-headers#configuration
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
+BASE_URL = config("BASE_URL", default="http://localhost:8000")
+
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-host

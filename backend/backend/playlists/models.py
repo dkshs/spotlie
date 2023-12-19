@@ -1,10 +1,13 @@
 import uuid
 
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from backend.musics.models import Music
+
+BASE_URL = getattr(settings, "BASE_URL", "")
 
 
 class Playlist(models.Model):
@@ -21,6 +24,11 @@ class Playlist(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.UUIDField()
     owner = GenericForeignKey("content_type", "object_id")
+
+    def get_image_url(self):
+        if self.image:
+            return BASE_URL + self.image.url
+        return None
 
     def __str__(self):
         return self.name

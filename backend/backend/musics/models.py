@@ -1,8 +1,11 @@
 import uuid
 
+from django.conf import settings
 from django.db import models
 
 from backend.artists.models import Artist
+
+BASE_URL = getattr(settings, "BASE_URL", "")
 
 
 class Music(models.Model):
@@ -13,6 +16,14 @@ class Music(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to="musics/images/")
     audio = models.FileField(upload_to="musics/audios/")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_image_url(self):
+        if self.image:
+            return BASE_URL + self.image.url
+        return None
+
+    def get_audio_url(self):
+        return BASE_URL + self.audio.url
 
     def __str__(self):
         return self.title

@@ -18,6 +18,10 @@ class PlaylistSchemaOut(Schema):
     created_at: datetime
     updated_at: datetime
 
+    @staticmethod
+    def resolve_image(obj):
+        return obj.get_image_url()
+
 
 class PlaylistSchemaIn(Schema):
     name: str

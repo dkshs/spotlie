@@ -16,6 +16,10 @@ class ArtistSchemaOut(Schema):
     created_at: datetime
     updated_at: datetime
 
+    @staticmethod
+    def resolve_cover(obj):
+        return obj.get_cover_url()
+
 
 class ArtistSchemaUpdateIn(Schema):
     about: str = None

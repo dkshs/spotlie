@@ -15,6 +15,14 @@ class MusicSchemaOut(Schema):
     audio: str
     created_at: datetime
 
+    @staticmethod
+    def resolve_image(obj):
+        return obj.get_image_url()
+
+    @staticmethod
+    def resolve_audio(obj):
+        return obj.get_audio_url()
+
 
 class MusicSchemaIn(Schema):
     title: str
