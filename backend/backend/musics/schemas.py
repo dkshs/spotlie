@@ -3,13 +3,13 @@ from uuid import UUID
 
 from ninja import Schema
 
-from backend.artists.schemas import ArtistSchemaOut
+from backend.users.schemas import UserSchemaOut
 
 
 class MusicSchemaOut(Schema):
     id: UUID
     title: str
-    artist: ArtistSchemaOut
+    artist: UserSchemaOut
     release_date: datetime | None
     image: str | None
     audio: str

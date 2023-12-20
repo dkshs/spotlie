@@ -1,26 +1,14 @@
-from datetime import datetime
 from uuid import UUID
 
 from ninja import Schema
 
 from backend.musics.schemas import MusicSchemaOut
-from backend.users.schemas import UserSchemaOut
+from backend.users.schemas import UserPlaylistSchema, UserSchemaOut
 
 
-class PlaylistSchemaOut(Schema):
-    id: UUID
-    name: str
-    description: str | None
-    image: str | None
+class PlaylistSchemaOut(UserPlaylistSchema):
     musics: list[MusicSchemaOut]
     owner: UserSchemaOut
-    is_public: bool
-    created_at: datetime
-    updated_at: datetime
-
-    @staticmethod
-    def resolve_image(obj):
-        return obj.get_image_url()
 
 
 class PlaylistSchemaIn(Schema):

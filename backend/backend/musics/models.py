@@ -11,7 +11,7 @@ BASE_URL = getattr(settings, "BASE_URL", "")
 class Music(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name="musics")
     release_date = models.DateField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to="musics/images/")
     audio = models.FileField(upload_to="musics/audios/")
