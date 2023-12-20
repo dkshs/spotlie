@@ -5,6 +5,14 @@
 await import("./src/env.mjs");
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: process.env.NEXT_PUBLIC_IMG_DOMAINS?.split(",").map(
+      (domain) => ({
+        hostname: domain,
+      }),
+    ),
+  },
+};
 
 export default nextConfig;

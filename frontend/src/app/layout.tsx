@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { Merriweather_Sans as MerriweatherSans } from "next/font/google";
 
 import { env } from "@/env.mjs";
+import { Providers } from "./providers";
 import { ClerkProvider } from "@clerk/nextjs";
 import { unstable_createTheme as unstableCreateTheme } from "@clerk/themes";
 
@@ -130,8 +131,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <ClerkProvider appearance={{ baseTheme: clerkTheme }}>
       <html lang="en" className={merriweatherSans.variable}>
         <body className="m-auto min-w-[320px] max-w-[1600px]">
-          <Header />
-          <div className="pt-[72px]">{children}</div>
+          <Providers>
+            <Header />
+            <div className="pt-[72px]">{children}</div>
+          </Providers>
         </body>
       </html>
     </ClerkProvider>
