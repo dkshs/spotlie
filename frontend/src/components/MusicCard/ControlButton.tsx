@@ -26,7 +26,7 @@ export function ControlButton({ music, playlist }: ControlButtonProps) {
       } duration-200 focus:translate-y-0 focus:opacity-100 group-hover:translate-y-0 group-hover:opacity-100`}
       radius="full"
       size="icon"
-      title={`${musicIsPlaying ? "Pause" : "Play"} music ${music.title}`}
+      title={`${musicIsPlaying ? "Pause" : "Play"} ${music.title}`}
       onClick={() =>
         musicIsPlaying ? pauseMusic() : playMusic(music, playlist)
       }
