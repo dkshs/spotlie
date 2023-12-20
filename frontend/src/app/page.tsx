@@ -4,6 +4,7 @@ import { serverFetcher } from "@/utils/api";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { MusicCard } from "@/components/MusicCard";
 import { ArtistCard } from "@/components/ArtistCard";
 
@@ -26,11 +27,14 @@ export default async function HomePage() {
             </Link>
           </Button>
         </header>
-        <div className="flex w-full max-w-[calc(100vw-20px)] snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-4 pt-2 md:gap-4">
-          {musics.map((music) => (
-            <MusicCard key={music.id} music={music} />
-          ))}
-        </div>
+        <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
+          <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
+            {musics.map((music) => (
+              <MusicCard key={music.id} music={music} />
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </section>
       <section className="px-4 md:px-9">
         <header className="mb-4 flex items-center justify-between">
@@ -41,11 +45,14 @@ export default async function HomePage() {
             </Link>
           </Button>
         </header>
-        <div className="flex w-full max-w-[calc(100vw-20px)] snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-4 pt-2 md:gap-4">
-          {artists.map((artist) => (
-            <ArtistCard key={artist.id} artist={artist} />
-          ))}
-        </div>
+        <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
+          <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
+            {artists.map((artist) => (
+              <ArtistCard key={artist.id} artist={artist} />
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </section>
     </div>
   );
