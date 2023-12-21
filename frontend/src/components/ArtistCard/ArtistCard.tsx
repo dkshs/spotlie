@@ -1,47 +1,43 @@
-import type { ArtistProps } from "@/utils/types";
-
-import { cn } from "@/lib/utils";
+import type { ArtistPropsWithMusics } from "@/utils/types";
 
 import Image from "next/image";
 import Link from "next/link";
+import { ControlButton } from "../MusicCard/ControlButton";
 
 interface ArtistCardProps {
-  artist: ArtistProps;
-  variant?: "vertical" | "horizontal";
+  artist: ArtistPropsWithMusics;
 }
 
-export function ArtistCard({ artist, variant = "vertical" }: ArtistCardProps) {
+export function ArtistCard({ artist }: ArtistCardProps) {
   return (
-    <Link
-      href={`/artist/${artist.id}`}
-      className={cn(
-        "group relative flex snap-center items-center rounded-lg bg-secondary/50 ring-ring duration-200 focus:outline-none focus:ring-2",
-        variant === "vertical"
-          ? "h-60 w-40 flex-col gap-4 p-2 md:h-72 md:w-52 md:p-4"
-          : "h-16 gap-3 px-2 py-1",
-      )}
-    >
+    <div className="group relative flex h-60 w-40 snap-center flex-col items-center gap-4 rounded-lg bg-secondary/50 p-2 md:h-72 md:w-52 md:p-4">
+      <Link
+        href={`/artist/${artist.id}`}
+        className="absolute inset-0 z-10 rounded-lg ring-ring duration-200 focus:outline-none focus:ring-2"
+        aria-label={artist.username}
+      />
       <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
-      <div
-        className={cn(
-          "relative overflow-hidden rounded-lg bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60",
-          variant === "vertical"
-            ? "h-[65%] min-h-[65%] w-36 md:w-44"
-            : "size-[50px] min-h-[50px] min-w-[50px]",
-        )}
-      >
+      <div className="relative h-[65%] min-h-[65%] w-36 rounded-full bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60 md:w-44">
         {artist.image && (
           <Image
             alt={artist.username}
             src={artist.image}
-            className="aspect-square object-cover"
+            className="aspect-square rounded-full object-cover"
             fill
           />
         )}
+        {artist.musics.length > 0 && (
+          <ControlButton music={artist.musics[0]!} playlist={artist.musics} />
+        )}
       </div>
-      <h3 className="w-full truncate rounded-lg text-lg font-bold hover:underline">
-        {artist.username}
-      </h3>
-    </Link>
+      <div className="flex w-full flex-col items-start truncate">
+        <h3 className="w-full truncate rounded-lg text-lg font-bold group-hover:underline">
+          {artist.username}
+        </h3>
+        <p className="w-full max-w-fit truncate text-sm text-foreground/60">
+          Artist
+        </p>
+      </div>
+    </div>
   );
 }

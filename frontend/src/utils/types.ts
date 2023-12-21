@@ -23,3 +23,7 @@ export interface MusicProps {
   audio: string;
   created_at: Date;
 }
+
+export interface ArtistPropsWithMusics extends ArtistProps {
+  musics: MusicProps[];
+}

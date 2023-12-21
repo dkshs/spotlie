@@ -1,30 +1,30 @@
 "use client";
 
-import type { ArtistProps } from "@/utils/types";
+import type { ArtistPropsWithMusics } from "@/utils/types";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useApi } from "@/hooks/useApi";
 
-import { ArtistCard } from "@/components/ArtistCard";
+import { SimpleArtistCard } from "@/components/ArtistCard";
 import { Button } from "@/components/ui/Button";
 
 import { Spinner } from "@phosphor-icons/react";
 
 export function ArtistsList() {
   const router = useRouter();
-  const [artists, setArtists] = useState<ArtistProps[]>([]);
+  const [artists, setArtists] = useState<ArtistPropsWithMusics[]>([]);
   const [offset, setOffset] = useState(0);
   const { fetcher } = useApi();
   const skeletons = [...Array(12).keys()].map((i) => i + 1);
 
-  const { isFetching, refetch } = useQuery<ArtistProps[]>({
+  const { isFetching, refetch } = useQuery<ArtistPropsWithMusics[]>({
     queryKey: ["artists"],
     queryFn: async () => {
       try {
         const qtd = skeletons.length;
-        const data = await fetcher<ArtistProps[]>("/artists/", {
+        const data = await fetcher<ArtistPropsWithMusics[]>("/artists/", {
           needAuth: false,
           searchParams: { limit: `${qtd}`, offset: `${qtd * offset}` },
         });
@@ -61,7 +61,7 @@ export function ArtistsList() {
           <p>No artists</p>
         ) : (
           artists.map((artist) => (
-            <ArtistCard key={artist.id} artist={artist} variant="horizontal" />
+            <SimpleArtistCard key={artist.id} artist={artist} />
           ))
         )}
       </div>

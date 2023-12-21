@@ -1,4 +1,4 @@
-import type { MusicProps, ArtistProps } from "@/utils/types";
+import type { MusicProps, ArtistPropsWithMusics } from "@/utils/types";
 
 import { serverFetcher } from "@/utils/api";
 
@@ -14,7 +14,7 @@ export default async function HomePage() {
   const musics = await serverFetcher<MusicProps[]>("/musics", {
     needAuth: false,
   });
-  const artists = await serverFetcher<ArtistProps[]>("/artists");
+  const artists = await serverFetcher<ArtistPropsWithMusics[]>("/artists");
 
   return (
     <div className="my-8 flex flex-col gap-8">
