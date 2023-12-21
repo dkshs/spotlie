@@ -4,12 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { ControlButton } from "./ControlButton";
 
-interface MusicCardProps {
+interface VerticalMusicCardProps {
   music: MusicProps;
   playlist?: MusicProps[];
 }
 
-export function MusicCard({ music, playlist }: MusicCardProps) {
+function VerticalMusicCard({ music, playlist }: VerticalMusicCardProps) {
   return (
     <div className="group relative flex h-60 w-40 cursor-pointer snap-center flex-col items-center gap-4 rounded-lg bg-secondary/50 p-2 md:h-72 md:w-52 md:p-4">
       <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
@@ -48,3 +48,5 @@ export function MusicCard({ music, playlist }: MusicCardProps) {
     </div>
   );
 }
+
+export { VerticalMusicCard, type VerticalMusicCardProps };

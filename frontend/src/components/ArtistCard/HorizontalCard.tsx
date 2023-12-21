@@ -2,25 +2,18 @@
 
 import type { ArtistPropsWithMusics } from "@/utils/types";
 
-import { useMemo, useState } from "react";
-import { useMusic } from "@/hooks/useMusic";
+import { useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
-import { SimpleButtonControl } from "../MusicCard/SimpleControlButton";
+import { ControlButton } from "../MusicCard";
 
-interface SimpleArtistCardProps {
+interface HorizontalArtistCardProps {
   artist: ArtistPropsWithMusics;
 }
 
-export function SimpleArtistCard({ artist }: SimpleArtistCardProps) {
-  const { currentMusic, musicState } = useMusic();
+function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
   const [buttonFocus, setButtonFocus] = useState(false);
-  const musicIsPlaying = useMemo(() => {
-    return artist.musics.find((m) => m.id === currentMusic?.id)
-      ? musicState === "playing"
-      : false;
-  }, [artist.musics, currentMusic?.id, musicState]);
 
   return (
     <div className="group relative flex h-16 snap-center items-center gap-3 rounded-lg bg-secondary/50 px-2 py-1">
@@ -43,12 +36,12 @@ export function SimpleArtistCard({ artist }: SimpleArtistCardProps) {
           />
         )}
         {artist.musics.length > 0 && (
-          <SimpleButtonControl
+          <ControlButton
             music={artist.musics[0]!}
             playlist={artist.musics}
             buttonFocus={buttonFocus}
-            musicIsPlaying={musicIsPlaying}
             radius="rounded-full"
+            orientation="horizontal"
           />
         )}
       </div>
@@ -63,3 +56,5 @@ export function SimpleArtistCard({ artist }: SimpleArtistCardProps) {
     </div>
   );
 }
+
+export { HorizontalArtistCard, type HorizontalArtistCardProps };

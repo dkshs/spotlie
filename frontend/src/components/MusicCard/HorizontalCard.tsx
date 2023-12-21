@@ -7,14 +7,14 @@ import { useMusic } from "@/hooks/useMusic";
 
 import Image from "next/image";
 import Link from "next/link";
-import { SimpleButtonControl } from "./SimpleControlButton";
+import { ControlButton } from "./ControlButton";
 
-interface SimpleMusicCardProps {
+interface HorizontalMusicCardProps {
   music: MusicProps;
   playlist?: MusicProps[];
 }
 
-export function SimpleMusicCard({ music, playlist }: SimpleMusicCardProps) {
+function HorizontalMusicCard({ music, playlist }: HorizontalMusicCardProps) {
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
   const [buttonFocus, setButtonFocus] = useState(false);
   const musicIsPlaying = useMemo(
@@ -54,11 +54,11 @@ export function SimpleMusicCard({ music, playlist }: SimpleMusicCardProps) {
             height={50}
           />
         )}
-        <SimpleButtonControl
+        <ControlButton
           music={music}
           playlist={playlist}
           buttonFocus={buttonFocus}
-          musicIsPlaying={musicIsPlaying}
+          orientation="horizontal"
         />
       </div>
       <div className="relative z-20 flex w-fit flex-col items-start truncate">
@@ -78,3 +78,5 @@ export function SimpleMusicCard({ music, playlist }: SimpleMusicCardProps) {
     </div>
   );
 }
+
+export { HorizontalMusicCard, type HorizontalMusicCardProps };

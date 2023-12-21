@@ -2,13 +2,13 @@ import type { ArtistPropsWithMusics } from "@/utils/types";
 
 import Image from "next/image";
 import Link from "next/link";
-import { ControlButton } from "../MusicCard/ControlButton";
+import { ControlButton } from "../MusicCard";
 
-interface ArtistCardProps {
+interface VerticalArtistCardProps {
   artist: ArtistPropsWithMusics;
 }
 
-export function ArtistCard({ artist }: ArtistCardProps) {
+function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
   return (
     <div className="group relative flex h-60 w-40 snap-center flex-col items-center gap-4 rounded-lg bg-secondary/50 p-2 md:h-72 md:w-52 md:p-4">
       <Link
@@ -39,3 +39,5 @@ export function ArtistCard({ artist }: ArtistCardProps) {
     </div>
   );
 }
+
+export { VerticalArtistCard, type VerticalArtistCardProps };

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useApi } from "@/hooks/useApi";
 
-import { SimpleArtistCard } from "@/components/ArtistCard";
+import { ArtistCard } from "@/components/ArtistCard";
 import { Button } from "@/components/ui/Button";
 
 import { Spinner } from "@phosphor-icons/react";
@@ -61,7 +61,11 @@ export function ArtistsList() {
           <p>No artists</p>
         ) : (
           artists.map((artist) => (
-            <SimpleArtistCard key={artist.id} artist={artist} />
+            <ArtistCard
+              key={artist.id}
+              artist={artist}
+              orientation="horizontal"
+            />
           ))
         )}
       </div>

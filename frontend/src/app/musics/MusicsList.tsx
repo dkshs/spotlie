@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useApi } from "@/hooks/useApi";
 
-import { SimpleMusicCard } from "@/components/MusicCard";
+import { MusicCard } from "@/components/MusicCard";
 import { Button } from "@/components/ui/Button";
 
 import { Spinner } from "@phosphor-icons/react";
@@ -61,7 +61,12 @@ export function MusicsList() {
           <p>No musics</p>
         ) : (
           musics.map((music) => (
-            <SimpleMusicCard key={music.id} music={music} playlist={musics} />
+            <MusicCard
+              key={music.id}
+              music={music}
+              playlist={musics}
+              orientation="horizontal"
+            />
           ))
         )}
       </div>
