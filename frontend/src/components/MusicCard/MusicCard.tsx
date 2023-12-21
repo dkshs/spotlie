@@ -12,7 +12,7 @@ interface MusicCardProps {
 export function MusicCard({ music, playlist }: MusicCardProps) {
   return (
     <div className="group relative flex h-60 w-40 cursor-pointer snap-center flex-col items-center gap-4 rounded-lg bg-secondary/50 p-2 md:h-72 md:w-52 md:p-4">
-      <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:bg-secondary group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
+      <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
       <Link
         href={`/music/${music.id}`}
         className="absolute inset-0 z-10"

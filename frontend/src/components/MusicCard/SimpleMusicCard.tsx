@@ -30,7 +30,7 @@ export function SimpleMusicCard({ music, playlist }: SimpleMusicCardProps) {
       } px-2 py-1 duration-200`}
       id={music.id}
     >
-      <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:bg-secondary group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
+      <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
       <button
         type="button"
         className="absolute inset-0 z-10 size-full rounded-lg ring-ring focus:outline-none focus:ring-2"
