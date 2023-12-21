@@ -17,12 +17,12 @@ export function ArtistCard({ artist }: ArtistCardProps) {
         aria-label={artist.username}
       />
       <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
-      <div className="relative h-[65%] min-h-[65%] w-36 rounded-full bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60 md:w-44">
+      <div className="relative size-36 rounded-full bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60 md:size-44">
         {artist.image && (
           <Image
             alt={artist.username}
             src={artist.image}
-            className="aspect-square rounded-full object-cover"
+            className="aspect-square size-36 rounded-full object-cover md:size-44"
             fill
           />
         )}
@@ -34,9 +34,7 @@ export function ArtistCard({ artist }: ArtistCardProps) {
         <h3 className="w-full truncate rounded-lg text-lg font-bold group-hover:underline">
           {artist.username}
         </h3>
-        <p className="w-full max-w-fit truncate text-sm text-foreground/60">
-          Artist
-        </p>
+        <p className="w-full truncate text-sm text-foreground/60">Artist</p>
       </div>
     </div>
   );
