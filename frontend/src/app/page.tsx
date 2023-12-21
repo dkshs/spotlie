@@ -30,7 +30,7 @@ export default async function HomePage() {
         <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
           <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
             {musics.map((music) => (
-              <MusicCard key={music.id} music={music} />
+              <MusicCard key={music.id} music={music} playlist={musics} />
             ))}
           </div>
           <ScrollBar orientation="horizontal" />
