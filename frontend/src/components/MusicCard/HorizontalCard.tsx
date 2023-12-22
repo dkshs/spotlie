@@ -11,10 +11,15 @@ import { ControlButton } from "./ControlButton";
 
 interface HorizontalMusicCardProps {
   music: MusicProps;
-  playlist?: MusicProps[];
+  musics?: MusicProps[];
+  showArtist?: boolean;
 }
 
-function HorizontalMusicCard({ music, playlist }: HorizontalMusicCardProps) {
+function HorizontalMusicCard({
+  music,
+  musics,
+  showArtist = true,
+}: HorizontalMusicCardProps) {
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
   const [buttonFocus, setButtonFocus] = useState(false);
   const musicIsPlaying = useMemo(
@@ -36,10 +41,10 @@ function HorizontalMusicCard({ music, playlist }: HorizontalMusicCardProps) {
         title={`${musicIsPlaying ? "Pause" : "Play"} ${music.title}`}
         onKeyDown={(e) => {
           if (e.key !== "Enter" && e.key !== " ") return;
-          musicIsPlaying ? pauseMusic() : playMusic(music, playlist);
+          musicIsPlaying ? pauseMusic() : playMusic(music, musics);
         }}
         onDoubleClick={() =>
-          musicIsPlaying ? pauseMusic() : playMusic(music, playlist)
+          musicIsPlaying ? pauseMusic() : playMusic(music, musics)
         }
         onFocus={() => setButtonFocus(true)}
         onBlur={() => setButtonFocus(false)}
@@ -56,7 +61,7 @@ function HorizontalMusicCard({ music, playlist }: HorizontalMusicCardProps) {
         )}
         <ControlButton
           music={music}
-          playlist={playlist}
+          playlist={musics}
           buttonFocus={buttonFocus}
           orientation="horizontal"
         />
@@ -68,12 +73,14 @@ function HorizontalMusicCard({ music, playlist }: HorizontalMusicCardProps) {
         >
           {music.title}
         </Link>
-        <Link
-          href={`/artist/${music.artist.id}`}
-          className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm hover:underline focus-visible:border-ring focus-visible:outline-none"
-        >
-          {music.artist.username}
-        </Link>
+        {showArtist && (
+          <Link
+            href={`/artist/${music.artist.id}`}
+            className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm hover:underline focus-visible:border-ring focus-visible:outline-none"
+          >
+            {music.artist.username}
+          </Link>
+        )}
       </div>
     </div>
   );

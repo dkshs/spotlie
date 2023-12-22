@@ -1,7 +1,18 @@
+export interface Playlist {
+  id: string;
+  name: string;
+  description?: string;
+  image?: string;
+  is_public: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface UserProps {
   id: string;
   username: string;
   image?: string;
+  playlists: Playlist[];
   created_at: Date;
   updated_at: Date;
 }
@@ -24,6 +35,12 @@ export interface MusicProps {
   created_at: Date;
 }
 
+export interface PlaylistPropsWithMusics extends Playlist {
+  musics: MusicProps[];
+  owner: UserProps;
+}
+
 export interface ArtistPropsWithMusics extends ArtistProps {
   musics: MusicProps[];
+  playlists: Playlist[];
 }

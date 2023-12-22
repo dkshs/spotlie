@@ -64,7 +64,7 @@ export function MusicsList() {
             <MusicCard
               key={music.id}
               music={music}
-              playlist={musics}
+              musics={musics}
               orientation="horizontal"
             />
           ))

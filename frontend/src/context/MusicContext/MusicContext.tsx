@@ -91,7 +91,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
     false,
   );
 
-  useQuery({
+  useQuery<MusicProps | null>({
     queryKey: ["verify-music"],
     queryFn: async () => {
       setMusicState("paused");
@@ -118,9 +118,11 @@ export function MusicContextProvider(props: PropsWithChildren) {
             };
           });
         };
+        return data || null;
       } catch (e) {
         setCurrentMusic(null);
         setLocalCurrentMusic(null);
+        return null;
       }
     },
     refetchOnWindowFocus: false,
