@@ -3,6 +3,6 @@
 
 # Clerk
 # ------------------------------------------------------------------------------
-CLERK_SECRET_KEY = ""
-WEBHOOK_SECRET = ""
-JWKS_URL = ""
+CLERK_SECRET_KEY=""
+WEBHOOK_SECRET=""
+JWKS_URL=""
