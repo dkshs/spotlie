@@ -74,7 +74,7 @@ export function ControlButton({
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
   const artistIsPlaying = useMemo(
     () => (artistId ? currentMusic?.artist.id === artistId : false),
-    [artistId, currentMusic?.artist.id],
+    [artistId, currentMusic?.artist?.id],
   );
   const musicIsPlaying = useMemo(
     () =>

@@ -91,17 +91,17 @@ export function MusicContextProvider(props: PropsWithChildren) {
     false,
   );
 
-  useQuery<MusicProps | null>({
+  useQuery({
     queryKey: ["verify-music"],
     queryFn: async () => {
       setMusicState("paused");
       try {
-        if (!localCurrentMusic) throw Error("");
+        if (!localCurrentMusic || !localCurrentMusic.id) throw Error("");
         const data = await fetcher<MusicProps>(
           `/musics/${localCurrentMusic.id}`,
           { needAuth: false },
         );
-        if (!data) throw Error("");
+        if (!data || !data.id) throw Error("");
         setCurrentMusic(data);
         setLocalCurrentMusic(data);
         const audio = new Audio(data.audio);
@@ -118,11 +118,9 @@ export function MusicContextProvider(props: PropsWithChildren) {
             };
           });
         };
-        return data || null;
       } catch (e) {
         setCurrentMusic(null);
         setLocalCurrentMusic(null);
-        return null;
       }
     },
     refetchOnWindowFocus: false,
