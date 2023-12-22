@@ -12,7 +12,7 @@
     "lint:fix": "eslint --fix . && prettier . -w"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.28.1",
+    "@clerk/nextjs": "^4.29.0",
     "@clerk/themes": "^1.7.9",
     "@phosphor-icons/react": "^2.0.15",
     "@radix-ui/react-scroll-area": "^1.0.5",
