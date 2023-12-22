@@ -12,6 +12,6 @@ PyJWT==2.8.0
 django==4.2.8
 django-cleanup==8.0.0
 dj-database-url==2.1.0
-django-ninja==1.0.1
+django-ninja==1.1.0
 orjson==3.9.10
 django-cors-headers==4.3.1
