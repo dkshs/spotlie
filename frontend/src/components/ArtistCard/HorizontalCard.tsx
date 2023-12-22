@@ -2,7 +2,8 @@
 
 import type { ArtistPropsWithMusics } from "@/utils/types";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useMusic } from "@/hooks/useMusic";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -13,10 +14,18 @@ interface HorizontalArtistCardProps {
 }
 
 function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
+  const { currentMusic, musicState } = useMusic();
   const [buttonFocus, setButtonFocus] = useState(false);
+  const musicIsPlaying = useMemo(() => {
+    return currentMusic?.artist.id === artist.id && musicState === "playing";
+  }, [artist.id, currentMusic?.artist.id, musicState]);
 
   return (
-    <div className="group relative flex h-16 snap-center items-center gap-3 rounded-lg bg-secondary/50 px-2 py-1">
+    <div
+      className={`group relative flex h-16 snap-center items-center gap-3 rounded-lg ${
+        musicIsPlaying ? "bg-secondary/80" : "bg-secondary/50"
+      } px-2 py-1`}
+    >
       <Link
         href={`/artist/${artist.id}`}
         className="absolute inset-0 z-10 rounded-lg ring-ring duration-200 focus:outline-none focus:ring-2"
@@ -38,6 +47,7 @@ function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
         {artist.musics.length > 0 && (
           <ControlButton
             music={artist.musics[0]!}
+            artistId={artist.id}
             playlist={artist.musics}
             buttonFocus={buttonFocus}
             radius="rounded-full"

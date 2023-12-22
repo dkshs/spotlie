@@ -2,7 +2,7 @@
 
 import type { MusicProps } from "@/utils/types";
 
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useMusic } from "@/hooks/useMusic";
 
 import { Button } from "@/components/ui/Button";
@@ -16,6 +16,7 @@ interface ControlButtonProps {
   buttonFocus?: boolean;
   radius?: "rounded-lg" | "rounded-full";
   orientation?: "horizontal" | "vertical";
+  artistId?: string;
 }
 
 function ButtonContent({
@@ -65,15 +66,44 @@ function ButtonContent({
 export function ControlButton({
   music,
   playlist,
+  artistId,
   radius = "rounded-lg",
   buttonFocus = false,
   orientation = "vertical",
 }: ControlButtonProps) {
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
-  const musicIsPlaying = useMemo(
-    () => currentMusic?.id === music.id && musicState === "playing",
-    [currentMusic?.id, music.id, musicState],
+  const artistIsPlaying = useMemo(
+    () => (artistId ? currentMusic?.artist.id === artistId : false),
+    [artistId, currentMusic?.artist.id],
   );
+  const musicIsPlaying = useMemo(
+    () =>
+      (currentMusic?.id === music.id || artistIsPlaying) &&
+      musicState === "playing",
+    [artistIsPlaying, currentMusic?.id, music.id, musicState],
+  );
+  const title = useMemo(() => {
+    const state = musicIsPlaying ? "Pause" : "Play";
+    const name = artistId ? music.artist.username : music.title;
+    return `${state} ${name}`;
+  }, [artistId, music.artist.username, music.title, musicIsPlaying]);
+
+  const onClick = useCallback(() => {
+    if (musicIsPlaying) {
+      pauseMusic();
+    } else {
+      const song = artistIsPlaying && currentMusic ? currentMusic : music;
+      playMusic(song, playlist);
+    }
+  }, [
+    artistIsPlaying,
+    currentMusic,
+    music,
+    musicIsPlaying,
+    pauseMusic,
+    playMusic,
+    playlist,
+  ]);
 
   return orientation === "vertical" ? (
     <Button
@@ -83,10 +113,8 @@ export function ControlButton({
       } focus:translate-y-0 focus:opacity-100 group-hover:translate-y-0 group-hover:opacity-100`}
       radius="full"
       size="icon"
-      title={`${musicIsPlaying ? "Pause" : "Play"} ${music.title}`}
-      onClick={() =>
-        musicIsPlaying ? pauseMusic() : playMusic(music, playlist)
-      }
+      title={title}
+      onClick={() => onClick()}
     >
       <ButtonContent
         musicIsPlaying={musicIsPlaying}
@@ -100,10 +128,8 @@ export function ControlButton({
       className={`group/button absolute inset-0 z-20 flex size-full items-center justify-center ${radius} border-2 border-transparent bg-black/50 ${
         musicIsPlaying || buttonFocus ? "opacity-100" : "opacity-0"
       } duration-200 focus:opacity-100 focus:outline-none focus-visible:border-primary group-hover:opacity-100`}
-      onClick={() =>
-        musicIsPlaying ? pauseMusic() : playMusic(music, playlist)
-      }
-      title={`${musicIsPlaying ? "Pause" : "Play"} ${music.title}`}
+      onClick={() => onClick()}
+      title={title}
     >
       <ButtonContent
         musicIsPlaying={musicIsPlaying}

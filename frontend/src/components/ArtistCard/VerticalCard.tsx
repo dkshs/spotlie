@@ -27,7 +27,11 @@ function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
           />
         )}
         {artist.musics.length > 0 && (
-          <ControlButton music={artist.musics[0]!} playlist={artist.musics} />
+          <ControlButton
+            artistId={artist.id}
+            music={artist.musics[0]!}
+            playlist={artist.musics}
+          />
         )}
       </div>
       <div className="flex w-full flex-col items-start truncate">
