@@ -1,7 +1,7 @@
 import uuid
 
 from django.contrib.contenttypes.models import ContentType
-from ninja import Router, UploadedFile
+from ninja import FilterSchema, Query, Router, UploadedFile
 
 from backend.musics.models import Music
 from backend.utils.schemas import ErrorSchema
@@ -14,10 +14,18 @@ from ..schemas import PlaylistSchemaIn, PlaylistSchemaOut, PlaylistSchemaUpdateI
 router = Router()
 
 
+class GetPlaylistsFilter(FilterSchema):
+    object_id: uuid.UUID | None = None
+
+
 @router.get("/", response={200: list[PlaylistSchemaOut], 500: ErrorSchema})
-def get_playlists(request, limit: int = 10, offset: int = 0, orderBy: str = None):
+def get_playlists(
+    request, limit: int = 10, offset: int = 0, orderBy: str = None, filters: GetPlaylistsFilter = Query(...)
+):
     try:
         playlists = Playlist.objects.all()
+        if filters.object_id:
+            playlists = playlists.filter(object_id=filters.object_id)
         if orderBy:
             playlists = playlists.order_by(*orderBy.split(","))
         return 200, playlists[offset : offset + limit]  # noqa: E203
