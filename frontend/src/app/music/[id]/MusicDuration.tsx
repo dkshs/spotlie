@@ -5,29 +5,16 @@ import { useEffect, useState } from "react";
 import { musicTimeFormatter } from "@/utils/formatters";
 
 export function MusicDuration({ src }: { src: string }) {
-  const [musicDuration, setMusicDuration] = useState<{
-    min: string;
-    sec: string;
-  } | null>(null);
+  const [musicDuration, setMusicDuration] = useState("");
 
   useEffect(() => {
     const audio = new Audio(src);
     audio.onloadedmetadata = () => {
-      const duration = musicTimeFormatter(audio).musicDurationTime.split(":");
-      let min = duration[0] || "00";
-      let sec = duration[1] || "00";
-      if (min === "00" && sec === "00") return;
-      min = min.charAt(0) === "0" ? min.slice(1) : min;
-      sec = sec.charAt(0) === "0" ? sec.slice(1) : sec;
-      setMusicDuration({ min, sec });
+      let duration = musicTimeFormatter(audio).musicDurationTime;
+      duration.charAt(0) === "0" && (duration = duration.slice(1));
+      setMusicDuration(duration);
     };
   }, [src]);
 
-  return (
-    musicDuration && (
-      <span>
-        {musicDuration.min} min {musicDuration.sec} sec
-      </span>
-    )
-  );
+  return <span>{musicDuration}</span>;
 }

@@ -84,9 +84,9 @@ export function ControlButton({
   );
   const title = useMemo(() => {
     const state = musicIsPlaying ? "Pause" : "Play";
-    const name = artistId ? music.artist.username : music.title;
+    const name = artistId ? music.artist.full_name : music.title;
     return `${state} ${name}`;
-  }, [artistId, music.artist.username, music.title, musicIsPlaying]);
+  }, [artistId, music.artist.full_name, music.title, musicIsPlaying]);
 
   const onClick = useCallback(() => {
     if (musicIsPlaying) {

@@ -60,6 +60,7 @@ export async function generateMetadata(
       description,
       url: music.id,
       type: "music.song",
+      images: music.image && [music.image],
     },
     twitter: {
       title: music.title,
@@ -116,7 +117,7 @@ export default async function MusicPage({ params }: Props) {
                 {music.artist?.image && (
                   <Image
                     src={music.artist.image}
-                    alt={music.artist.username}
+                    alt={music.artist.full_name}
                     className="size-6 rounded-full bg-black/20"
                     width={24}
                     height={24}
@@ -124,10 +125,10 @@ export default async function MusicPage({ params }: Props) {
                 )}
                 <Link
                   href={`/artist/${music.artist.id}`}
-                  title={music.artist.username}
+                  title={music.artist.full_name}
                   className="rounded-sm font-bold outline-2 outline-purple-400 duration-200 hover:underline focus:outline active:opacity-70"
                 >
-                  {music.artist.username}
+                  {music.artist.full_name}
                 </Link>
               </div>
               {music.release_date && (
@@ -158,14 +159,22 @@ export default async function MusicPage({ params }: Props) {
         <section className="mt-20">
           <header className="flex items-center justify-between">
             <h2 className="text-xl font-bold">
-              More by {music.artist.username}
+              More by {music.artist.full_name}
             </h2>
           </header>
           <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
             <div className="flex w-max gap-3 px-1 pb-4 pt-3">
               {musics.map((music) => (
                 <div key={music.id} className="w-full">
-                  <MusicCard music={music} musics={musics} showArtist={false} />
+                  <MusicCard
+                    music={music}
+                    musics={musics}
+                    showArtist={false}
+                    text={
+                      music.release_date &&
+                      new Date(music.release_date).getFullYear().toString()
+                    }
+                  />
                 </div>
               ))}
             </div>

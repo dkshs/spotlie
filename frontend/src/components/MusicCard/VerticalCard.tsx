@@ -9,12 +9,14 @@ interface VerticalMusicCardProps {
   musics?: MusicProps[];
   playlist?: PlaylistPropsWithMusics;
   showArtist?: boolean;
+  text?: string;
 }
 
 function VerticalMusicCard({
   music,
   musics,
   playlist,
+  text,
   showArtist = true,
 }: VerticalMusicCardProps) {
   const isPlaylist = !!playlist;
@@ -68,13 +70,19 @@ function VerticalMusicCard({
         >
           {isPlaylist ? playlist.name : music.title}
         </Link>
-        {showArtist && (
+        {showArtist && !isPlaylist ? (
           <Link
-            href={`/artist/${isPlaylist ? playlist.name : music.artist.id}`}
-            className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm hover:underline focus-visible:border-ring focus-visible:outline-none"
+            href={`/artist/${music.artist.id}`}
+            className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm capitalize text-foreground/60 hover:underline focus-visible:border-ring focus-visible:outline-none"
           >
-            {isPlaylist ? playlist.owner.username : music.artist.username}
+            {music.artist.full_name}
           </Link>
+        ) : (
+          text && (
+            <p className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm capitalize text-foreground/60">
+              {text}
+            </p>
+          )
         )}
       </div>
     </div>

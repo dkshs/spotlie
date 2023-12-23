@@ -78,7 +78,7 @@ function HorizontalMusicCard({
             href={`/artist/${music.artist.id}`}
             className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm hover:underline focus-visible:border-ring focus-visible:outline-none"
           >
-            {music.artist.username}
+            {music.artist.full_name}
           </Link>
         )}
       </div>

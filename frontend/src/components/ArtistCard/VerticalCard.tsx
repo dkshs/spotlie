@@ -14,13 +14,13 @@ function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
       <Link
         href={`/artist/${artist.id}`}
         className="absolute inset-0 z-10 rounded-lg ring-ring duration-200 focus:outline-none focus:ring-2"
-        aria-label={artist.username}
+        aria-label={artist.full_name}
       />
       <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
       <div className="relative size-36 rounded-full bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60 md:size-44">
         {artist.image && (
           <Image
-            alt={artist.username}
+            alt={artist.full_name}
             src={artist.image}
             className="aspect-square size-36 rounded-full object-cover md:size-44"
             fill
@@ -36,7 +36,7 @@ function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
       </div>
       <div className="flex w-full flex-col items-start truncate">
         <h3 className="w-full truncate rounded-lg text-lg font-bold group-hover:underline">
-          {artist.username}
+          {artist.full_name}
         </h3>
         <p className="w-full truncate text-sm text-foreground/60">Artist</p>
       </div>

@@ -47,19 +47,20 @@ export async function generateMetadata(
 
   return {
     metadataBase: new URL(artistUrl),
-    title: artist.username,
+    title: artist.full_name,
     description,
     alternates: {
       canonical: artist.id,
     },
     openGraph: {
-      title: artist.username,
+      title: artist.full_name,
       description,
       url: artist.id,
       type: "profile",
+      images: artist.image && [artist.image],
     },
     twitter: {
-      title: artist.username,
+      title: artist.full_name,
       card: artist.image ? "summary_large_image" : "summary",
       images: artist.image && [artist.image],
       description,
@@ -84,7 +85,7 @@ export default async function ArtistPage({ params }: Props) {
           <div className="absolute inset-0 z-[-1] bg-center md:h-80">
             <Image
               src={artist.image}
-              alt={artist.username}
+              alt={artist.full_name}
               fill
               sizes="100vw"
               className="aspect-video bg-cover bg-center bg-no-repeat object-cover opacity-50 blur-3xl"
@@ -95,7 +96,7 @@ export default async function ArtistPage({ params }: Props) {
           <div className="flex justify-center self-center rounded-full bg-background/50 md:mr-8 md:min-h-[280px]">
             <Image
               src={artist.image}
-              alt={artist.username}
+              alt={artist.full_name}
               className="aspect-square rounded-full object-cover shadow-xl shadow-background/40"
               width={280}
               height={280}
@@ -108,8 +109,8 @@ export default async function ArtistPage({ params }: Props) {
             <small className="text-xs font-extrabold uppercase text-white md:mt-4">
               ARTIST
             </small>
-            <h1 className="break-words font-sans text-3xl font-extrabold capitalize">
-              {artist.username}
+            <h1 className="break-words font-sans text-3xl font-extrabold">
+              {artist.full_name}
             </h1>
             {artist.musics && artist.musics.length > 0 && (
               <div className="group relative mt-2 self-center md:mt-10 md:self-start [&_>button]:relative [&_>button]:translate-y-0 [&_>button]:opacity-100">
@@ -140,7 +141,7 @@ export default async function ArtistPage({ params }: Props) {
               </div>
             ))
           ) : (
-            <p>The artist {artist.username} has no songs!</p>
+            <p>The artist {artist.full_name} has no songs!</p>
           )}
         </div>
       </section>
@@ -157,6 +158,7 @@ export default async function ArtistPage({ params }: Props) {
                   music={playlist.musics[0]!}
                   playlist={playlist}
                   showArtist={false}
+                  text={`By ${artist.full_name}`}
                 />
               ))}
             </div>

@@ -29,8 +29,8 @@ function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
       <Link
         href={`/artist/${artist.id}`}
         className="absolute inset-0 z-10 rounded-lg ring-ring duration-200 focus:outline-none focus:ring-2"
-        aria-label={artist.username}
-        title={artist.username}
+        aria-label={artist.full_name}
+        title={artist.full_name}
         onFocus={() => setButtonFocus(true)}
         onBlur={() => setButtonFocus(false)}
       />
@@ -38,7 +38,7 @@ function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
       <div className="relative size-[50px] min-h-[50px] min-w-[50px] rounded-full bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60">
         {artist.image && (
           <Image
-            alt={artist.username}
+            alt={artist.full_name}
             src={artist.image}
             className="aspect-square rounded-full object-cover"
             fill
@@ -57,7 +57,7 @@ function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
       </div>
       <div className="flex w-full flex-col items-start truncate">
         <h3 className="w-full truncate rounded-lg text-lg font-bold group-hover:underline">
-          {artist.username}
+          {artist.full_name}
         </h3>
         <p className="w-full max-w-fit truncate text-sm text-foreground/60">
           Artist
