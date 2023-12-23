@@ -11,10 +11,13 @@ import { ArtistCard } from "@/components/ArtistCard";
 export const revalidate = 60 * 5; // 5 minutes
 
 export default async function HomePage() {
+  const searchParams = { limit: "10" };
   const musics = await serverFetcher<MusicProps[]>("/musics", {
-    needAuth: false,
+    searchParams,
   });
-  const artists = await serverFetcher<ArtistPropsWithMusics[]>("/artists");
+  const artists = await serverFetcher<ArtistPropsWithMusics[]>("/artists", {
+    searchParams,
+  });
 
   return (
     <div className="my-8 flex flex-col gap-8">

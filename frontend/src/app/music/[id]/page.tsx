@@ -22,9 +22,7 @@ type Props = {
 };
 
 const getMusics = cache(async () => {
-  return await serverFetcher<MusicProps[]>("/musics/", {
-    needAuth: false,
-  });
+  return await serverFetcher<MusicProps[]>("/musics/");
 });
 
 export async function generateStaticParams() {
@@ -113,10 +111,6 @@ export default async function MusicPage({ params }: Props) {
               Music
             </small>
             <MusicTitle title={music.title} />
-            {/* <h1 className="mb-3 break-words font-sans text-3xl font-extrabold md:text-6xl">
-              <span className="hidden break-all md:flex">{musicTitle}</span>
-              <span className="md:hidden">{music.title}</span>
-            </h1> */}
             <div className="flex items-center gap-2 self-center md:self-start">
               <div className="flex items-center gap-2 after:content-['•']">
                 {music.artist?.image && (

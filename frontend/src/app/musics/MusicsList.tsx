@@ -25,7 +25,6 @@ export function MusicsList() {
       try {
         const qtd = skeletons.length;
         const data = await fetcher<MusicProps[]>("/musics/", {
-          needAuth: false,
           searchParams: { limit: `${qtd}`, offset: `${qtd * offset}` },
         });
         const newMusics = [...new Set([...musics, ...data])];

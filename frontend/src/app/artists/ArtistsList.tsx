@@ -25,7 +25,6 @@ export function ArtistsList() {
       try {
         const qtd = skeletons.length;
         const data = await fetcher<ArtistPropsWithMusics[]>("/artists/", {
-          needAuth: false,
           searchParams: { limit: `${qtd}`, offset: `${qtd * offset}` },
         });
         const newArtists = [...new Set([...artists, ...data])];
