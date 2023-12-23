@@ -34,6 +34,7 @@ export const env = createEnv({
     NEXT_PUBLIC_BACKEND_API_URL: z.string().url(),
     // Clerk
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+    NEXT_PUBLIC_CLERK_JWT_TEMPLATE_NAME: z.string().min(1),
     // Clerk URLs
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string().default("/sign-in"),
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().default("/sign-up"),
@@ -56,11 +57,13 @@ export const env = createEnv({
 
     // Client
     // ----------------------------
-    // Clerk
     // Backend API
     NEXT_PUBLIC_BACKEND_API_URL: process.env.NEXT_PUBLIC_BACKEND_API_URL,
+    // Clerk
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_CLERK_JWT_TEMPLATE_NAME:
+      process.env.NEXT_PUBLIC_CLERK_JWT_TEMPLATE_NAME,
     // Clerk URLs
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
