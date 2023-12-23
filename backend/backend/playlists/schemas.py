@@ -9,6 +9,14 @@ from backend.users.schemas import UserPlaylistSchema, UserSchemaOut
 class PlaylistSchemaOut(UserPlaylistSchema):
     musics: list[MusicSchemaOut]
     owner: UserSchemaOut
+    owner_is_artist: bool = False
+
+    @staticmethod
+    def resolve_owner_is_artist(obj):
+        if obj.owner.is_artist():
+            return True
+        else:
+            return False
 
 
 class PlaylistSchemaIn(Schema):
