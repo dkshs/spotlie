@@ -2,11 +2,11 @@
 
 import { useWindowSize } from "usehooks-ts";
 
-interface MusicTitleProps {
+interface DataTitleProps {
   title: string;
 }
 
-export function MusicTitle({ title }: MusicTitleProps) {
+export function DataTitle({ title }: DataTitleProps) {
   const { width } = useWindowSize();
 
   const truncate = (str: string, len = 12) => {

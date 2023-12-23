@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/HoverCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { MusicDuration } from "./MusicDuration";
-import { MusicTitle } from "./MusicTitle";
+import { DataTitle } from "@/components/DataTitle";
 
 type Props = {
   params: { id: string };
@@ -111,7 +111,7 @@ export default async function MusicPage({ params }: Props) {
             <small className="text-xs font-extrabold uppercase text-white md:mt-4">
               Music
             </small>
-            <MusicTitle title={music.title} />
+            <DataTitle title={music.title} />
             <div className="flex items-center gap-2 self-center md:self-start">
               <div className="flex items-center gap-2 after:content-['•']">
                 {music.artist?.image && (

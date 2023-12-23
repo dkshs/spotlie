@@ -41,6 +41,7 @@ export interface MusicProps {
 export interface PlaylistPropsWithMusics extends Playlist {
   musics: MusicProps[];
   owner: UserProps;
+  owner_is_artist: boolean;
 }
 
 export interface ArtistPropsWithMusics extends ArtistProps {
