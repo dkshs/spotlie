@@ -35,6 +35,8 @@ def webhook(request: HttpRequest):
     try:
         external_id = data["id"]
         if event_type in ["user.created", "user.updated"]:
+            first_name = data["first_name"] if "first_name" in data else None
+            last_name = data["last_name"] if "last_name" in data else None
             email = data["email_addresses"][0]["email_address"]
             username = data["username"] or f"user_{token_hex(8)}"
             image = data["profile_image_url"]
@@ -56,7 +58,9 @@ def webhook(request: HttpRequest):
                 user_f = user.first()
                 public_metadata["external_id"] = user.first().id.hex
                 if (
-                    user_f.email == email
+                    user_f.first_name == first_name
+                    and user_f.last_name == last_name
+                    and user_f.email == email
                     and user_f.username == username
                     and user_f.image == image
                     and user_f.public_metadata == public_metadata
@@ -65,6 +69,8 @@ def webhook(request: HttpRequest):
             user.update_or_create(
                 external_id=external_id,
                 defaults={
+                    "first_name": first_name,
+                    "last_name": last_name,
                     "email": email,
                     "username": username,
                     "image": image,

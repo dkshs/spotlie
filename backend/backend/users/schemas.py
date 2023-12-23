@@ -20,6 +20,9 @@ class UserPlaylistSchema(Schema):
 
 class UserSchemaOut(Schema):
     id: UUID
+    first_name: str | None
+    last_name: str | None
+    full_name: str
     username: str
     image: str | None
     playlists: list[UserPlaylistSchema]
@@ -29,3 +32,7 @@ class UserSchemaOut(Schema):
     @staticmethod
     def resolve_playlists(obj):
         return obj.get_playlists()
+
+    @staticmethod
+    def resolve_full_name(obj):
+        return obj.get_full_name()

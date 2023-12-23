@@ -9,6 +9,8 @@ from django.db import models
 class AbstractUser(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     external_id = models.CharField(max_length=32, unique=True, editable=False)
+    first_name = models.CharField(blank=True, null=True, max_length=64)
+    last_name = models.CharField(blank=True, null=True, max_length=64)
     username = models.CharField(max_length=64, unique=True)
     email = models.EmailField()
     image = models.URLField(blank=True, null=True, default="https://img.clerk.com/preview.png")
@@ -37,6 +39,12 @@ class AbstractUser(models.Model):
         )
         self.save()
 
+    def get_full_name(self):
+        first_name = getattr(self, "first_name", "")
+        last_name = getattr(self, "last_name", "")
+        full_name = f"{first_name or ''} {last_name or ''}".strip()
+        return full_name == "" and self.username or full_name
+
     def is_artist(self) -> bool:
         return self.public_metadata.get("is_artist", False)
 
@@ -46,4 +54,4 @@ class AbstractUser(models.Model):
 
 class User(AbstractUser):
     def __str__(self):
-        return self.username
+        return self.get_full_name()
