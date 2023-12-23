@@ -9,7 +9,7 @@ PyJWT==2.8.0
 
 # Django
 # ------------------------------------------------------------------------------
-django==4.2.8
+django==5.0
 django-cleanup==8.0.0
 dj-database-url==2.1.0
 django-ninja==1.1.0
