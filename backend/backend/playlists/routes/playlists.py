@@ -20,7 +20,7 @@ class GetPlaylistsFilter(FilterSchema):
 
 @router.get("/", response={200: list[PlaylistSchemaOut], 500: ErrorSchema})
 def get_playlists(
-    request, limit: int = 10, offset: int = 0, orderBy: str = None, filters: GetPlaylistsFilter = Query(...)
+    request, limit: int = None, offset: int = 0, orderBy: str = None, filters: GetPlaylistsFilter = Query(...)
 ):
     try:
         playlists = Playlist.objects.all()
@@ -28,7 +28,7 @@ def get_playlists(
             playlists = playlists.filter(object_id=filters.object_id)
         if orderBy:
             playlists = playlists.order_by(*orderBy.split(","))
-        return 200, playlists[offset : offset + limit]  # noqa: E203
+        return 200, playlists[offset : offset + limit] if limit else playlists[offset:]  # noqa: E203
     except Exception as e:
         return api_error(500, "Internal server error", str(e))
 

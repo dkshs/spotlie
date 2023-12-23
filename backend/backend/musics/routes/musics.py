@@ -1,6 +1,6 @@
 import uuid
 
-from ninja import Router, UploadedFile
+from ninja import FilterSchema, Query, Router, UploadedFile
 
 from backend.utils.schemas import ErrorSchema
 from config.api.auth import token_is_valid
@@ -12,13 +12,19 @@ from ..schemas import MusicSchemaIn, MusicSchemaOut, MusicSchemaUpdateIn
 router = Router()
 
 
+class MusicFilterSchema(FilterSchema):
+    artist_id: uuid.UUID | None = None
+
+
 @router.get("/", response={200: list[MusicSchemaOut], 500: ErrorSchema})
-def get_musics(request, limit: int = 10, offset: int = 0, orderBy: str = None):
+def get_musics(
+    request, limit: int = None, offset: int = 0, orderBy: str = None, filters: MusicFilterSchema = Query(...)
+):
     try:
-        musics = Music.objects.all()
+        musics = filters.filter(Music.objects.all())
         if orderBy:
             musics = musics.order_by(*orderBy.split(","))
-        return 200, musics[offset : offset + limit]  # noqa: E203
+        return 200, musics[offset : offset + limit] if limit else musics[offset:]  # noqa: E203
     except Exception as e:
         return api_error(500, "Internal server error", str(e))
 

@@ -12,12 +12,12 @@ router = Router()
 
 
 @router.get("/", response={200: list[UserSchemaOut], 500: ErrorSchema})
-def get_users(request, limit: int = 10, offset: int = 0, orderBy: str = None):
+def get_users(request, limit: int = None, offset: int = 0, orderBy: str = None):
     try:
         users = User.objects.all()
         if orderBy:
             users = users.order_by(*orderBy.split(","))
-        return 200, users[offset : offset + limit]  # noqa: E203
+        return 200, users[offset : offset + limit] if limit else users[offset:]  # noqa: E203
     except Exception as e:
         return api_error(500, "Internal server error", str(e))
 

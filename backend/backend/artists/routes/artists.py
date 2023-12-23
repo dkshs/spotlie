@@ -16,12 +16,12 @@ router = Router()
 
 
 @router.get("/", response={200: list[ArtistSchemaOut], 500: ErrorSchema})
-def get_artists(request, limit: int = 10, offset: int = 0, orderBy: str = None):
+def get_artists(request, limit: int = None, offset: int = 0, orderBy: str = None):
     try:
         artists = Artist.objects.all()
         if orderBy:
             artists = artists.order_by(*orderBy.split(","))
-        return 200, artists[offset : offset + limit]  # noqa: E203
+        return 200, artists[offset : offset + limit] if limit else artists[offset:]  # noqa: E203
     except Exception as e:
         return api_error(500, "Internal server error", str(e))
 
