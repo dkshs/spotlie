@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ControlButton } from "./ControlButton";
 import { MusicMenu } from "../MusicMenu";
+import { PlaylistMenu } from "../PlaylistMenu";
 
 interface VerticalMusicCardProps {
   music: MusicProps;
@@ -35,10 +36,10 @@ function VerticalMusicCard({
         aria-label={isPlaylist ? playlist.name : music.title}
       />
       <div className="relative h-[65%] min-h-[65%] w-36 overflow-hidden rounded-lg bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60 md:w-44">
-        {isPlaylist && playlist.image ? (
+        {isPlaylist && (playlist.image || playlist?.musics[0]?.image) ? (
           <Image
             alt={playlist.name}
-            src={playlist.image}
+            src={(playlist.image || playlist?.musics[0]?.image)!}
             className="aspect-square object-cover"
             fill
           />
@@ -86,9 +87,13 @@ function VerticalMusicCard({
           )
         )}
       </div>
-      {!isPlaylist && (
+      {!isPlaylist ? (
         <div className="absolute bottom-0 right-0 [&_>button]:m-0 [&_>button]:hover:bg-background/60 md:[&_>button]:bottom-3 md:[&_>button]:right-4">
           <MusicMenu music={music} />
+        </div>
+      ) : (
+        <div className="absolute bottom-0 right-0 [&_>button]:m-0 [&_>button]:hover:bg-background/60 md:[&_>button]:bottom-3 md:[&_>button]:right-4">
+          <PlaylistMenu playlist={playlist} />
         </div>
       )}
     </div>

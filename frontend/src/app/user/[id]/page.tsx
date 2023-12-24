@@ -10,8 +10,6 @@ import { MusicCard } from "@/components/MusicCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { DataTitle } from "@/components/DataTitle";
 
-export const revalidate = 60 * 5; // 5 minutes
-
 type Props = {
   params: { id: string };
 };
@@ -73,8 +71,9 @@ export default async function UserPage({ params }: Props) {
   }
   const playlists = await serverFetcher<PlaylistPropsWithMusics[]>(
     "/playlists/",
-    { searchParams: { object_id: user.id } },
+    { searchParams: { object_id: user.id }, next: { revalidate: 1 } },
   );
+  const musics = playlists.flatMap((playlist) => playlist.musics);
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
@@ -108,10 +107,10 @@ export default async function UserPage({ params }: Props) {
               Profile
             </small>
             <DataTitle title={user.full_name} />
-            {user.playlists.length > 0 && (
+            {playlists?.length > 0 && (
               <div className="flex items-center gap-2 self-center md:self-start">
                 <span className="text-sm">
-                  {user.playlists.length} Public Playlists
+                  {playlists.length} Public Playlists
                 </span>
               </div>
             )}
@@ -128,7 +127,7 @@ export default async function UserPage({ params }: Props) {
               {playlists.map((playlist) => (
                 <MusicCard
                   key={playlist.id}
-                  music={playlist.musics[0]!}
+                  music={playlist.musics[0]! || musics[0]}
                   playlist={playlist}
                   showArtist={false}
                   text={`By ${user.full_name}`}

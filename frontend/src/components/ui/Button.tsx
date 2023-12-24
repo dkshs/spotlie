@@ -20,6 +20,7 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground active:bg-accent/60",
         link: "text-primary underline-offset-4 hover:underline",
+        none: "",
       },
       radius: {
         default: "rounded-md",

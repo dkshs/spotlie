@@ -20,8 +20,7 @@ function HorizontalMusicCard({
   music,
   musics,
   showArtist = true,
-  showGoToArtist = false,
-  showGoToMusic = false,
+  ...props
 }: HorizontalMusicCardProps) {
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
   const [buttonFocus, setButtonFocus] = useState(false);
@@ -85,11 +84,7 @@ function HorizontalMusicCard({
           </Link>
         )}
       </div>
-      <MusicMenu
-        music={music}
-        showGoToArtist={showGoToArtist}
-        showGoToMusic={showGoToMusic}
-      />
+      <MusicMenu music={music} {...props} />
     </div>
   );
 }

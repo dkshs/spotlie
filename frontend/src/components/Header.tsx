@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes } from "react";
 import Link from "next/link";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton, currentUser } from "@clerk/nextjs";
 
 import { House, SpotifyLogo } from "@phosphor-icons/react/dist/ssr";
 
@@ -17,7 +17,10 @@ function HeaderLink({
   );
 }
 
-export function Header() {
+export async function Header() {
+  const externalId =
+    ((await currentUser())?.publicMetadata.external_id as string) || null;
+
   const navLinks = [
     {
       href: "/",
@@ -71,7 +74,10 @@ export function Header() {
             </HeaderLink>
           </SignedOut>
           <SignedIn>
-            <UserButton userProfileMode="modal" />
+            <UserButton
+              userProfileMode={externalId ? "navigation" : "modal"}
+              userProfileUrl={`/user/${externalId}`}
+            />
           </SignedIn>
         </div>
       </ul>

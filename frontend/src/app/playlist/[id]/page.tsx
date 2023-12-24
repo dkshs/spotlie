@@ -14,13 +14,16 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/HoverCard";
 import { DataTitle } from "@/components/DataTitle";
+import { PlaylistMenu } from "@/components/PlaylistMenu";
 
 type Props = {
   params: { id: string };
 };
 
 const getPlaylists = cache(async () => {
-  return await serverFetcher<PlaylistPropsWithMusics[]>("/playlists/");
+  return await serverFetcher<PlaylistPropsWithMusics[]>("/playlists/", {
+    next: { revalidate: 1 },
+  });
 });
 
 export async function generateStaticParams() {
@@ -82,19 +85,19 @@ export default async function PlaylistPage({ params }: Props) {
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
       <div className="flex flex-col justify-center text-center md:min-h-[280px] md:flex-row md:justify-start md:text-start">
-        {playlist.image && (
+        {(playlist.image || playlist?.musics[0]?.image) && (
           <>
             <div className="absolute inset-0 z-[-1] bg-center md:h-80">
               <Image
                 className="aspect-square bg-cover bg-center bg-no-repeat object-cover opacity-50 blur-2xl"
-                src={playlist.image}
+                src={(playlist.image || playlist?.musics[0]?.image)!}
                 alt={playlist.name}
                 fill
               />
             </div>
             <div className="flex max-h-[280px] max-w-[280px] justify-center self-center rounded-md bg-black/50 md:mr-8 md:min-h-[280px] md:min-w-[280px]">
               <Image
-                src={playlist.image}
+                src={(playlist.image || playlist?.musics[0]?.image)!}
                 alt={playlist.name}
                 className="aspect-square h-full w-full rounded-md object-cover shadow-xl shadow-black/40"
                 width={280}
@@ -132,7 +135,7 @@ export default async function PlaylistPage({ params }: Props) {
                 </Link>
               </div>
               <HoverCard openDelay={200} closeDelay={100}>
-                <HoverCardTrigger className="after:ml-1.5 after:content-['•']">
+                <HoverCardTrigger className="after:ml-1.5">
                   {new Date(playlist.created_at).getFullYear()}
                 </HoverCardTrigger>
                 <HoverCardContent side="top" className="w-fit px-3 py-2">
@@ -143,18 +146,27 @@ export default async function PlaylistPage({ params }: Props) {
                   })}
                 </HoverCardContent>
               </HoverCard>
-              <div>{playlist.musics.length} musics</div>
+              {playlist?.musics && (
+                <div className="before:content-['•']">
+                  {playlist.musics.length} musics
+                </div>
+              )}
             </div>
           </div>
-          <div className="group relative self-center md:mt-3 md:self-start [&_>button]:relative [&_>button]:translate-y-0 [&_>button]:opacity-100">
-            <ControlButton
-              music={playlist.musics[0]!}
-              playlist={playlist.musics}
-            />
+          <div className="group relative flex self-center md:mt-3 md:self-start [&_button]:relative [&_button]:translate-y-0 [&_button]:opacity-100">
+            {playlist?.musics && playlist.musics.length > 0 && (
+              <ControlButton
+                music={playlist.musics[0]!}
+                playlist={playlist.musics}
+              />
+            )}
+            <div className="mt-1">
+              <PlaylistMenu playlist={playlist} />
+            </div>
           </div>
         </div>
       </div>
-      {playlist.musics && playlist.musics.length > 0 && (
+      {playlist?.musics && playlist.musics.length > 0 && (
         <div className="mt-20 flex w-full max-w-[50%] flex-col gap-2">
           {playlist.musics.map((music) => (
             <div key={music.id} className="w-full">
@@ -162,6 +174,7 @@ export default async function PlaylistPage({ params }: Props) {
                 music={music}
                 musics={playlist.musics}
                 orientation="horizontal"
+                playlistId={playlist.id}
               />
             </div>
           ))}

@@ -21,19 +21,29 @@ import {
 } from "./ui/DropdownMenu";
 import { Button } from "./ui/Button";
 
-import { DotsThree, MusicNote, Plus, User } from "@phosphor-icons/react";
+import {
+  DotsThree,
+  MusicNote,
+  Plus,
+  TrashSimple,
+  User,
+} from "@phosphor-icons/react";
+import { useRouter } from "next/navigation";
 
 export interface MusicMenuProps {
   music: MusicProps;
   showGoToArtist?: boolean;
   showGoToMusic?: boolean;
+  playlistId?: string;
 }
 
 export function MusicMenu({
   music,
+  playlistId,
   showGoToArtist = true,
   showGoToMusic = true,
 }: MusicMenuProps) {
+  const router = useRouter();
   const { fetcher } = useApi();
   const { user } = useUser();
 
@@ -71,6 +81,21 @@ export function MusicMenu({
       }
     },
     [fetcher],
+  );
+  const deleteMusicToPlaylist = useCallback(
+    async (playlistId: string, musicsId: string[]) => {
+      try {
+        await fetcher(`/playlists/${playlistId}/remove_musics`, {
+          method: "PATCH",
+          body: JSON.stringify(musicsId),
+          needAuth: true,
+        });
+        await router.refresh();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [fetcher, router],
   );
 
   const createPlaylist = useCallback(
@@ -135,6 +160,15 @@ export function MusicMenu({
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
+            {playlistId && (
+              <DropdownMenuItem
+                className="flex gap-2"
+                onClick={() => deleteMusicToPlaylist(playlistId, [music.id])}
+              >
+                <TrashSimple weight="bold" size={18} />
+                <span>Delete from this playlist</span>
+              </DropdownMenuItem>
+            )}
             {(showGoToArtist || showGoToMusic) && <DropdownMenuSeparator />}
           </>
         )}
