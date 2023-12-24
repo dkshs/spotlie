@@ -3,6 +3,7 @@ import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
 import { ControlButton } from "./ControlButton";
+import { MusicMenu } from "../MusicMenu";
 
 interface VerticalMusicCardProps {
   music: MusicProps;
@@ -73,18 +74,23 @@ function VerticalMusicCard({
         {showArtist && !isPlaylist ? (
           <Link
             href={`/artist/${music.artist.id}`}
-            className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm capitalize text-foreground/60 hover:underline focus-visible:border-ring focus-visible:outline-none"
+            className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm text-foreground/60 hover:underline focus-visible:border-ring focus-visible:outline-none"
           >
             {music.artist.full_name}
           </Link>
         ) : (
           text && (
-            <p className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm capitalize text-foreground/60">
+            <p className="w-full max-w-fit truncate text-sm text-foreground/60">
               {text}
             </p>
           )
         )}
       </div>
+      {!isPlaylist && (
+        <div className="absolute bottom-0 right-0 [&_>button]:m-0 [&_>button]:hover:bg-background/60 md:[&_>button]:bottom-3 md:[&_>button]:right-4">
+          <MusicMenu music={music} />
+        </div>
+      )}
     </div>
   );
 }

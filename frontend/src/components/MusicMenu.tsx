@@ -96,7 +96,7 @@ export function MusicMenu({
       <DropdownMenuTrigger asChild>
         <Button
           type="button"
-          className="absolute right-0 z-20 mr-2 w-fit scale-100 px-1 opacity-0 duration-200 hover:scale-100 focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100"
+          className="absolute right-0 z-20 mr-2 w-fit scale-100 px-1 opacity-0 duration-200 hover:scale-100 focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100 data-[state='open']:opacity-100"
           size="icon"
           variant="ghost"
         >
