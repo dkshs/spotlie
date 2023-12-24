@@ -53,7 +53,7 @@ def create_artist(request):
             content_type=ContentType.objects.get(app_label="artists", model="artist"), object_id=artist.id
         )
         user.delete()
-        artist.update_public_metadata({"external_id": artist.id.hex, "is_artist": True})
+        artist.update_public_metadata({"external_id": str(artist.id), "is_artist": True})
         return 201, artist
     except User.DoesNotExist:
         return api_error(400, "Bad request", "User not found")

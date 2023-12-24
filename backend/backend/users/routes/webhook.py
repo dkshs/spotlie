@@ -56,7 +56,7 @@ def webhook(request: HttpRequest):
                 user = artist
             if user.exists():
                 user_f = user.first()
-                public_metadata["external_id"] = user.first().id.hex
+                public_metadata["external_id"] = str(user.first().id)
                 if (
                     user_f.first_name == first_name
                     and user_f.last_name == last_name
@@ -76,7 +76,7 @@ def webhook(request: HttpRequest):
                     "image": image,
                 },
             )
-            public_metadata["external_id"] = user.first().id.hex
+            public_metadata["external_id"] = str(user.first().id)
             user.first().update_public_metadata(public_metadata)
         elif event_type == "user.deleted":
             user = User.objects.filter(external_id=external_id)
