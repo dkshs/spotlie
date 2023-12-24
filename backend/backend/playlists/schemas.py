@@ -30,3 +30,4 @@ class PlaylistSchemaUpdateIn(Schema):
     name: str = None
     description: str = None
     is_public: bool = None
+    update_image: bool = False

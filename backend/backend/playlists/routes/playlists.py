@@ -79,9 +79,10 @@ def update_playlist(request, id: uuid.UUID, playlist: PlaylistSchemaUpdateIn = N
         playlist = Playlist.objects.get(id=id)
         if playlist.object_id != is_authenticated.user.id:
             raise ApiProcessError(403, "Forbidden", "You are not the owner of this playlist")
+        update_image = playlist_dict.pop("update_image", False)
         for key, value in playlist_dict.items():
             setattr(playlist, key, value)
-        if image:
+        if update_image:
             playlist.image = image
         playlist.save()
         return 200, playlist
