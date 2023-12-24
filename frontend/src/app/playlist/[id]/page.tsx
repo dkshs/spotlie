@@ -155,7 +155,7 @@ export default async function PlaylistPage({ params }: Props) {
         </div>
       </div>
       {playlist.musics && playlist.musics.length > 0 && (
-        <div className="mt-20 flex w-full flex-col gap-2">
+        <div className="mt-20 flex w-full max-w-[50%] flex-col gap-2">
           {playlist.musics.map((music) => (
             <div key={music.id} className="w-full">
               <MusicCard

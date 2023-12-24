@@ -26,7 +26,7 @@ function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
             fill
           />
         )}
-        {artist.musics.length > 0 && (
+        {artist.musics?.length > 0 && (
           <ControlButton
             artistId={artist.id}
             music={artist.musics[0]!}

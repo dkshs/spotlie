@@ -44,7 +44,7 @@ function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
             fill
           />
         )}
-        {artist.musics.length > 0 && (
+        {artist.musics?.length > 0 && (
           <ControlButton
             music={artist.musics[0]!}
             artistId={artist.id}
