@@ -11,6 +11,7 @@ import { serverFetcher } from "@/utils/api";
 import Image from "next/image";
 import { ControlButton, MusicCard } from "@/components/MusicCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
+import { DataTitle } from "@/components/DataTitle";
 
 export const revalidate = 60 * 5; // 5 minutes
 
@@ -93,7 +94,7 @@ export default async function ArtistPage({ params }: Props) {
           </div>
         )}
         {artist.image && (
-          <div className="flex justify-center self-center rounded-full bg-background/50 md:mr-8 md:min-h-[280px]">
+          <div className="flex justify-center self-center rounded-full bg-background/50 md:mr-8 md:min-h-[280px] md:min-w-[280px]">
             <Image
               src={artist.image}
               alt={artist.full_name}
@@ -109,9 +110,7 @@ export default async function ArtistPage({ params }: Props) {
             <small className="text-xs font-extrabold uppercase text-white md:mt-4">
               ARTIST
             </small>
-            <h1 className="break-words font-sans text-3xl font-extrabold">
-              {artist.full_name}
-            </h1>
+            <DataTitle title={artist.full_name} />
             {artist.musics && artist.musics.length > 0 && (
               <div className="group relative mt-2 self-center md:mt-10 md:self-start [&_>button]:relative [&_>button]:translate-y-0 [&_>button]:opacity-100">
                 <ControlButton
