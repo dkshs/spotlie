@@ -6,11 +6,14 @@ import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
 import { useApi } from "@/hooks/useApi";
+import { useRouter } from "next/navigation";
 
 import Link from "next/link";
+import { MenuShareItem } from "./MenuShareItem";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuSeparator,
@@ -28,13 +31,13 @@ import {
   TrashSimple,
   User,
 } from "@phosphor-icons/react";
-import { useRouter } from "next/navigation";
 
 export interface MusicMenuProps {
   music: MusicProps;
   showGoToArtist?: boolean;
   showGoToMusic?: boolean;
   playlistId?: string;
+  isPLaylist?: boolean;
 }
 
 export function MusicMenu({
@@ -42,6 +45,7 @@ export function MusicMenu({
   playlistId,
   showGoToArtist = true,
   showGoToMusic = true,
+  isPLaylist = false,
 }: MusicMenuProps) {
   const router = useRouter();
   const { fetcher } = useApi();
@@ -90,7 +94,7 @@ export function MusicMenu({
           body: JSON.stringify(musicsId),
           needAuth: true,
         });
-        await router.refresh();
+        router.refresh();
       } catch (error) {
         console.error(error);
       }
@@ -188,6 +192,13 @@ export function MusicMenu({
             </Link>
           </DropdownMenuItem>
         )}
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <MenuShareItem
+            id={isPLaylist && playlistId ? playlistId : music.id}
+            isPlaylist={isPLaylist}
+          />
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

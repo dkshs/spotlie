@@ -136,7 +136,7 @@ export default async function ArtistPage({ params }: Props) {
                   musics={artist.musics}
                   showArtist={false}
                   orientation="horizontal"
-                  showGoToMusic
+                  showGoToArtist={false}
                 />
               </div>
             ))

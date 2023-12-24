@@ -18,6 +18,7 @@ import {
 import { Button } from "../ui/Button";
 import { DeleteDialog } from "./DeleteDialog";
 import { EditDialog } from "./EditDialog";
+import { MenuShareItem } from "../MenuShareItem";
 
 import {
   DotsThree,
@@ -62,51 +63,39 @@ export function PlaylistMenu({ playlist }: PlaylistMenuProps) {
   }, [fetcher, playlist.description, playlist?.musics, playlist.name, router]);
 
   return (
-    user && (
-      <>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              type="button"
-              className="absolute right-0 z-20 mr-2 w-fit scale-100 px-1 opacity-0 duration-200 hover:scale-100 focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100 data-[state='open']:opacity-100"
-              size="icon"
-              variant="ghost"
-            >
-              <span className="sr-only">Open Playlist menu</span>
-              <DotsThree size={32} weight="bold" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-fit">
-            {externalId === playlist.owner.id ? (
-              <>
-                <DropdownMenuGroup>
-                  <DropdownMenuItem
-                    className="flex gap-2"
-                    onClick={() => setEditDialogOpen(true)}
-                  >
-                    <PencilSimple weight="bold" size={18} />
-                    <span>Edit details</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="flex gap-2"
-                    onClick={() => setDeleteDialogOpen(true)}
-                  >
-                    <TrashSimple weight="bold" size={18} />
-                    <span>Delete</span>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem
-                    className="flex gap-2"
-                    onClick={() => copyPlaylist()}
-                  >
-                    <Copy weight="bold" size={18} />
-                    <span>Copy</span>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </>
-            ) : (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            type="button"
+            className="absolute right-0 z-20 mr-2 w-fit scale-100 px-1 opacity-0 duration-200 hover:scale-100 focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100 data-[state='open']:opacity-100"
+            size="icon"
+            variant="ghost"
+          >
+            <span className="sr-only">Open Playlist menu</span>
+            <DotsThree size={32} weight="bold" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-fit">
+          {externalId === playlist.owner.id ? (
+            <>
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  className="flex gap-2"
+                  onClick={() => setEditDialogOpen(true)}
+                >
+                  <PencilSimple weight="bold" size={18} />
+                  <span>Edit details</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="flex gap-2"
+                  onClick={() => setDeleteDialogOpen(true)}
+                >
+                  <TrashSimple weight="bold" size={18} />
+                  <span>Delete</span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   className="flex gap-2"
@@ -116,20 +105,36 @@ export function PlaylistMenu({ playlist }: PlaylistMenuProps) {
                   <span>Copy</span>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DeleteDialog
-          playlist={playlist}
-          open={deleteDialogOpen}
-          setOpen={setDeleteDialogOpen}
-        />
-        <EditDialog
-          playlist={playlist}
-          open={editDialogOpen}
-          setOpen={setEditDialogOpen}
-        />
-      </>
-    )
+            </>
+          ) : (
+            user && (
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  className="flex gap-2"
+                  onClick={() => copyPlaylist()}
+                >
+                  <Copy weight="bold" size={18} />
+                  <span>Copy</span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            )
+          )}
+          {user && <DropdownMenuSeparator />}
+          <DropdownMenuGroup>
+            <MenuShareItem id={playlist.id} isPlaylist />
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <DeleteDialog
+        playlist={playlist}
+        open={deleteDialogOpen}
+        setOpen={setDeleteDialogOpen}
+      />
+      <EditDialog
+        playlist={playlist}
+        open={editDialogOpen}
+        setOpen={setEditDialogOpen}
+      />
+    </>
   );
 }
