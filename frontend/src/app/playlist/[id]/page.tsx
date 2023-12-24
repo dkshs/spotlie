@@ -135,7 +135,7 @@ export default async function PlaylistPage({ params }: Props) {
                 </Link>
               </div>
               <HoverCard openDelay={200} closeDelay={100}>
-                <HoverCardTrigger className="after:ml-1.5">
+                <HoverCardTrigger>
                   {new Date(playlist.created_at).getFullYear()}
                 </HoverCardTrigger>
                 <HoverCardContent side="top" className="w-fit px-3 py-2">
@@ -147,7 +147,7 @@ export default async function PlaylistPage({ params }: Props) {
                 </HoverCardContent>
               </HoverCard>
               {playlist?.musics && (
-                <div className="before:content-['•']">
+                <div className="before:mr-1.5 before:content-['•']">
                   {playlist.musics.length} musics
                 </div>
               )}
