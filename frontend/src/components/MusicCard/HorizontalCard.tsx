@@ -8,8 +8,9 @@ import { useMusic } from "@/hooks/useMusic";
 import Image from "next/image";
 import Link from "next/link";
 import { ControlButton } from "./ControlButton";
+import { MusicMenu, type MusicMenuProps } from "../MusicMenu";
 
-interface HorizontalMusicCardProps {
+interface HorizontalMusicCardProps extends MusicMenuProps {
   music: MusicProps;
   musics?: MusicProps[];
   showArtist?: boolean;
@@ -19,6 +20,8 @@ function HorizontalMusicCard({
   music,
   musics,
   showArtist = true,
+  showGoToArtist = false,
+  showGoToMusic = false,
 }: HorizontalMusicCardProps) {
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
   const [buttonFocus, setButtonFocus] = useState(false);
@@ -76,12 +79,17 @@ function HorizontalMusicCard({
         {showArtist && (
           <Link
             href={`/artist/${music.artist.id}`}
-            className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm hover:underline focus-visible:border-ring focus-visible:outline-none"
+            className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm text-foreground/60 hover:underline focus-visible:border-ring focus-visible:outline-none"
           >
             {music.artist.full_name}
           </Link>
         )}
       </div>
+      <MusicMenu
+        music={music}
+        showGoToArtist={showGoToArtist}
+        showGoToMusic={showGoToMusic}
+      />
     </div>
   );
 }

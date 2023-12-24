@@ -65,6 +65,8 @@ export function MusicsList() {
               music={music}
               musics={musics}
               orientation="horizontal"
+              showGoToArtist
+              showGoToMusic
             />
           ))
         )}

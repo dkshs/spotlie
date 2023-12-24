@@ -130,10 +130,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <ClerkProvider appearance={{ baseTheme: clerkTheme }}>
       <html lang="en" className={merriweatherSans.variable}>
-        <body className="m-auto min-w-[320px] max-w-[1600px]">
+        <body>
           <Providers>
-            <Header />
-            <div className="pt-[72px]">{children}</div>
+            <div className="mx-auto min-w-[320px] max-w-[1600px]">
+              <Header />
+              <div className="pt-[72px]">{children}</div>
+            </div>
           </Providers>
         </body>
       </html>
