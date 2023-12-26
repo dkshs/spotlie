@@ -111,7 +111,7 @@ export default async function ArtistPage({ params }: Props) {
             </small>
             <DataTitle title={artist.full_name} />
             {artist.musics && artist.musics.length > 0 && (
-              <div className="group relative mt-2 self-center md:mt-10 md:self-start [&_>button]:relative [&_>button]:translate-y-0 [&_>button]:opacity-100">
+              <div className="group relative mt-2 self-center md:mt-10 md:self-start [&_>button]:relative [&_>button]:mr-0 [&_>button]:translate-y-0 [&_>button]:opacity-100">
                 <ControlButton
                   music={artist.musics[0]!}
                   playlist={artist.musics}

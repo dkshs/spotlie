@@ -88,11 +88,11 @@ function VerticalMusicCard({
         )}
       </div>
       {!isPlaylist ? (
-        <div className="absolute bottom-0 right-0 [&_>button]:m-0 [&_>button]:hover:bg-background/60 md:[&_>button]:bottom-3 md:[&_>button]:right-4">
+        <div className="absolute inset-0 [&_button]:bottom-1 [&_button]:right-1 [&_button]:m-0 [&_button]:hover:bg-background/60 md:[&_button]:bottom-3 md:[&_button]:right-4">
           <MusicMenu music={music} />
         </div>
       ) : (
-        <div className="absolute bottom-0 right-0 [&_>button]:m-0 [&_>button]:hover:bg-background/60 md:[&_>button]:bottom-3 md:[&_>button]:right-4">
+        <div className="absolute inset-0 [&_button]:bottom-1 [&_button]:right-1 [&_button]:m-0 [&_button]:hover:bg-background/60 md:[&_button]:bottom-3 md:[&_button]:right-4">
           <PlaylistMenu playlist={playlist} />
         </div>
       )}
