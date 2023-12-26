@@ -18,8 +18,9 @@ function HeaderLink({
 }
 
 export async function Header() {
-  const externalId =
-    ((await currentUser())?.publicMetadata.external_id as string) || null;
+  const userPublicMetadata = (await currentUser())?.publicMetadata;
+  const externalId = (userPublicMetadata?.external_id as string) || null;
+  const isArtist = (userPublicMetadata?.is_artist as boolean) || false;
 
   const navLinks = [
     {
@@ -76,7 +77,7 @@ export async function Header() {
           <SignedIn>
             <UserButton
               userProfileMode={externalId ? "navigation" : "modal"}
-              userProfileUrl={`/user/${externalId}`}
+              userProfileUrl={`/${isArtist ? "artist" : "user"}/${externalId}`}
               afterSignOutUrl="/"
             />
           </SignedIn>
