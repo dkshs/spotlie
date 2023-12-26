@@ -13,8 +13,6 @@ import { ControlButton, MusicCard } from "@/components/MusicCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { DataTitle } from "@/components/DataTitle";
 
-export const revalidate = 60 * 5; // 5 minutes
-
 type Props = {
   params: { id: string };
 };
@@ -76,8 +74,9 @@ export default async function ArtistPage({ params }: Props) {
   }
   const playlists = await serverFetcher<PlaylistPropsWithMusics[]>(
     "/playlists/",
-    { searchParams: { object_id: artist.id } },
+    { searchParams: { object_id: artist.id }, next: { revalidate: 1 } },
   );
+  const musics = playlists.map((playlist) => playlist.musics);
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
@@ -152,15 +151,18 @@ export default async function ArtistPage({ params }: Props) {
           </header>
           <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
             <div className="flex w-max gap-3 px-1 pb-4 pt-3">
-              {playlists.map((playlist) => (
-                <MusicCard
-                  key={playlist.id}
-                  music={playlist.musics[0]!}
-                  playlist={playlist}
-                  showArtist={false}
-                  text={`By ${artist.full_name}`}
-                />
-              ))}
+              {playlists.map(
+                (playlist) =>
+                  (playlist?.musics?.length > 0 || musics[0]) && (
+                    <MusicCard
+                      key={playlist.id}
+                      music={playlist.musics[0]! || musics[0]}
+                      playlist={playlist}
+                      showArtist={false}
+                      text={`By ${artist.full_name}`}
+                    />
+                  ),
+              )}
             </div>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>

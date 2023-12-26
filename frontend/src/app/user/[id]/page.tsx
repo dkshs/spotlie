@@ -73,7 +73,7 @@ export default async function UserPage({ params }: Props) {
     "/playlists/",
     { searchParams: { object_id: user.id }, next: { revalidate: 1 } },
   );
-  const musics = playlists.flatMap((playlist) => playlist.musics);
+  const musics = playlists.map((playlist) => playlist.musics);
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
@@ -124,15 +124,18 @@ export default async function UserPage({ params }: Props) {
           </header>
           <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
             <div className="flex w-max gap-3 px-1 pb-4 pt-3">
-              {playlists.map((playlist) => (
-                <MusicCard
-                  key={playlist.id}
-                  music={playlist.musics[0]! || musics[0]}
-                  playlist={playlist}
-                  showArtist={false}
-                  text={`By ${user.full_name}`}
-                />
-              ))}
+              {playlists.map(
+                (playlist) =>
+                  (playlist?.musics?.length > 0 || musics[0]) && (
+                    <MusicCard
+                      key={playlist.id}
+                      music={playlist.musics[0]! || musics[0]}
+                      playlist={playlist}
+                      showArtist={false}
+                      text={`By ${user.full_name}`}
+                    />
+                  ),
+              )}
             </div>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
