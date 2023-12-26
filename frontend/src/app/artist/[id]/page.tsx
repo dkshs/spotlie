@@ -93,11 +93,11 @@ export default async function ArtistPage({ params }: Props) {
           </div>
         )}
         {artist.image && (
-          <div className="flex justify-center self-center rounded-full bg-background/50 md:mr-8 md:min-h-[280px] md:min-w-[280px]">
+          <div className="flex justify-center self-center rounded-full bg-background/50 md:mr-8 md:max-h-[280px] md:max-w-[280px]">
             <Image
               src={artist.image}
               alt={artist.full_name}
-              className="aspect-square rounded-full object-cover shadow-xl shadow-background/40"
+              className="aspect-square size-[280px] rounded-full object-cover shadow-xl shadow-background/40"
               width={280}
               height={280}
               priority

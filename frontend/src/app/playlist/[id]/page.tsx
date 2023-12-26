@@ -95,11 +95,11 @@ export default async function PlaylistPage({ params }: Props) {
                 fill
               />
             </div>
-            <div className="flex max-h-[280px] max-w-[280px] justify-center self-center rounded-md bg-black/50 md:mr-8 md:min-h-[280px] md:min-w-[280px]">
+            <div className="flex justify-center self-center rounded-md bg-black/50 md:mr-8 md:max-h-[280px] md:max-w-[280px]">
               <Image
                 src={(playlist.image || playlist?.musics[0]?.image)!}
                 alt={playlist.name}
-                className="aspect-square h-full w-full rounded-md object-cover shadow-xl shadow-black/40"
+                className="aspect-square size-[280px] rounded-md object-cover shadow-xl shadow-black/40"
                 width={280}
                 height={280}
                 priority
@@ -167,7 +167,7 @@ export default async function PlaylistPage({ params }: Props) {
         </div>
       </div>
       {playlist?.musics && playlist.musics.length > 0 && (
-        <div className="mt-20 flex w-full max-w-[50%] flex-col gap-2">
+        <div className="mt-20 flex w-full flex-col gap-2 lg:max-w-[50%]">
           {playlist.musics.map((music) => (
             <div key={music.id} className="w-full">
               <MusicCard
