@@ -15,7 +15,7 @@ type Props = {
 };
 
 const getUsers = cache(async () => {
-  return await serverFetcher<UserProps[]>("/users");
+  return await serverFetcher<UserProps[]>("/users/");
 });
 
 export async function generateStaticParams() {

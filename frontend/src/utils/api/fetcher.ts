@@ -13,14 +13,14 @@ export async function fetcher<T = unknown>(
   if (opts?.searchParams)
     url.search = new URLSearchParams(opts.searchParams).toString();
   if (!opts?.token) {
-    const res = await fetch(url, opts);
+    const res = await fetch(url.toString(), opts);
     if (res.status === 204) {
       return null as Awaited<T>;
     }
     return res.json() as Awaited<T>;
   }
   const headers = { ...opts.headers, Authorization: `Bearer ${opts.token}` };
-  const res = await fetch(url, { ...opts, headers });
+  const res = await fetch(url.toString(), { ...opts, headers });
   if (res.status === 204) {
     return null as Awaited<T>;
   }
