@@ -77,6 +77,7 @@ export async function Header() {
             <UserButton
               userProfileMode={externalId ? "navigation" : "modal"}
               userProfileUrl={`/user/${externalId}`}
+              afterSignOutUrl="/"
             />
           </SignedIn>
         </div>
