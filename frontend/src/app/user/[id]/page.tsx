@@ -15,7 +15,7 @@ type Props = {
 };
 
 const getUsers = cache(async () => {
-  return await serverFetcher<UserProps[]>("/users/");
+  return await serverFetcher<UserProps[]>("/users");
 });
 
 export async function generateStaticParams() {
@@ -71,7 +71,7 @@ export default async function UserPage({ params }: Props) {
   }
   const playlists = await serverFetcher<PlaylistPropsWithMusics[]>(
     "/playlists/",
-    { searchParams: { object_id: user.id }, next: { revalidate: 1 } },
+    { searchParams: { object_id: user.id } },
   );
   const musics = playlists.map((playlist) => playlist.musics);
 

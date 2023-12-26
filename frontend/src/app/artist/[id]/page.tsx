@@ -18,7 +18,7 @@ type Props = {
 };
 
 const getArtists = cache(async () => {
-  return await serverFetcher<ArtistPropsWithMusics[]>("/artists/");
+  return await serverFetcher<ArtistPropsWithMusics[]>("/artists");
 });
 
 export async function generateStaticParams() {
@@ -74,7 +74,7 @@ export default async function ArtistPage({ params }: Props) {
   }
   const playlists = await serverFetcher<PlaylistPropsWithMusics[]>(
     "/playlists/",
-    { searchParams: { object_id: artist.id }, next: { revalidate: 1 } },
+    { searchParams: { object_id: artist.id } },
   );
   const musics = playlists.map((playlist) => playlist.musics);
 

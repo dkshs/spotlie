@@ -21,8 +21,8 @@ type Props = {
 };
 
 const getPlaylists = cache(async () => {
-  return await serverFetcher<PlaylistPropsWithMusics[]>("/playlists/", {
-    next: { revalidate: 1 },
+  return await serverFetcher<PlaylistPropsWithMusics[]>("/playlists", {
+    next: { revalidate: 0 },
   });
 });
 
