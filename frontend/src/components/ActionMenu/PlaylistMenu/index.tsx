@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useApi } from "@/hooks/useApi";
 
+import { toast } from "react-toastify";
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -37,6 +38,7 @@ export function PlaylistMenu({
   );
 
   const copyPlaylist = useCallback(async () => {
+    const toastLoading = toast.loading("Copying playlist...");
     try {
       const pl = {
         name: playlist.name,
@@ -50,9 +52,22 @@ export function PlaylistMenu({
         needAuth: true,
         body: data,
       });
+      toast.update(toastLoading, {
+        render: "Playlist copied!",
+        type: "success",
+        isLoading: false,
+        autoClose: 1000,
+      });
       router.refresh();
     } catch (error) {
-      console.log(error);
+      const msg = (error as Error).message || "Failed to copy playlist!";
+      toast.update(toastLoading, {
+        render: msg,
+        type: "error",
+        isLoading: false,
+        autoClose: 1000,
+      });
+      console.error(error);
     }
   }, [fetcher, playlist.description, playlist?.musics, playlist.name, router]);
 

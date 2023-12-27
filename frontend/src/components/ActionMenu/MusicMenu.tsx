@@ -8,6 +8,7 @@ import { useUser } from "@clerk/nextjs";
 import { useApi } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
 
+import { toast } from "react-toastify";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -52,14 +53,28 @@ export function MusicMenu({ music, playlist }: MusicMenuProps) {
 
   const addMusicToPlaylist = useCallback(
     async (playlistId: string, musicsId: string[]) => {
+      const toastLoading = toast.loading("Adding music...");
       try {
         await fetcher(`/playlists/${playlistId}/add_musics`, {
           method: "PATCH",
           body: JSON.stringify(musicsId),
           needAuth: true,
         });
+        toast.update(toastLoading, {
+          render: "Music added!",
+          type: "success",
+          isLoading: false,
+          autoClose: 1000,
+        });
         router.refresh();
       } catch (error) {
+        const msg = (error as Error).message || "Failed to add music!";
+        toast.update(toastLoading, {
+          render: msg,
+          type: "error",
+          isLoading: false,
+          autoClose: 1000,
+        });
         console.error(error);
       }
     },
@@ -67,14 +82,28 @@ export function MusicMenu({ music, playlist }: MusicMenuProps) {
   );
   const deleteMusicToPlaylist = useCallback(
     async (playlistId: string, musicsId: string[]) => {
+      const toastLoading = toast.loading("Removing music...");
       try {
         await fetcher(`/playlists/${playlistId}/remove_musics`, {
           method: "PATCH",
           body: JSON.stringify(musicsId),
           needAuth: true,
         });
+        toast.update(toastLoading, {
+          render: "Music removed!",
+          type: "success",
+          isLoading: false,
+          autoClose: 1000,
+        });
         router.refresh();
       } catch (error) {
+        const msg = (error as Error).message || "Failed to remove music!";
+        toast.update(toastLoading, {
+          render: msg,
+          type: "error",
+          isLoading: false,
+          autoClose: 1000,
+        });
         console.error(error);
       }
     },
@@ -83,6 +112,7 @@ export function MusicMenu({ music, playlist }: MusicMenuProps) {
 
   const createPlaylist = useCallback(
     async (name: string, musicId: string) => {
+      const toastLoading = toast.loading("Creating playlist...");
       const data = new FormData();
       data.append("playlist", JSON.stringify({ name, musics: [musicId] }));
       try {
@@ -91,8 +121,23 @@ export function MusicMenu({ music, playlist }: MusicMenuProps) {
           body: data,
           needAuth: true,
         });
+        toast.update(toastLoading, {
+          render: "Playlist created successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 1000,
+        });
         await refetch();
       } catch (error) {
+        const msg =
+          (error as Error).message ||
+          "Failed to create playlist! Please try again later.";
+        toast.update(toastLoading, {
+          render: msg,
+          type: "error",
+          isLoading: false,
+          autoClose: 1000,
+        });
         console.error(error);
       }
     },

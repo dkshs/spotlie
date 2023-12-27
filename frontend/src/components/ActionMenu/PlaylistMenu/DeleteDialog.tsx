@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { useApi } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
 
+import { toast } from "react-toastify";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,6 +35,7 @@ export function DeleteDialog({
   const { fetcher } = useApi();
 
   const deletePlaylist = useCallback(async () => {
+    const toastLoading = toast.loading("Deleting playlist...");
     try {
       const url = `${playlist.owner_is_artist ? "/artist" : "/user"}/${
         playlist.owner.id
@@ -42,10 +44,24 @@ export function DeleteDialog({
         method: "DELETE",
         needAuth: true,
       });
+      toast.update(toastLoading, {
+        render: "Playlist deleted!",
+        type: "success",
+        isLoading: false,
+        autoClose: 1000,
+      });
       router.push(url);
       router.refresh();
     } catch (error) {
-      console.log(error);
+      const msg = (error as Error).message || "Failed to delete playlist!";
+      toast.update(toastLoading, {
+        render: msg,
+        type: "error",
+        isLoading: false,
+        autoClose: 1000,
+      });
+      setOpen && setOpen(false);
+      console.error(error);
     }
   }, [
     fetcher,
@@ -53,6 +69,7 @@ export function DeleteDialog({
     playlist.owner.id,
     playlist.owner_is_artist,
     router,
+    setOpen,
   ]);
 
   return (

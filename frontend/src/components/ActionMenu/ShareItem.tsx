@@ -5,6 +5,7 @@ import type { ActionType } from "./types";
 import { useCallback } from "react";
 import { useCopyToClipboard } from "usehooks-ts";
 
+import { toast } from "react-toastify";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -25,6 +26,7 @@ export function ShareItem({ id, path = "music" }: ShareItemProps) {
 
   const copy = useCallback(() => {
     copyToClipboard(`${window.location.origin}/${path}/${id}`);
+    toast.success("Link copied to clipboard");
   }, [copyToClipboard, id, path]);
 
   return (

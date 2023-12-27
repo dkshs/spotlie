@@ -1,3 +1,4 @@
+import "react-toastify/dist/ReactToastify.min.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -5,6 +6,7 @@ import { Merriweather_Sans as MerriweatherSans } from "next/font/google";
 
 import { env } from "@/env.mjs";
 import { Providers } from "./providers";
+import { ToastContainer } from "react-toastify";
 import { ClerkProvider } from "@clerk/nextjs";
 import { unstable_createTheme as unstableCreateTheme } from "@clerk/themes";
 
@@ -132,7 +134,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <html lang="en" className={merriweatherSans.variable}>
         <body>
           <Providers>
-            <div className="mx-auto min-w-[320px] max-w-[1600px]">
+            <div className="relative mx-auto min-w-[320px] max-w-[1600px]">
+              <ToastContainer
+                autoClose={3000}
+                position="top-right"
+                theme="dark"
+                newestOnTop={true}
+                pauseOnFocusLoss={false}
+                limit={3}
+                className="z-[99999]"
+                toastClassName="bg-background z-[99999]"
+                bodyClassName="text-foreground z-[99999]"
+                progressClassName="bg-primary"
+              />
               <Header />
               <div className="pt-[72px]">{children}</div>
             </div>

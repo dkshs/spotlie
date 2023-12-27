@@ -2,10 +2,11 @@
 
 import type { PlaylistPropsWithMusics } from "@/utils/types";
 
-import { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 
+import { toast } from "react-toastify";
 import Image from "next/image";
 import {
   Dialog,
@@ -74,6 +75,7 @@ export function EditDialog({
         setOpen && setOpen(false);
         return;
       }
+      const toastLoading = toast.loading("Updating...");
       const pl = {
         name: data.name,
         description: data.description || "",
@@ -88,9 +90,22 @@ export function EditDialog({
           needAuth: true,
           body: formData,
         });
+        toast.update(toastLoading, {
+          render: "Playlist updated!",
+          type: "success",
+          isLoading: false,
+          autoClose: 1000,
+        });
         router.refresh();
       } catch (error) {
-        console.log(error);
+        const msg = (error as Error).message || "Failed to update playlist!";
+        toast.update(toastLoading, {
+          render: msg,
+          type: "error",
+          isLoading: false,
+          autoClose: 1000,
+        });
+        console.error(error);
       }
       setOpen && setOpen(false);
       setLoading(false);
@@ -98,7 +113,7 @@ export function EditDialog({
     [data, dataChanged, fetcher, imgChanged, playlist.id, router, setOpen],
   );
 
-  const handleImage = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const handleImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
