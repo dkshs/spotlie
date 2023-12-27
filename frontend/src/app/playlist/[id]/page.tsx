@@ -76,8 +76,9 @@ export async function generateMetadata(
 }
 
 export default async function PlaylistPage({ params }: Props) {
-  const playlists = await getPlaylists();
-  const playlist = playlists.find((playlist) => playlist.id === params.id);
+  const playlist = (await getPlaylists()).find(
+    (playlist) => playlist.id === params.id,
+  );
   if (!playlist) {
     notFound();
   }

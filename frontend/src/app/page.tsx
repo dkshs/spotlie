@@ -12,10 +12,10 @@ export const revalidate = 60 * 5; // 5 minutes
 
 export default async function HomePage() {
   const searchParams = { limit: "10" };
-  const musics = await serverFetcher<MusicProps[]>("/musics", {
+  const musics = await serverFetcher<MusicProps[]>("/musics/", {
     searchParams,
   });
-  const artists = await serverFetcher<ArtistPropsWithMusics[]>("/artists", {
+  const artists = await serverFetcher<ArtistPropsWithMusics[]>("/artists/", {
     searchParams,
   });
 

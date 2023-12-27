@@ -23,7 +23,7 @@ type Props = {
 };
 
 const getMusics = cache(async () => {
-  return await serverFetcher<MusicProps[]>("/musics");
+  return await serverFetcher<MusicProps[]>("/musics/");
 });
 
 export async function generateStaticParams() {
