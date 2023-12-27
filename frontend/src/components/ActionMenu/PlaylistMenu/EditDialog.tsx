@@ -2,7 +2,7 @@
 
 import type { PlaylistPropsWithMusics } from "@/utils/types";
 
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 
@@ -28,12 +28,18 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { InputFile } from "@/components/ui/InputFile";
 
-import { PencilSimple, X } from "@phosphor-icons/react";
+import { PencilSimple, Spinner, X } from "@phosphor-icons/react";
 
 export interface EditDialogProps extends React.PropsWithChildren {
   playlist: PlaylistPropsWithMusics;
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface DataType {
+  name: string;
+  description?: string;
+  image: File | null;
 }
 
 export function EditDialog({
@@ -43,67 +49,64 @@ export function EditDialog({
   open = false,
 }: EditDialogProps) {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<DataType>({ ...playlist, image: null });
   const [imgChanged, setImgChanged] = useState(false);
   const [imgPreview, setImgPreview] = useState<string | undefined>(
     playlist.image,
   );
-  const [image, setImage] = useState<File | null>(null);
   const { fetcher } = useApi();
+
+  const dataChanged = useMemo(() => {
+    return (
+      data.name !== playlist.name ||
+      data.description !== playlist.description ||
+      imgChanged
+    );
+  }, [data, imgChanged, playlist]);
 
   const updatePlaylist = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
+      setLoading(true);
       e.preventDefault();
-      const data = new FormData(e.currentTarget);
-      const pl = {
-        name: data.get("name"),
-        description: data.get("description"),
-        update_image: imgChanged,
-      };
-      if (
-        !imgChanged &&
-        !image &&
-        playlist.name === pl.name &&
-        playlist.description === pl.description
-      ) {
+      if (!dataChanged) {
+        setLoading(false);
+        setOpen && setOpen(false);
         return;
       }
-      data.append("playlist", JSON.stringify(pl));
-      if (!imgChanged) {
-        data.delete("image");
-      } else {
-        data.delete("image");
-        data.append("image", image || "");
-      }
+      const pl = {
+        name: data.name,
+        description: data.description || "",
+        update_image: imgChanged,
+      };
+      const formData = new FormData();
+      formData.append("playlist", JSON.stringify(pl));
+      formData.append("image", data.image || "");
       try {
         await fetcher(`/playlists/${playlist.id}`, {
           method: "PATCH",
           needAuth: true,
-          body: data,
+          body: formData,
         });
         router.refresh();
       } catch (error) {
         console.log(error);
       }
       setOpen && setOpen(false);
+      setLoading(false);
     },
-    [
-      fetcher,
-      image,
-      imgChanged,
-      playlist.description,
-      playlist.id,
-      playlist.name,
-      router,
-      setOpen,
-    ],
+    [data, dataChanged, fetcher, imgChanged, playlist.id, router, setOpen],
   );
 
   const handleImage = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]?.type.startsWith("image/")) {
+    setLoading(true);
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith("image/")) {
       setImgChanged(true);
-      setImgPreview(URL.createObjectURL(e.target.files[0]));
-      setImage(e.target.files[0]);
+      setImgPreview(URL.createObjectURL(file));
+      setData((prev) => ({ ...prev, image: file }));
     }
+    setLoading(false);
   }, []);
 
   return (
@@ -152,9 +155,11 @@ export function EditDialog({
                         radius="full"
                         variant="destructive"
                         onClick={() => {
-                          setImgChanged(true);
+                          if (playlist.image) {
+                            setImgChanged(true);
+                          }
                           setImgPreview(undefined);
-                          setImage(null);
+                          setData((prev) => ({ ...prev, image: null }));
                         }}
                         size="icon"
                         type="button"
@@ -177,7 +182,10 @@ export function EditDialog({
                   type="text"
                   name="name"
                   placeholder="Add a name"
-                  defaultValue={playlist.name}
+                  onChange={(e) =>
+                    setData((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  value={data.name}
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -187,12 +195,24 @@ export function EditDialog({
                   name="description"
                   placeholder="Add an optional description"
                   defaultValue={playlist.description}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                 ></Textarea>
               </div>
             </div>
           </div>
           <DialogFooter className="mt-4">
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={!dataChanged || loading}>
+              {loading ? (
+                <Spinner className="animate-spin" size={18} weight="bold" />
+              ) : (
+                "Save"
+              )}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
