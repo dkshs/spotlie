@@ -8,9 +8,9 @@ import { useMusic } from "@/hooks/useMusic";
 import Image from "next/image";
 import Link from "next/link";
 import { ControlButton } from "./ControlButton";
-import { MusicMenu, type MusicMenuProps } from "../MusicMenu";
+import { ActionMenu, type ActionMenuProps } from "../ActionMenu";
 
-interface HorizontalMusicCardProps extends MusicMenuProps {
+interface HorizontalMusicCardProps extends ActionMenuProps {
   music: MusicProps;
   musics?: MusicProps[];
   showArtist?: boolean;
@@ -84,7 +84,12 @@ function HorizontalMusicCard({
           </Link>
         )}
       </div>
-      <MusicMenu music={music} {...props} />
+      <ActionMenu
+        {...props}
+        music={music}
+        actionType="music"
+        actionId={music.id}
+      />
     </div>
   );
 }

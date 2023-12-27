@@ -64,9 +64,8 @@ export function MusicsList() {
               key={music.id}
               music={music}
               musics={musics}
+              actionId={music.id}
               orientation="horizontal"
-              showGoToArtist
-              showGoToMusic
             />
           ))
         )}

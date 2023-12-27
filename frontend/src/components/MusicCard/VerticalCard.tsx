@@ -3,8 +3,7 @@ import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
 import { ControlButton } from "./ControlButton";
-import { MusicMenu } from "../MusicMenu";
-import { PlaylistMenu } from "../PlaylistMenu";
+import { ActionMenu } from "../ActionMenu";
 
 interface VerticalMusicCardProps {
   music: MusicProps;
@@ -87,15 +86,16 @@ function VerticalMusicCard({
           )
         )}
       </div>
-      {!isPlaylist ? (
-        <div className="absolute inset-0 [&_button]:bottom-1 [&_button]:right-1 [&_button]:m-0 [&_button]:hover:bg-background/60 md:[&_button]:bottom-3 md:[&_button]:right-4">
-          <MusicMenu music={music} />
-        </div>
-      ) : (
-        <div className="absolute inset-0 [&_button]:bottom-1 [&_button]:right-1 [&_button]:m-0 [&_button]:hover:bg-background/60 md:[&_button]:bottom-3 md:[&_button]:right-4">
-          <PlaylistMenu playlist={playlist} />
-        </div>
-      )}
+      <div className="absolute inset-0 [&_button]:bottom-1 [&_button]:right-1 [&_button]:m-0 [&_button]:hover:bg-background/60 md:[&_button]:bottom-3 md:[&_button]:right-4">
+        <ActionMenu
+          actionId={isPlaylist ? playlist.id : music.id}
+          actionType={isPlaylist ? "playlist" : "music"}
+          music={music}
+          playlist={playlist}
+          showGoToArtist={!isPlaylist}
+          showGoToMusic={!isPlaylist}
+        />
+      </div>
     </div>
   );
 }

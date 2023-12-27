@@ -16,7 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/AlertDialog";
+} from "@/components/ui/AlertDialog";
 
 export interface DeleteDialogProps extends React.PropsWithChildren {
   playlist: PlaylistPropsWithMusics;

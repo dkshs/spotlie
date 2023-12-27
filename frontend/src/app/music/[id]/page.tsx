@@ -16,7 +16,7 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { MusicDuration } from "./MusicDuration";
 import { DataTitle } from "@/components/DataTitle";
-import { MusicMenu } from "@/components/MusicMenu";
+import { ActionMenu } from "@/components/ActionMenu";
 
 type Props = {
   params: { id: string };
@@ -154,7 +154,11 @@ export default async function MusicPage({ params }: Props) {
           <div className="group relative flex self-center md:mt-3 md:self-start [&_button]:relative [&_button]:translate-y-0 [&_button]:opacity-100">
             <ControlButton music={music} />
             <div className="mt-1">
-              <MusicMenu music={music} showGoToMusic={false} />
+              <ActionMenu
+                music={music}
+                showGoToMusic={false}
+                actionId={music.id}
+              />
             </div>
           </div>
         </div>
@@ -174,6 +178,7 @@ export default async function MusicPage({ params }: Props) {
                     music={music}
                     musics={musics}
                     showArtist={false}
+                    actionId={music.id}
                     text={
                       music.release_date &&
                       new Date(music.release_date).getFullYear().toString()

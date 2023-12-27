@@ -1,5 +1,7 @@
 "use client";
 
+import type { ActionType } from "./types";
+
 import { useCallback } from "react";
 import { useCopyToClipboard } from "usehooks-ts";
 
@@ -9,25 +11,21 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from "./ui/DropdownMenu";
+} from "@/components/ui/DropdownMenu";
 
 import { Copy, Export } from "@phosphor-icons/react";
 
-interface MenuShareItemProps {
+interface ShareItemProps {
   id: string;
-  isPlaylist?: boolean;
+  path?: ActionType;
 }
 
-export function MenuShareItem({ id, isPlaylist = false }: MenuShareItemProps) {
+export function ShareItem({ id, path = "music" }: ShareItemProps) {
   const [, copyToClipboard] = useCopyToClipboard();
 
   const copy = useCallback(() => {
-    const path = isPlaylist ? "playlist" : "music";
-    const url = `${window.location.origin}/${path}/${id}`;
-    copyToClipboard(url);
-    console.log(url);
-    return url;
-  }, [copyToClipboard, id, isPlaylist]);
+    copyToClipboard(`${window.location.origin}/${path}/${id}`);
+  }, [copyToClipboard, id, path]);
 
   return (
     <DropdownMenuSub>

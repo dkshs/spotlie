@@ -9,6 +9,7 @@ import Image from "next/image";
 import { MusicCard } from "@/components/MusicCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { DataTitle } from "@/components/DataTitle";
+import { ActionMenu } from "@/components/ActionMenu";
 
 type Props = {
   params: { id: string };
@@ -115,6 +116,13 @@ export default async function UserPage({ params }: Props) {
               </div>
             )}
           </div>
+          <div className="group relative flex self-center md:mt-3 md:self-start">
+            <ActionMenu
+              actionId={user.id}
+              actionType="user"
+              triggerClassName="relative opacity-100 scale-100"
+            />
+          </div>
         </div>
       </div>
       {playlists && playlists.length > 0 && (
@@ -132,6 +140,7 @@ export default async function UserPage({ params }: Props) {
                       music={playlist.musics[0]! || musics[0]}
                       playlist={playlist}
                       showArtist={false}
+                      actionId={playlist.id}
                       text={`By ${user.full_name}`}
                     />
                   ),

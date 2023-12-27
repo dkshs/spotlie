@@ -6,6 +6,7 @@ import { ChangeEvent, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -14,19 +15,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/Dialog";
+} from "@/components/ui/Dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/Tooltip";
-import { Label } from "../ui/Label";
-import { Input } from "../ui/Input";
-import { Textarea } from "../ui/Textarea";
-import { Button } from "../ui/Button";
-import { InputFile } from "../ui/InputFile";
-import Image from "next/image";
+} from "@/components/ui/Tooltip";
+import { Label } from "@/components/ui/Label";
+import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/Textarea";
+import { Button } from "@/components/ui/Button";
+import { InputFile } from "@/components/ui/InputFile";
 
 import { PencilSimple, X } from "@phosphor-icons/react";
 

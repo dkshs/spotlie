@@ -12,6 +12,7 @@ import Image from "next/image";
 import { ControlButton, MusicCard } from "@/components/MusicCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { DataTitle } from "@/components/DataTitle";
+import { ActionMenu } from "@/components/ActionMenu";
 
 type Props = {
   params: { id: string };
@@ -110,15 +111,18 @@ export default async function ArtistPage({ params }: Props) {
               ARTIST
             </small>
             <DataTitle title={artist.full_name} />
-            {artist.musics && artist.musics.length > 0 && (
-              <div className="group relative mt-2 self-center md:mt-10 md:self-start [&_>button]:relative [&_>button]:mr-0 [&_>button]:translate-y-0 [&_>button]:opacity-100">
+            <div className="group relative mt-2 flex gap-3 self-center md:mt-10 md:self-start [&_button]:relative [&_button]:mr-0 [&_button]:translate-y-0 [&_button]:opacity-100">
+              {artist.musics && artist.musics.length > 0 && (
                 <ControlButton
                   music={artist.musics[0]!}
                   playlist={artist.musics}
                   artistId={artist.id}
                 />
+              )}
+              <div className="mt-1">
+                <ActionMenu actionId={artist.id} actionType="artist" />
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
@@ -135,6 +139,7 @@ export default async function ArtistPage({ params }: Props) {
                   musics={artist.musics}
                   showArtist={false}
                   orientation="horizontal"
+                  actionId={music.id}
                   showGoToArtist={false}
                 />
               </div>
@@ -159,6 +164,7 @@ export default async function ArtistPage({ params }: Props) {
                       music={playlist.musics[0]! || musics[0]}
                       playlist={playlist}
                       showArtist={false}
+                      actionId={playlist.id}
                       text={`By ${artist.full_name}`}
                     />
                   ),

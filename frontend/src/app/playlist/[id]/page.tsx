@@ -14,7 +14,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/HoverCard";
 import { DataTitle } from "@/components/DataTitle";
-import { PlaylistMenu } from "@/components/PlaylistMenu";
+import { ActionMenu } from "@/components/ActionMenu";
 
 type Props = {
   params: { id: string };
@@ -161,7 +161,11 @@ export default async function PlaylistPage({ params }: Props) {
               />
             )}
             <div className="mt-1">
-              <PlaylistMenu playlist={playlist} />
+              <ActionMenu
+                playlist={playlist}
+                actionId={playlist.id}
+                actionType="playlist"
+              />
             </div>
           </div>
         </div>
@@ -174,7 +178,8 @@ export default async function PlaylistPage({ params }: Props) {
                 music={music}
                 musics={playlist.musics}
                 orientation="horizontal"
-                playlistId={playlist.id}
+                actionId={music.id}
+                playlist={playlist}
               />
             </div>
           ))}
