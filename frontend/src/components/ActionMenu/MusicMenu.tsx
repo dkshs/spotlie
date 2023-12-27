@@ -39,10 +39,10 @@ export function MusicMenu({ music, playlist }: MusicMenuProps) {
     queryFn: async () => {
       if (!user || !externalId) return null;
       try {
-        const data = await fetcher<PlaylistPropsWithMusics[]>("/playlists", {
+        const res = await fetcher<PlaylistPropsWithMusics[]>("/playlists", {
           searchParams: { object_id: externalId },
         });
-        return data || null;
+        return res.data || null;
       } catch (error) {
         return null;
       }

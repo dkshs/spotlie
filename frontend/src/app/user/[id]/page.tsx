@@ -16,7 +16,7 @@ type Props = {
 };
 
 const getUsers = cache(async () => {
-  return await serverFetcher<UserProps[]>("/users/");
+  return (await serverFetcher<UserProps[]>("/users/")).data || [];
 });
 
 export async function generateStaticParams() {
@@ -70,11 +70,11 @@ export default async function UserPage({ params }: Props) {
   if (!user) {
     notFound();
   }
-  const playlists = await serverFetcher<PlaylistPropsWithMusics[]>(
+  const { data: playlists } = await serverFetcher<PlaylistPropsWithMusics[]>(
     "/playlists/",
     { searchParams: { object_id: user.id }, next: { revalidate: 0 } },
   );
-  const musics = playlists.flatMap((playlist) => playlist.musics);
+  const musics = playlists?.flatMap((playlist) => playlist.musics) || [];
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
@@ -108,7 +108,7 @@ export default async function UserPage({ params }: Props) {
               Profile
             </small>
             <DataTitle title={user.full_name} />
-            {playlists?.length > 0 && (
+            {playlists && playlists.length > 0 && (
               <div className="flex items-center gap-2 self-center md:self-start">
                 <span className="text-sm">
                   {playlists.length} Public Playlists
@@ -135,7 +135,7 @@ export default async function UserPage({ params }: Props) {
             <div className="flex w-max gap-3 px-1 pb-4 pt-3">
               {playlists.map(
                 (playlist) =>
-                  (playlist?.musics?.length > 0 || musics[0]) && (
+                  (playlist.musics.length > 0 || musics[0]) && (
                     <MusicCard
                       key={playlist.id}
                       music={playlist.musics[0]! || musics[0]}

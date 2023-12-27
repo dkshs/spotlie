@@ -97,7 +97,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
       setMusicState("paused");
       try {
         if (!localCurrentMusic || !localCurrentMusic.id) throw Error("");
-        const data = await fetcher<MusicProps>(
+        const { data } = await fetcher<MusicProps>(
           `/musics/${localCurrentMusic.id}`,
           { needAuth: false },
         );
@@ -132,7 +132,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
     queryKey: ["DBPlaylist"],
     queryFn: async () => {
       try {
-        const data = await fetcher<MusicProps[]>("/musics/", {
+        const { data } = await fetcher<MusicProps[]>("/musics/", {
           needAuth: false,
         });
         setPlaylist(data || []);

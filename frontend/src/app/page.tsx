@@ -12,12 +12,15 @@ export const revalidate = 60 * 5; // 5 minutes
 
 export default async function HomePage() {
   const searchParams = { limit: "10" };
-  const musics = await serverFetcher<MusicProps[]>("/musics/", {
+  const { data: musics } = await serverFetcher<MusicProps[]>("/musics/", {
     searchParams,
   });
-  const artists = await serverFetcher<ArtistPropsWithMusics[]>("/artists/", {
-    searchParams,
-  });
+  const { data: artists } = await serverFetcher<ArtistPropsWithMusics[]>(
+    "/artists/",
+    {
+      searchParams,
+    },
+  );
 
   return (
     <div className="my-8 flex flex-col gap-8">
@@ -32,14 +35,18 @@ export default async function HomePage() {
         </header>
         <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
           <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
-            {musics.map((music) => (
-              <MusicCard
-                key={music.id}
-                music={music}
-                musics={musics}
-                actionId={music.id}
-              />
-            ))}
+            {musics ? (
+              musics.map((music) => (
+                <MusicCard
+                  key={music.id}
+                  music={music}
+                  musics={musics}
+                  actionId={music.id}
+                />
+              ))
+            ) : (
+              <p>No musics found...</p>
+            )}
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
@@ -55,9 +62,13 @@ export default async function HomePage() {
         </header>
         <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
           <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
-            {artists.map((artist) => (
-              <ArtistCard key={artist.id} artist={artist} />
-            ))}
+            {artists ? (
+              artists.map((artist) => (
+                <ArtistCard key={artist.id} artist={artist} />
+              ))
+            ) : (
+              <p>No artists found...</p>
+            )}
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>

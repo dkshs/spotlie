@@ -24,10 +24,10 @@ export function ArtistsList() {
     queryFn: async () => {
       try {
         const qtd = skeletons.length;
-        const data = await fetcher<ArtistPropsWithMusics[]>("/artists/", {
+        const { data } = await fetcher<ArtistPropsWithMusics[]>("/artists/", {
           searchParams: { limit: `${qtd}`, offset: `${qtd * offset}` },
         });
-        const newArtists = [...new Set([...artists, ...data])];
+        const newArtists = [...new Set([...artists, ...(data || [])])];
         if (newArtists.length !== artists.length) {
           setArtists(newArtists);
           setOffset((prevOffset) => prevOffset + 1);

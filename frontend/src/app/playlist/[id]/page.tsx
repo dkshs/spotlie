@@ -21,9 +21,10 @@ type Props = {
 };
 
 const getPlaylists = cache(async () => {
-  return await serverFetcher<PlaylistPropsWithMusics[]>("/playlists/", {
+  const res = await serverFetcher<PlaylistPropsWithMusics[]>("/playlists/", {
     next: { revalidate: 0 },
   });
+  return res.data || [];
 });
 
 export async function generateStaticParams() {
@@ -86,19 +87,19 @@ export default async function PlaylistPage({ params }: Props) {
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
       <div className="flex flex-col justify-center text-center md:min-h-[280px] md:flex-row md:justify-start md:text-start">
-        {(playlist.image || playlist?.musics[0]?.image) && (
+        {(playlist.image || playlist.musics[0]?.image) && (
           <>
             <div className="absolute inset-0 z-[-1] bg-center md:h-80">
               <Image
                 className="aspect-square bg-cover bg-center bg-no-repeat object-cover opacity-50 blur-2xl"
-                src={(playlist.image || playlist?.musics[0]?.image)!}
+                src={(playlist.image || playlist.musics[0]?.image)!}
                 alt={playlist.name}
                 fill
               />
             </div>
             <div className="flex justify-center self-center rounded-md bg-black/50 md:mr-8 md:max-h-[280px] md:max-w-[280px]">
               <Image
-                src={(playlist.image || playlist?.musics[0]?.image)!}
+                src={(playlist.image || playlist.musics[0]?.image)!}
                 alt={playlist.name}
                 className="aspect-square size-[280px] rounded-md object-cover shadow-xl shadow-black/40"
                 width={280}
@@ -147,7 +148,7 @@ export default async function PlaylistPage({ params }: Props) {
                   })}
                 </HoverCardContent>
               </HoverCard>
-              {playlist?.musics && (
+              {playlist.musics && (
                 <div className="before:mr-1.5 before:content-['•']">
                   {playlist.musics.length} musics
                 </div>
@@ -155,7 +156,7 @@ export default async function PlaylistPage({ params }: Props) {
             </div>
           </div>
           <div className="group relative flex self-center md:mt-3 md:self-start [&_button]:relative [&_button]:translate-y-0 [&_button]:opacity-100">
-            {playlist?.musics && playlist.musics.length > 0 && (
+            {playlist.musics && playlist.musics.length > 0 && (
               <ControlButton
                 music={playlist.musics[0]!}
                 playlist={playlist.musics}
@@ -171,7 +172,7 @@ export default async function PlaylistPage({ params }: Props) {
           </div>
         </div>
       </div>
-      {playlist?.musics && playlist.musics.length > 0 && (
+      {playlist.musics && playlist.musics.length > 0 && (
         <div className="mt-20 flex w-full flex-col gap-2 lg:max-w-[50%]">
           {playlist.musics.map((music) => (
             <div key={music.id} className="w-full">

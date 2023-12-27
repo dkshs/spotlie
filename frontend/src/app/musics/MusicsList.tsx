@@ -24,10 +24,10 @@ export function MusicsList() {
     queryFn: async () => {
       try {
         const qtd = skeletons.length;
-        const data = await fetcher<MusicProps[]>("/musics/", {
+        const { data } = await fetcher<MusicProps[]>("/musics/", {
           searchParams: { limit: `${qtd}`, offset: `${qtd * offset}` },
         });
-        const newMusics = [...new Set([...musics, ...data])];
+        const newMusics = [...new Set([...musics, ...(data || [])])];
         if (newMusics.length !== musics.length) {
           setMusics(newMusics);
           setOffset((prevOffset) => prevOffset + 1);

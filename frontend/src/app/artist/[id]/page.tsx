@@ -19,7 +19,8 @@ type Props = {
 };
 
 const getArtists = cache(async () => {
-  return await serverFetcher<ArtistPropsWithMusics[]>("/artists/");
+  const res = await serverFetcher<ArtistPropsWithMusics[]>("/artists/");
+  return res.data || [];
 });
 
 export async function generateStaticParams() {
@@ -73,11 +74,11 @@ export default async function ArtistPage({ params }: Props) {
   if (!artist) {
     notFound();
   }
-  const playlists = await serverFetcher<PlaylistPropsWithMusics[]>(
+  const { data: playlists } = await serverFetcher<PlaylistPropsWithMusics[]>(
     "/playlists/",
     { searchParams: { object_id: artist.id }, next: { revalidate: 0 } },
   );
-  const musics = playlists.map((playlist) => playlist.musics);
+  const musics = playlists?.map((playlist) => playlist.musics) || [];
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
@@ -162,7 +163,7 @@ export default async function ArtistPage({ params }: Props) {
             <div className="flex w-max gap-3 px-1 pb-4 pt-3">
               {playlists.map(
                 (playlist) =>
-                  (playlist?.musics?.length > 0 || musics[0]) && (
+                  (playlist.musics.length > 0 || musics[0]) && (
                     <MusicCard
                       key={playlist.id}
                       music={playlist.musics[0]! || musics[0]}

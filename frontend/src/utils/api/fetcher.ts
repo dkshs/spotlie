@@ -4,25 +4,25 @@ export interface FetcherOpts extends RequestInit {
   token?: string | null;
   searchParams?: Record<string, string> | URLSearchParams | null;
 }
+export interface FetcherResponse<T> {
+  data: T | null;
+  ok: boolean;
+}
 
 export async function fetcher<T = unknown>(
   path: string,
   opts?: FetcherOpts,
-): Promise<Awaited<T>> {
+): Promise<FetcherResponse<T>> {
   const url = new URL(`${env.NEXT_PUBLIC_BACKEND_API_URL}${path}`);
   if (opts?.searchParams)
     url.search = new URLSearchParams(opts.searchParams).toString();
-  if (!opts?.token) {
-    const res = await fetch(url.toString(), opts);
-    if (res.status === 204) {
-      return null as Awaited<T>;
-    }
-    return res.json() as Awaited<T>;
-  }
-  const headers = { ...opts.headers, Authorization: `Bearer ${opts.token}` };
+  const auth = opts?.token ? { Authorization: `Bearer ${opts.token}` } : null;
+  const headers = { ...opts?.headers, ...auth };
   const res = await fetch(url.toString(), { ...opts, headers });
-  if (res.status === 204) {
-    return null as Awaited<T>;
-  }
-  return res.json() as Awaited<T>;
+  if (!res.ok) throw new Error(res.statusText);
+  const data =
+    !res.body || res.status === 204 || res.status === 205
+      ? null
+      : ((await res.json()) as T);
+  return { data, ok: res.ok };
 }
