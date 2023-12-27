@@ -15,13 +15,7 @@ export const env = createEnv({
     // these variables are used for the site's SEO
     SITE_NAME: z.string().default("SpotLie"),
     SITE_LOCALE: z.string().default("en_US"),
-    SITE_BASEURL: z.preprocess(
-      // This makes Vercel deployments not fail if you don't set SITE_BASEURL
-      (str) => process.env.VERCEL_URL ?? str,
-      process.env.VERCEL_URL // Vercel deployments will set this env var.
-        ? z.string().transform((str) => `https://${str}`)
-        : z.string().url().default("http://localhost:3000"),
-    ),
+    SITE_BASEURL: z.string().url().default("http://localhost:3000"),
   },
 
   /**
