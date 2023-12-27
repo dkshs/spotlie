@@ -121,6 +121,7 @@ export default async function UserPage({ params }: Props) {
               actionId={user.id}
               actionType="user"
               triggerClassName="relative opacity-100 scale-100"
+              user={user}
             />
           </div>
         </div>

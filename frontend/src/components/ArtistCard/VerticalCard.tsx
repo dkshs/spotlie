@@ -3,6 +3,7 @@ import type { ArtistPropsWithMusics } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
 import { ControlButton } from "../MusicCard";
+import { ActionMenu } from "../ActionMenu";
 
 interface VerticalArtistCardProps {
   artist: ArtistPropsWithMusics;
@@ -39,6 +40,14 @@ function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
           {artist.full_name}
         </h3>
         <p className="w-full truncate text-sm text-foreground/60">Artist</p>
+      </div>
+      <div className="absolute inset-0">
+        <ActionMenu
+          actionId={artist.id}
+          actionType="artist"
+          user={artist}
+          triggerClassName="scale-100 bottom-1 right-1 m-0 hover:bg-background/60 md:bottom-2 md:right-2"
+        />
       </div>
     </div>
   );

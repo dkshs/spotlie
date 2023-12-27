@@ -86,7 +86,7 @@ function VerticalMusicCard({
           )
         )}
       </div>
-      <div className="absolute inset-0 [&_button]:bottom-1 [&_button]:right-1 [&_button]:m-0 [&_button]:hover:bg-background/60 md:[&_button]:bottom-3 md:[&_button]:right-4">
+      <div className="absolute inset-0">
         <ActionMenu
           actionId={isPlaylist ? playlist.id : music.id}
           actionType={isPlaylist ? "playlist" : "music"}
@@ -94,6 +94,7 @@ function VerticalMusicCard({
           playlist={playlist}
           showGoToArtist={!isPlaylist}
           showGoToMusic={!isPlaylist}
+          triggerClassName="scale-100 bottom-1 right-1 m-0 hover:bg-background/60 md:bottom-2 md:right-2"
         />
       </div>
     </div>

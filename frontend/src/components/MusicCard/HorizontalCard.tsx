@@ -89,6 +89,7 @@ function HorizontalMusicCard({
         music={music}
         actionType="music"
         actionId={music.id}
+        triggerClassName="scale-100 hover:bg-background/60"
       />
     </div>
   );

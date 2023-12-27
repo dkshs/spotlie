@@ -2,6 +2,9 @@
 
 import type { ActionMenuProps, ActionType } from "./types";
 
+import { useState } from "react";
+import { useUser } from "@clerk/nextjs";
+
 import { cn } from "@/lib/utils";
 
 import Link from "next/link";
@@ -17,8 +20,12 @@ import {
   DropdownMenuTrigger,
 } from "../ui/DropdownMenu";
 
-import { DotsThree, MusicNote, User } from "@phosphor-icons/react";
-import { useState } from "react";
+import {
+  DotsThree,
+  MusicNote,
+  User,
+  UserCirclePlus,
+} from "@phosphor-icons/react";
 
 export function ActionMenu({
   actionId,
@@ -26,12 +33,15 @@ export function ActionMenu({
   triggerClassName,
   label,
   music,
+  user,
   playlist,
   showGoToArtist = true,
   showGoToMusic = true,
 }: ActionMenuProps) {
+  const { user: clerkUser } = useUser();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const externalId = (clerkUser?.publicMetadata.external_id as string) || null;
 
   return (
     <DropdownMenu>
@@ -50,37 +60,58 @@ export function ActionMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-fit">
+        {externalId &&
+          user &&
+          externalId !== user.id &&
+          (actionType === "artist" || actionType === "user") && (
+            <>
+              <DropdownMenuItem className="flex gap-2">
+                <UserCirclePlus weight="bold" size={18} />
+                <span>Follow</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
         {playlist && actionType === "playlist" && (
-          <PlaylistMenu
-            playlist={playlist}
-            setDeleteDialogOpen={setDeleteDialogOpen}
-            setEditDialogOpen={setEditDialogOpen}
-          />
+          <>
+            <PlaylistMenu
+              playlist={playlist}
+              setDeleteDialogOpen={setDeleteDialogOpen}
+              setEditDialogOpen={setEditDialogOpen}
+            />
+            {clerkUser && <DropdownMenuSeparator />}
+          </>
         )}
         {music && actionType === "music" && (
-          <MusicMenu music={music} playlist={playlist} />
-        )}
-        {actionType === "music" && (showGoToArtist || showGoToMusic) && (
-          <DropdownMenuSeparator />
+          <>
+            <MusicMenu music={music} playlist={playlist} />
+            {clerkUser && (showGoToArtist || showGoToMusic) && (
+              <DropdownMenuSeparator />
+            )}
+          </>
         )}
         {music && showGoToMusic && actionType === "music" && (
-          <DropdownMenuItem asChild>
-            <Link href={`/music/${music.id}`} className="flex gap-2">
-              <MusicNote weight="bold" size={18} />
-              <span>Go to music</span>
-            </Link>
-          </DropdownMenuItem>
+          <>
+            <DropdownMenuItem asChild>
+              <Link href={`/music/${music.id}`} className="flex gap-2">
+                <MusicNote weight="bold" size={18} />
+                <span>Go to music</span>
+              </Link>
+            </DropdownMenuItem>
+            {!showGoToArtist && <DropdownMenuSeparator />}
+          </>
         )}
         {music && showGoToArtist && actionType === "music" && (
-          <DropdownMenuItem asChild>
-            <Link href={`/artist/${music.artist.id}`} className="flex gap-2">
-              <User weight="bold" size={18} />
-              <span>Go to artist</span>
-            </Link>
-          </DropdownMenuItem>
+          <>
+            <DropdownMenuItem asChild>
+              <Link href={`/artist/${music.artist.id}`} className="flex gap-2">
+                <User weight="bold" size={18} />
+                <span>Go to artist</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
         )}
-        {((music && actionType === "music") ||
-          (playlist && actionType === "playlist")) && <DropdownMenuSeparator />}
         <ShareItem id={actionId} path={actionType} />
       </DropdownMenuContent>
       {playlist && actionType === "playlist" && (

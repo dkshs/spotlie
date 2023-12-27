@@ -120,7 +120,11 @@ export default async function ArtistPage({ params }: Props) {
                 />
               )}
               <div className="mt-1">
-                <ActionMenu actionId={artist.id} actionType="artist" />
+                <ActionMenu
+                  actionId={artist.id}
+                  actionType="artist"
+                  user={artist}
+                />
               </div>
             </div>
           </div>

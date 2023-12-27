@@ -8,6 +8,7 @@ import { useMusic } from "@/hooks/useMusic";
 import Image from "next/image";
 import Link from "next/link";
 import { ControlButton } from "../MusicCard";
+import { ActionMenu } from "../ActionMenu";
 
 interface HorizontalArtistCardProps {
   artist: ArtistPropsWithMusics;
@@ -63,6 +64,12 @@ function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
           Artist
         </p>
       </div>
+      <ActionMenu
+        actionId={artist.id}
+        actionType="artist"
+        user={artist}
+        triggerClassName="scale-100 hover:bg-background/60"
+      />
     </div>
   );
 }
