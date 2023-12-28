@@ -1,5 +1,5 @@
 import type { Metadata, ResolvingMetadata } from "next";
-import type { PlaylistPropsWithMusics } from "@/utils/types";
+import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 import { cache } from "react";
 import { notFound } from "next/navigation";
@@ -83,6 +83,19 @@ export default async function PlaylistPage({ params }: Props) {
   if (!playlist) {
     notFound();
   }
+  const orderIds = [
+    ...new Set(playlist.musics?.flatMap((m) => m.order_id).sort()),
+  ];
+  const musics = playlist.musics
+    ? orderIds.map((orderId) => {
+        return {
+          ...(playlist.musics.find((m) =>
+            m.order_id.includes(orderId),
+          ) as MusicProps),
+          order_id: orderId,
+        };
+      })
+    : [];
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
@@ -172,19 +185,23 @@ export default async function PlaylistPage({ params }: Props) {
           </div>
         </div>
       </div>
-      {playlist.musics && playlist.musics.length > 0 && (
+      {musics && musics.length > 0 && (
         <div className="mt-20 flex w-full flex-col gap-2 lg:max-w-[50%]">
-          {playlist.musics.map((music) => (
-            <div key={music.id} className="w-full">
-              <MusicCard
-                music={music}
-                musics={playlist.musics}
-                orientation="horizontal"
-                actionId={music.id}
-                playlist={playlist}
-              />
-            </div>
-          ))}
+          {musics.map(
+            (music, i) =>
+              music && (
+                <div key={i} className="w-full">
+                  <MusicCard
+                    music={music}
+                    musics={playlist.musics}
+                    orientation="horizontal"
+                    actionId={music.id}
+                    playlist={playlist}
+                    orderId={music.order_id}
+                  />
+                </div>
+              ),
+          )}
         </div>
       )}
     </div>

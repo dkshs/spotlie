@@ -14,6 +14,7 @@ export interface ActionMenuProps {
   playlist?: PlaylistPropsWithMusics;
   music?: MusicProps;
   user?: UserProps;
+  orderId?: number;
   showGoToArtist?: boolean;
   showGoToMusic?: boolean;
 }

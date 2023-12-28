@@ -23,9 +23,10 @@ import { Plus, TrashSimple } from "@phosphor-icons/react";
 export interface MusicMenuProps {
   music: MusicProps;
   playlist?: PlaylistPropsWithMusics;
+  orderId?: number;
 }
 
-export function MusicMenu({ music, playlist }: MusicMenuProps) {
+export function MusicMenu({ music, playlist, orderId }: MusicMenuProps) {
   const router = useRouter();
   const { fetcher } = useApi();
   const { user } = useUser();
@@ -177,7 +178,9 @@ export function MusicMenu({ music, playlist }: MusicMenuProps) {
         {playlist && ownsThePlaylist && (
           <DropdownMenuItem
             className="flex gap-2"
-            onClick={() => deleteMusicToPlaylist(playlist.id, [music.id])}
+            onClick={() =>
+              deleteMusicToPlaylist(playlist.id, [`${orderId}` || music.id])
+            }
           >
             <TrashSimple weight="bold" size={18} />
             <span>Delete from this playlist</span>

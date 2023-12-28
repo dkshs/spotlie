@@ -33,6 +33,7 @@ export function ActionMenu({
   triggerClassName,
   label,
   music,
+  orderId,
   user,
   playlist,
   showGoToArtist = true,
@@ -84,7 +85,7 @@ export function ActionMenu({
         )}
         {music && actionType === "music" && (
           <>
-            <MusicMenu music={music} playlist={playlist} />
+            <MusicMenu music={music} playlist={playlist} orderId={orderId} />
             {clerkUser && (showGoToArtist || showGoToMusic) && (
               <DropdownMenuSeparator />
             )}

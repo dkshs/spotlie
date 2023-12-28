@@ -38,8 +38,12 @@ export interface MusicProps {
   created_at: Date;
 }
 
+export interface PlaylistMusicProps extends MusicProps {
+  order_id: number[];
+}
+
 export interface PlaylistPropsWithMusics extends Playlist {
-  musics: MusicProps[];
+  musics: PlaylistMusicProps[];
   owner: UserProps;
   owner_is_artist: boolean;
 }
