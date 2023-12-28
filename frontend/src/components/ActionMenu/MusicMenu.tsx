@@ -35,11 +35,11 @@ export function MusicMenu({ music, playlist }: MusicMenuProps) {
   const { data: playlists, refetch } = useQuery<
     PlaylistPropsWithMusics[] | null
   >({
-    queryKey: [user?.id, "playlists"],
+    queryKey: ["playlists"],
     queryFn: async () => {
       if (!user || !externalId) return null;
       try {
-        const res = await fetcher<PlaylistPropsWithMusics[]>("/playlists", {
+        const res = await fetcher<PlaylistPropsWithMusics[]>("/playlists/", {
           searchParams: { object_id: externalId },
         });
         return res.data || null;
@@ -47,7 +47,8 @@ export function MusicMenu({ music, playlist }: MusicMenuProps) {
         return null;
       }
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 30,
+    enabled: !!user && !!externalId,
     refetchOnWindowFocus: false,
   });
 
