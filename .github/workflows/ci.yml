@@ -83,6 +83,6 @@ jobs:
 
       - name: Deploy
         if: failure()
-        run: railway up ${{github.event.commits}} -s ${{secrets.RAILWAY_SERVICE}}
+        run: railway up ${{github.event.commits}} -d -s ${{secrets.RAILWAY_SERVICE}}
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
