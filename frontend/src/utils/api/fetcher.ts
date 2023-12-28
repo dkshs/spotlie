@@ -19,7 +19,14 @@ export async function fetcher<T = unknown>(
   const auth = opts?.token ? { Authorization: `Bearer ${opts.token}` } : null;
   const headers = { ...opts?.headers, ...auth };
   const res = await fetch(url.toString(), { ...opts, headers });
-  if (!res.ok) throw new Error(res.statusText);
+  if (!res.ok) {
+    let msg = res.statusText;
+    try {
+      const json = JSON.parse(await res.text());
+      msg = json.full_message || msg;
+    } catch (error) {}
+    throw new Error(msg);
+  }
   const data =
     !res.body || res.status === 204 || res.status === 205
       ? null
