@@ -1,3 +1,4 @@
+from datetime import datetime
 import uuid
 
 from django.contrib.contenttypes.models import ContentType
@@ -8,7 +9,7 @@ from backend.utils.schemas import ErrorSchema
 from config.api.auth import token_is_valid
 from config.api.utils import ApiProcessError, api_error
 
-from ..models import Playlist
+from ..models import Playlist, MusicOrder
 from ..schemas import PlaylistSchemaIn, PlaylistSchemaOut, PlaylistSchemaUpdateIn
 
 router = Router()
@@ -58,8 +59,8 @@ def create_playlist(request, playlist: PlaylistSchemaIn, image: UploadedFile = N
             **payload_dict,
             image=image,
         )
-        for music in musics:
-            playlist.musics.add(music)
+        for i, music in enumerate(musics, 1):
+            MusicOrder.objects.create(playlist=playlist, order=i, music_id=music)
         return 201, playlist
     except ApiProcessError as e:
         return api_error(**e.__dict__)
@@ -125,13 +126,12 @@ def add_musics_to_playlist(request, id: uuid.UUID, musics: list[uuid.UUID]):
         playlist = Playlist.objects.get(id=id)
         if playlist.object_id != is_authenticated.user.id:
             raise ApiProcessError(403, "Forbidden", "You are not the owner of this playlist")
-        for music in musics:
+        order = playlist.get_musics_order().count() + 1
+        for i, music in enumerate(musics, order):
             music_obj = Music.objects.filter(id=music).first()
             if not music_obj:
-                raise ApiProcessError(400, "Music not found", f"Music with id {music} not found")
-            if music in playlist.musics.all():
-                continue
-            playlist.musics.add(music)
+                raise ApiProcessError(400, "Music not found", "Music not found")
+            MusicOrder.objects.create(playlist=playlist, order=i, music_id=music, added_at=datetime.now())
         playlist.save()
         return 200, playlist
     except Playlist.DoesNotExist:
@@ -144,9 +144,16 @@ def add_musics_to_playlist(request, id: uuid.UUID, musics: list[uuid.UUID]):
 
 @router.patch(
     "/{id}/remove_musics",
-    response={200: PlaylistSchemaOut, 400: ErrorSchema, 401: ErrorSchema, 403: ErrorSchema, 404: ErrorSchema},
+    response={
+        200: PlaylistSchemaOut,
+        400: ErrorSchema,
+        401: ErrorSchema,
+        403: ErrorSchema,
+        404: ErrorSchema,
+        500: ErrorSchema,
+    },
 )
-def remove_musics_from_playlist(request, id: uuid.UUID, musics: list[uuid.UUID]):
+def remove_musics_from_playlist(request, id: uuid.UUID, musics: list[uuid.UUID] | list[int]):
     try:
         is_authenticated = token_is_valid(request, True)
         if not is_authenticated.is_valid:
@@ -154,9 +161,17 @@ def remove_musics_from_playlist(request, id: uuid.UUID, musics: list[uuid.UUID])
         playlist = Playlist.objects.get(id=id)
         if playlist.object_id != is_authenticated.user.id:
             raise ApiProcessError(403, "Forbidden", "You are not the owner of this playlist")
-        for music in musics:
-            playlist.musics.remove(music)
-        playlist.save()
+        musicOrders = MusicOrder.objects.filter(playlist=playlist)
+        if not musicOrders.exists() or musicOrders.count() == 0:
+            raise ApiProcessError(400, "Bad request", "Playlist is empty")
+        music_deleted = False
+        for musicOrder in musicOrders:
+            if musicOrder.music_id in musics or musicOrder.id in musics:
+                musicOrder.delete()
+                music_deleted = True
+            elif music_deleted:
+                musicOrder.order -= 1
+                musicOrder.save()
         return 200, playlist
     except Playlist.DoesNotExist:
         return api_error(404, "Playlist not found", "Playlist not found")

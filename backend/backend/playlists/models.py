@@ -15,7 +15,7 @@ class Playlist(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to="playlists")
-    musics = models.ManyToManyField(Music, blank=True)
+    musics = models.ManyToManyField(Music, blank=True, through="MusicOrder")
     is_public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -30,5 +30,26 @@ class Playlist(models.Model):
             return BASE_URL + self.image.url
         return None
 
+    def get_musics_order(self):
+        return self.musics.through.objects.filter(playlist=self).order_by("order")
+
+    def get_musics(self):
+        return [m.music for m in self.get_musics_order()]
+
     def __str__(self):
         return self.name
+
+
+class MusicOrder(models.Model):
+    order = models.PositiveIntegerField(default=0)
+    music = models.ForeignKey(Music, on_delete=models.CASCADE)
+    playlist = models.ForeignKey("Playlist", on_delete=models.CASCADE)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.playlist.name} - {self.music.title}"
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "Music Order"
+        verbose_name_plural = "Music Orders"

@@ -1,13 +1,16 @@
 from uuid import UUID
 
 from ninja import Schema
-
 from backend.musics.schemas import MusicSchemaOut
 from backend.users.schemas import UserPlaylistSchema, UserSchemaOut
 
 
+class PlaylistMusicOrderSchema(MusicSchemaOut):
+    order_id: list[int] = []
+
+
 class PlaylistSchemaOut(UserPlaylistSchema):
-    musics: list[MusicSchemaOut]
+    musics: list[PlaylistMusicOrderSchema]
     owner: UserSchemaOut
     owner_is_artist: bool = False
 
@@ -17,6 +20,14 @@ class PlaylistSchemaOut(UserPlaylistSchema):
             return True
         else:
             return False
+
+    @staticmethod
+    def resolve_musics(obj):
+        orders = obj.get_musics_order()
+        musics = obj.get_musics()
+        for music in musics:
+            music.order_id = [order.id for order in orders.filter(music_id=music.id)]
+        return musics
 
 
 class PlaylistSchemaIn(Schema):
