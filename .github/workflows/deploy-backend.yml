@@ -9,10 +9,6 @@ concurrency:
   group: ${{ github.run_id }}
   cancel-in-progress: true
 
-defaults:
-  run:
-    working-directory: backend
-
 jobs:
   linter:
     name: Pre-Commit
@@ -33,6 +29,7 @@ jobs:
           path: ~/.cache/pre-commit
           key: pre-commit-3|${{ hashFiles('.pre-commit-config.yaml') }}
       - name: Running pre-commit
+        working-directory: "backend"
         run: pre-commit run --show-diff-on-failure --color=always --all-files
 
   deploy-backend:
