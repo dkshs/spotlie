@@ -1,20 +1,20 @@
 -r base.txt
 
-Werkzeug[watchdog]==3.0.1
-psycopg[binary]==3.1.16
+Werkzeug[watchdog]==3.0.1  # https://github.com/pallets/werkzeug
+psycopg[binary]==3.1.16  # https://github.com/psycopg/psycopg
 
 # Testing
 # ------------------------------------------------------------------------------
-mypy==1.8.0
+mypy==1.8.0  # https://github.com/python/mypy
 
 # Code quality
 # ------------------------------------------------------------------------------
-flake8==6.1.0
-flake8-isort==6.1.1
-black==23.12.1
-pylint-django==2.5.5
-pre-commit==3.6.0
+flake8==6.1.0  # https://github.com/PyCQA/flake8
+flake8-isort==6.1.1  # https://github.com/gforcada/flake8-isort
+black==23.12.1  # https://github.com/psf/black
+pylint-django==2.5.5  # https://github.com/PyCQA/pylint-django
+pre-commit==3.6.0  # https://github.com/pre-commit/pre-commit
 
 # Django
 # ------------------------------------------------------------------------------
-django-extensions==3.2.3
+django-extensions==3.2.3  # https://github.com/django-extensions/django-extensions
