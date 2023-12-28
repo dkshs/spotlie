@@ -1,5 +1,5 @@
-from datetime import datetime
 import uuid
+from datetime import datetime
 
 from django.contrib.contenttypes.models import ContentType
 from ninja import FilterSchema, Query, Router, UploadedFile
@@ -9,7 +9,7 @@ from backend.utils.schemas import ErrorSchema
 from config.api.auth import token_is_valid
 from config.api.utils import ApiProcessError, api_error
 
-from ..models import Playlist, MusicOrder
+from ..models import MusicOrder, Playlist
 from ..schemas import PlaylistSchemaIn, PlaylistSchemaOut, PlaylistSchemaUpdateIn
 
 router = Router()

@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from ninja import Schema
+
 from backend.musics.schemas import MusicSchemaOut
 from backend.users.schemas import UserPlaylistSchema, UserSchemaOut
 
