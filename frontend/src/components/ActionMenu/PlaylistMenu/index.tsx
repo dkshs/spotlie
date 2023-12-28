@@ -16,7 +16,13 @@ import {
 import { DeleteDialog } from "./DeleteDialog";
 import { EditDialog } from "./EditDialog";
 
-import { PencilSimple, TrashSimple, Copy } from "@phosphor-icons/react";
+import {
+  PencilSimple,
+  TrashSimple,
+  Copy,
+  LockSimple,
+  LockSimpleOpen,
+} from "@phosphor-icons/react";
 
 export interface PlaylistMenuProps {
   playlist: PlaylistPropsWithMusics;
@@ -71,9 +77,59 @@ export function PlaylistMenu({
     }
   }, [fetcher, playlist.description, playlist?.musics, playlist.name, router]);
 
+  const handlePlaylistIsPublic = useCallback(async () => {
+    const toastLoading = toast.loading("Updating playlist...");
+    try {
+      const data = new FormData();
+      data.append(
+        "playlist",
+        JSON.stringify({ is_public: !playlist.is_public }),
+      );
+      await fetcher(`/playlists/${playlist.id}`, {
+        method: "PATCH",
+        needAuth: true,
+        body: data,
+      });
+      toast.update(toastLoading, {
+        render: `The playlist is now ${
+          playlist.is_public ? "private" : "public"
+        }!`,
+        type: "success",
+        isLoading: false,
+        autoClose: 1000,
+      });
+      router.refresh();
+    } catch (error) {
+      const msg = (error as Error).message || "Failed to update playlist!";
+      toast.update(toastLoading, {
+        render: msg,
+        type: "error",
+        isLoading: false,
+        autoClose: 1000,
+      });
+      console.error(error);
+    }
+  }, [fetcher, playlist.id, playlist.is_public, router]);
+
   return externalId === playlist.owner.id ? (
     <>
       <DropdownMenuGroup>
+        <DropdownMenuItem
+          className="flex gap-2"
+          onClick={() => handlePlaylistIsPublic()}
+        >
+          {playlist.is_public ? (
+            <>
+              <LockSimple weight="bold" size={18} />
+              <span>Make private</span>
+            </>
+          ) : (
+            <>
+              <LockSimpleOpen weight="bold" size={18} />
+              <span>Make public</span>
+            </>
+          )}
+        </DropdownMenuItem>
         <DropdownMenuItem
           className="flex gap-2"
           onClick={() => setEditDialogOpen(true)}
