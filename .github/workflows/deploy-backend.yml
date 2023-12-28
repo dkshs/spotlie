@@ -3,7 +3,7 @@ name: Deploy Backend
 on:
   push:
     branches: ["master", "main"]
-    paths-ignore: ["!backend"]
+    paths: ["backend/**"]
 
 concurrency:
   group: ${{ github.run_id }}
