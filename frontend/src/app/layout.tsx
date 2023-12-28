@@ -134,7 +134,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <html lang="en" className={merriweatherSans.variable}>
         <body>
           <Providers>
-            <div className="relative mx-auto min-w-[320px] max-w-[1600px]">
+            <div className="mx-auto min-w-[320px] max-w-[1600px]">
               <ToastContainer
                 autoClose={3000}
                 position="top-right"
