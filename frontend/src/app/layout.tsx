@@ -143,8 +143,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 pauseOnFocusLoss={false}
                 limit={3}
                 className="z-[99999]"
-                toastClassName="bg-background z-[99999]"
-                bodyClassName="text-foreground z-[99999] font-merriweatherSans"
+                toastClassName="bg-background"
+                bodyClassName="font-merriweatherSans text-foreground"
                 progressClassName="bg-primary"
               />
               <Header />

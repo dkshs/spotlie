@@ -163,7 +163,7 @@ export function MusicMenu({ music, playlist, orderId }: MusicMenuProps) {
                 <Plus weight="bold" size={18} />
                 <span>Create Playlist</span>
               </DropdownMenuItem>
-              {playlists && <DropdownMenuSeparator />}
+              {playlists && playlists.length > 0 && <DropdownMenuSeparator />}
               {playlists?.map((playlist) => (
                 <DropdownMenuItem
                   key={playlist.id}
