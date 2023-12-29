@@ -137,15 +137,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <div className="mx-auto min-w-[320px] max-w-[1600px]">
               <ToastContainer
                 autoClose={3000}
-                position="top-right"
                 theme="dark"
                 newestOnTop={true}
                 pauseOnFocusLoss={false}
                 limit={3}
-                className="z-[99999]"
-                toastClassName="bg-background"
-                bodyClassName="font-merriweatherSans text-foreground"
-                progressClassName="bg-primary"
               />
               <Header />
               <div className="pt-[72px]">{children}</div>

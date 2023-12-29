@@ -33,6 +33,10 @@
     --ring: 262 83% 60%;
 
     --radius: 0.5rem;
+
+    /* Toastify */
+    --toastify-z-index: 99999;
+    --toastify-color-dark: hsl(var(--background));
   }
 }
 
@@ -49,6 +53,7 @@
   }
 }
 
+/* Clerk */
 .cl-pageScrollBox::-webkit-scrollbar {
   @apply h-2 w-2;
 }
@@ -60,4 +65,9 @@
 }
 .cl-internal-b3fm6y {
   @apply hidden;
+}
+
+/* Toastify */
+.Toastify__toast-body {
+  @apply font-merriweatherSans text-foreground;
 }
