@@ -24,6 +24,7 @@ import {
   DotsThree,
   MusicNote,
   User,
+  UserCircleGear,
   UserCirclePlus,
 } from "@phosphor-icons/react";
 
@@ -63,13 +64,21 @@ export function ActionMenu({
       <DropdownMenuContent className="w-fit">
         {externalId &&
           user &&
-          externalId !== user.id &&
           (actionType === "artist" || actionType === "user") && (
             <>
-              <DropdownMenuItem className="flex gap-2">
-                <UserCirclePlus weight="bold" size={18} />
-                <span>Follow</span>
-              </DropdownMenuItem>
+              {externalId !== user.id ? (
+                <DropdownMenuItem className="flex gap-2">
+                  <UserCirclePlus weight="bold" size={18} />
+                  <span>Follow</span>
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem asChild>
+                  <Link className="flex gap-2" href="/settings">
+                    <UserCircleGear weight="bold" size={18} />
+                    <span>Edit profile</span>
+                  </Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSeparator />
             </>
           )}
