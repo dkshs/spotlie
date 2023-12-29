@@ -11,6 +11,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { clerkTheme } from "./clerkTheme";
 
 import { Header } from "@/components/Header";
+import { Player } from "@/components/Player";
 
 const merriweatherSans = MerriweatherSans({
   subsets: ["latin"],
@@ -74,7 +75,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 limit={3}
               />
               <Header />
-              <div className="pt-[72px]">{children}</div>
+              <div className="pb-20 pt-[72px]">{children}</div>
+              <Player />
             </div>
           </Providers>
         </body>

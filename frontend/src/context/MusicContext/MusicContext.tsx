@@ -187,7 +187,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
       setLocalCurrentMusic(music);
 
       musicAudio?.pause();
-      const audio = new Audio(music.audio);
+      const audio = new Audio(music?.audio);
       if (musicAudio?.src === music.audio && !repeatMusic) {
         audio.currentTime = musicTime.currentTimeNum;
       }
