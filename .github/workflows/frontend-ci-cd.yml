@@ -11,10 +11,6 @@ concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
-defaults:
-  run:
-    working-directory: ./frontend
-
 env:
   SKIP_ENV_VALIDATION: true
 
@@ -39,9 +35,11 @@ jobs:
           cache-dependency-path: ./frontend/pnpm-lock.yaml
 
       - name: Install dependencies
+        working-directory: frontend
         run: pnpm install
 
       - name: Running lint
+        working-directory: frontend
         run: pnpm lint
 
   deploy-frontend:
