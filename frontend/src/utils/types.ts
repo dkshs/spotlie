@@ -39,7 +39,7 @@ export interface MusicProps {
 }
 
 export interface PlaylistMusicProps extends MusicProps {
-  order_id: number[];
+  order_id: number;
 }
 
 export interface PlaylistPropsWithMusics extends Playlist {

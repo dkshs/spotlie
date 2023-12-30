@@ -1,5 +1,5 @@
 import type { Metadata, ResolvingMetadata } from "next";
-import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
+import type { PlaylistPropsWithMusics } from "@/utils/types";
 
 import { cache } from "react";
 import { notFound } from "next/navigation";
@@ -83,19 +83,6 @@ export default async function PlaylistPage({ params }: Props) {
   if (!playlist) {
     notFound();
   }
-  const orderIds = [
-    ...new Set(playlist.musics?.flatMap((m) => m.order_id).sort()),
-  ];
-  const musics = playlist.musics
-    ? orderIds.map((orderId) => {
-        return {
-          ...(playlist.musics.find((m) =>
-            m.order_id.includes(orderId),
-          ) as MusicProps),
-          order_id: orderId,
-        };
-      })
-    : [];
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
@@ -185,9 +172,9 @@ export default async function PlaylistPage({ params }: Props) {
           </div>
         </div>
       </div>
-      {musics && musics.length > 0 && (
+      {playlist.musics && playlist.musics.length > 0 && (
         <div className="mt-20 flex w-full flex-col gap-2 lg:max-w-[50%]">
-          {musics.map(
+          {playlist.musics.map(
             (music, i) =>
               music && (
                 <div key={i} className="w-full">
