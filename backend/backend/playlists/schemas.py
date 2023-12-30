@@ -1,5 +1,5 @@
-from uuid import UUID
 import itertools
+from uuid import UUID
 
 from ninja import Schema
 
