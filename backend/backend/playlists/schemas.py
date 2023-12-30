@@ -1,4 +1,5 @@
 from uuid import UUID
+import itertools
 
 from ninja import Schema
 
@@ -7,7 +8,7 @@ from backend.users.schemas import UserPlaylistSchema, UserSchemaOut
 
 
 class PlaylistMusicOrderSchema(MusicSchemaOut):
-    order_id: list[int] = []
+    order_id: int = []
 
 
 class PlaylistSchemaOut(UserPlaylistSchema):
@@ -25,9 +26,14 @@ class PlaylistSchemaOut(UserPlaylistSchema):
     @staticmethod
     def resolve_musics(obj):
         orders = obj.get_musics_order()
-        musics = obj.get_musics()
-        for music in musics:
-            music.order_id = [order.id for order in orders.filter(music_id=music.id)]
+        musics = []
+        orders_id = [*set(itertools.chain([order.id for order in orders]))]
+        orders_id.sort()
+        for order_id in orders_id:
+            order = orders.get(id=order_id)
+            music = order.music
+            music.order_id = order.id
+            musics.append(music)
         return musics
 
 

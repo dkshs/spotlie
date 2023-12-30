@@ -3,7 +3,8 @@ import uuid
 from ninja import Router
 
 from backend.utils.schemas import ErrorSchema
-from config.api.utils import api_error
+from config.api.auth import token_is_valid
+from config.api.utils import ApiProcessError, api_error
 
 from ..models import User
 from ..schemas import UserSchemaOut
@@ -28,5 +29,18 @@ def get_user(request, id: uuid.UUID):
         return 200, User.objects.get(id=id)
     except User.DoesNotExist:
         return api_error(404, "User not found", "User not found")
+    except Exception as e:
+        return api_error(500, "Internal server error", str(e))
+
+
+@router.get("/me/", response={200: UserSchemaOut, 401: ErrorSchema, 500: ErrorSchema})
+def get_me(request):
+    try:
+        is_authenticated = token_is_valid(request, True)
+        if not is_authenticated.is_valid:
+            raise ApiProcessError(401, "Unauthorized", f"You are not logged in!\n{is_authenticated.message}")
+        return 200, is_authenticated.user
+    except ApiProcessError as e:
+        return api_error(**e.__dict__)
     except Exception as e:
         return api_error(500, "Internal server error", str(e))
