@@ -2,7 +2,7 @@ import type { AnchorHTMLAttributes } from "react";
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton, currentUser } from "@clerk/nextjs";
 
-import { House, SpotifyLogo } from "@phosphor-icons/react/dist/ssr";
+import { House, SpotifyLogo, Headphones } from "@phosphor-icons/react/dist/ssr";
 
 function HeaderLink({
   href = "/",
@@ -18,7 +18,8 @@ function HeaderLink({
 }
 
 export async function Header() {
-  const userPublicMetadata = (await currentUser())?.publicMetadata;
+  const user = await currentUser();
+  const userPublicMetadata = user?.publicMetadata;
   const externalId = (userPublicMetadata?.external_id as string) || null;
   const isArtist = (userPublicMetadata?.is_artist as boolean) || false;
 
@@ -27,14 +28,16 @@ export async function Header() {
       href: "/",
       label: "Home",
       title: "Go to Home",
+      if: true,
       icon: House,
     },
-    // {
-    //   href: "/my/library",
-    //   label: "Library",
-    //   title: "Go to your library",
-    //   icon: Headphones,
-    // },
+    {
+      href: "/library",
+      label: "Library",
+      title: "Go to your library",
+      if: user,
+      icon: Headphones,
+    },
   ];
 
   return (
@@ -54,16 +57,22 @@ export async function Header() {
               />
             </Link>
           </li>
-          {navLinks.map((navLink, i) => (
-            <li key={i} className="flex h-12 w-12 items-center sm:w-auto">
-              <HeaderLink href={navLink.href} title={navLink.title}>
-                <navLink.icon size={24} weight="fill" />{" "}
-                <span className="hidden font-bold sm:block">
-                  {navLink.label}
-                </span>
-              </HeaderLink>
-            </li>
-          ))}
+          {navLinks.map(
+            (navLink, i) =>
+              !!navLink.if && (
+                <li
+                  key={i}
+                  className="mr-2 flex h-12 w-12 items-center sm:w-auto"
+                >
+                  <HeaderLink href={navLink.href} title={navLink.title}>
+                    <navLink.icon size={24} weight="fill" />{" "}
+                    <span className="hidden font-bold sm:block">
+                      {navLink.label}
+                    </span>
+                  </HeaderLink>
+                </li>
+              ),
+          )}
         </div>
         <div className="flex items-end">
           <SignedOut>
