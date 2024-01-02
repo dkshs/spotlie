@@ -59,8 +59,7 @@ export function PlaylistMenu({
           },
         );
         if (playlists && playlists.length > 0) {
-          console.log(`${pl.name} #${playlists.length++}`);
-          pl.name = `${pl.name} #${playlists.length++}`;
+          pl.name = `${pl.name} #${playlists.length + 1}`;
         }
       }
       data.append("playlist", JSON.stringify(pl));

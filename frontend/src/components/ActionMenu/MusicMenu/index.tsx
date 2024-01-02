@@ -127,8 +127,12 @@ export function MusicMenu({
     async (name: string, musicId: string) => {
       const toastLoading = toast.loading("Creating playlist...");
       const data = new FormData();
-      const nameIndex = playlists?.findIndex((p) => p.name === name);
-      const playlistName = nameIndex !== -1 ? `${name} #${nameIndex}` : name;
+      let playlistName = name.replace(/ #\d+$/, "");
+      if (playlists && playlists.length > 0) {
+        playlistName = `${playlistName} #${
+          playlists.map((p) => p.name).length
+        }`;
+      }
       data.append(
         "playlist",
         JSON.stringify({ name: playlistName, musics: [musicId] }),
@@ -146,6 +150,7 @@ export function MusicMenu({
           autoClose: 1000,
         });
         await refetch();
+        router.refresh();
       } catch (error) {
         const msg =
           (error as Error).message ||
@@ -159,7 +164,7 @@ export function MusicMenu({
         console.error(error);
       }
     },
-    [fetcher, playlists, refetch],
+    [fetcher, playlists, refetch, router],
   );
 
   return (
