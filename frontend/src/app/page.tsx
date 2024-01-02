@@ -17,9 +17,7 @@ export default async function HomePage() {
   });
   const { data: artists } = await serverFetcher<ArtistPropsWithMusics[]>(
     "/artists/",
-    {
-      searchParams,
-    },
+    { searchParams },
   );
 
   return (
