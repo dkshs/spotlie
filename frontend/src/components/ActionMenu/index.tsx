@@ -9,8 +9,12 @@ import { cn } from "@/lib/utils";
 
 import Link from "next/link";
 import { ShareItem } from "./ShareItem";
-import { MusicMenu } from "./MusicMenu";
-import { PlaylistMenu, DeleteDialog, EditDialog } from "./PlaylistMenu";
+import { EditMusicDialog, MusicMenu, DeleteMusicDialog } from "./MusicMenu";
+import {
+  PlaylistMenu,
+  DeletePlaylistDialog,
+  EditPlaylistDialog,
+} from "./PlaylistMenu";
 import { Button } from "../ui/Button";
 import {
   DropdownMenu,
@@ -41,9 +45,14 @@ export function ActionMenu({
   showGoToMusic = true,
 }: ActionMenuProps) {
   const { user: clerkUser } = useUser();
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const externalId = (clerkUser?.publicMetadata.external_id as string) || null;
+  const [deletePlaylistDialogOpen, setDeletePlaylistDialogOpen] =
+    useState(false);
+  const [editPlaylistDialogOpen, setEditPlaylistDialogOpen] = useState(false);
+  const [editMusicDialogOpen, setEditMusicDialogOpen] = useState(false);
+  const [deleteMusicDialogOpen, setDeleteMusicDialogOpen] = useState(false);
+  const publicMetadata = clerkUser?.publicMetadata;
+  const externalId = (publicMetadata?.external_id as string) || null;
+  const isArtist = (publicMetadata?.is_artist as boolean) || false;
 
   return (
     <DropdownMenu>
@@ -86,15 +95,21 @@ export function ActionMenu({
           <>
             <PlaylistMenu
               playlist={playlist}
-              setDeleteDialogOpen={setDeleteDialogOpen}
-              setEditDialogOpen={setEditDialogOpen}
+              setDeleteDialogOpen={setDeletePlaylistDialogOpen}
+              setEditDialogOpen={setEditPlaylistDialogOpen}
             />
             {clerkUser && <DropdownMenuSeparator />}
           </>
         )}
         {music && actionType === "music" && (
           <>
-            <MusicMenu music={music} playlist={playlist} orderId={orderId} />
+            <MusicMenu
+              music={music}
+              playlist={playlist}
+              orderId={orderId}
+              setEditDialogOpen={setEditMusicDialogOpen}
+              setDeleteDialogOpen={setDeleteMusicDialogOpen}
+            />
             {clerkUser && (showGoToArtist || showGoToMusic) && (
               <DropdownMenuSeparator />
             )}
@@ -126,15 +141,29 @@ export function ActionMenu({
       </DropdownMenuContent>
       {playlist && actionType === "playlist" && (
         <>
-          <DeleteDialog
+          <DeletePlaylistDialog
             playlist={playlist}
-            open={deleteDialogOpen}
-            setOpen={setDeleteDialogOpen}
+            open={deletePlaylistDialogOpen}
+            setOpen={setDeletePlaylistDialogOpen}
           />
-          <EditDialog
+          <EditPlaylistDialog
             playlist={playlist}
-            open={editDialogOpen}
-            setOpen={setEditDialogOpen}
+            open={editPlaylistDialogOpen}
+            setOpen={setEditPlaylistDialogOpen}
+          />
+        </>
+      )}
+      {music && actionType === "music" && isArtist && (
+        <>
+          <DeleteMusicDialog
+            music={music}
+            open={deleteMusicDialogOpen}
+            setOpen={setDeleteMusicDialogOpen}
+          />
+          <EditMusicDialog
+            music={music}
+            open={editMusicDialogOpen}
+            setOpen={setEditMusicDialogOpen}
           />
         </>
       )}

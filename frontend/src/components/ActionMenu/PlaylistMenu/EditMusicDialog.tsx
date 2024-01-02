@@ -31,7 +31,7 @@ import { InputFile } from "@/components/ui/InputFile";
 
 import { PencilSimple, Spinner, X } from "@phosphor-icons/react";
 
-export interface EditDialogProps extends React.PropsWithChildren {
+export interface EditPlaylistDialogProps extends React.PropsWithChildren {
   playlist: PlaylistPropsWithMusics;
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,12 +43,12 @@ interface DataType {
   image: File | null;
 }
 
-export function EditDialog({
+export function EditPlaylistDialog({
   playlist,
   children,
   setOpen,
   open = false,
-}: EditDialogProps) {
+}: EditPlaylistDialogProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<DataType>({ ...playlist, image: null });

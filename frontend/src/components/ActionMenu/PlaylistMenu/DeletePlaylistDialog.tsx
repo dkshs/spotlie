@@ -4,7 +4,7 @@ import type { PlaylistPropsWithMusics } from "@/utils/types";
 
 import { useCallback } from "react";
 import { useApi } from "@/hooks/useApi";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { toast } from "react-toastify";
 import {
@@ -19,27 +19,31 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog";
 
-export interface DeleteDialogProps extends React.PropsWithChildren {
+export interface DeletePlaylistDialogProps extends React.PropsWithChildren {
   playlist: PlaylistPropsWithMusics;
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function DeleteDialog({
+export function DeletePlaylistDialog({
   playlist,
   children,
   setOpen,
   open = false,
-}: DeleteDialogProps) {
+}: DeletePlaylistDialogProps) {
+  const pathname = usePathname();
   const router = useRouter();
   const { fetcher } = useApi();
 
   const deletePlaylist = useCallback(async () => {
     const toastLoading = toast.loading("Deleting playlist...");
     try {
-      const url = `${playlist.owner_is_artist ? "/artist" : "/user"}/${
-        playlist.owner.id
-      }`;
+      let redirectUrl = null;
+      if (pathname.startsWith("/playlist/")) {
+        redirectUrl = `${playlist.owner_is_artist ? "/artist" : "/user"}/${
+          playlist.owner.id
+        }`;
+      }
       await fetcher(`/playlists/${playlist.id}`, {
         method: "DELETE",
         needAuth: true,
@@ -50,7 +54,7 @@ export function DeleteDialog({
         isLoading: false,
         autoClose: 1000,
       });
-      router.push(url);
+      redirectUrl && router.push(redirectUrl);
       router.refresh();
     } catch (error) {
       const msg = (error as Error).message || "Failed to delete playlist!";
@@ -65,6 +69,7 @@ export function DeleteDialog({
     }
   }, [
     fetcher,
+    pathname,
     playlist.id,
     playlist.owner.id,
     playlist.owner_is_artist,

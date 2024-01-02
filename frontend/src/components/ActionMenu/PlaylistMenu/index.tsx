@@ -13,8 +13,6 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
-import { DeleteDialog } from "./DeleteDialog";
-import { EditDialog } from "./EditDialog";
 
 import {
   PencilSimple,
@@ -185,4 +183,11 @@ export function PlaylistMenu({
   );
 }
 
-export { DeleteDialog, EditDialog };
+export {
+  EditPlaylistDialog,
+  type EditPlaylistDialogProps,
+} from "./EditMusicDialog";
+export {
+  DeletePlaylistDialog,
+  type DeletePlaylistDialogProps,
+} from "./DeletePlaylistDialog";

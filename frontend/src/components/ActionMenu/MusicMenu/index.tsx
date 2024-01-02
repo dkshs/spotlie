@@ -18,20 +18,31 @@ import {
   DropdownMenuSubTrigger,
 } from "@/components/ui/DropdownMenu";
 
-import { Plus, TrashSimple } from "@phosphor-icons/react";
+import { PencilSimple, Plus, TrashSimple } from "@phosphor-icons/react";
 
 export interface MusicMenuProps {
   music: MusicProps;
   playlist?: PlaylistPropsWithMusics;
   orderId?: number;
+  setEditDialogOpen: (open: boolean) => void;
+  setDeleteDialogOpen: (open: boolean) => void;
 }
 
-export function MusicMenu({ music, playlist, orderId }: MusicMenuProps) {
+export function MusicMenu({
+  music,
+  playlist,
+  orderId,
+  setEditDialogOpen,
+  setDeleteDialogOpen,
+}: MusicMenuProps) {
   const router = useRouter();
   const { fetcher } = useApi();
   const { user } = useUser();
-  const externalId = (user?.publicMetadata.external_id as string) || null;
+  const publicMetadata = user?.publicMetadata;
+  const externalId = (publicMetadata?.external_id as string) || null;
+  const isArtist = (publicMetadata?.is_artist as boolean) || false;
   const ownsThePlaylist = playlist?.owner.id === externalId;
+  const ownsTheMusic = music.artist.id === externalId;
 
   const { data: playlists, refetch } = useQuery<
     PlaylistPropsWithMusics[] | null
@@ -154,6 +165,25 @@ export function MusicMenu({ music, playlist, orderId }: MusicMenuProps) {
   return (
     user && (
       <>
+        {isArtist && ownsTheMusic && (
+          <>
+            <DropdownMenuItem
+              className="flex gap-2"
+              onClick={() => setEditDialogOpen(true)}
+            >
+              <PencilSimple weight="bold" size={18} />
+              <span>Edit details</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex gap-2"
+              onClick={() => setDeleteDialogOpen(true)}
+            >
+              <TrashSimple weight="bold" size={18} />
+              <span>Delete music</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="flex gap-2">
             <Plus weight="bold" size={18} />
@@ -195,3 +225,9 @@ export function MusicMenu({ music, playlist, orderId }: MusicMenuProps) {
     )
   );
 }
+
+export { EditMusicDialog, type EditMusicDialogProps } from "./EditMusicDialog";
+export {
+  DeleteMusicDialog,
+  type DeleteMusicDialogProps,
+} from "./DeleteMusicDialog";
