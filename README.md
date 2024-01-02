@@ -16,7 +16,6 @@ Music app.
   - [Clerk](https://clerk.com/)
   - [TailwindCSS](https://tailwindcss.com/)
   - [TanStack Query](https://tanstack.com/query/latest/)
-  - [Axios](https://axios-http.com/)
 
 ## Demo
 
