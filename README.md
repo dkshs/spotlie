@@ -20,7 +20,7 @@ Music app.
 
 ## Demo
 
-Demo of the project can be found here: <https://spotlie.railway.app/>
+Demo of the project can be found here: <https://spotlie.dkshs.me/>
 
 ### Required tools
 

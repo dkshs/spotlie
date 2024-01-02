@@ -14,8 +14,8 @@ DJANGO_SECURE_SSL_REDIRECT=False
 # Clerk
 # ------------------------------------------------------------------------------
 CLERK_SECRET_KEY=""
-WEBHOOK_SECRET=""
-JWKS_URL=""
+WEBHOOK_SECRET="" # Secret key of your application's webhook in Clerk
+JWKS_URL=""       # This key is used to verify Clerk generated JWTs.
 
 # Email
 # ------------------------------------------------------------------------------

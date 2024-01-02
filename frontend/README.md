@@ -1,35 +1,64 @@
-# frontend
+# SpotLie - Frontend
 
-[![license mit](https://img.shields.io/badge/licence-MIT-7c3aed)](LICENSE)
-[![Built with create-dk-app](https://img.shields.io/badge/built%20with-Create%20DK%20App-7c3aed.svg)](https://github.com/dkshs/create-dk-app)
+Spotlie frontend.
 
-Frontend of the SpotLie project.
+## Install and run the project
 
-## Getting Started
+### Global Dependencies
 
-First, run the development server:
+You need to have a main dependency installed:
+
+- Node.js LTS v16 (or any higher version)
+
+Do you use `nvm`? Then you can run `nvm install` in the project folder to install and use the most appropriate version of Node.js.
+
+### Get the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+git clone https://github.com/dkshs/spotlie.git
+```
+
+### Local Dependencies
+
+So after getting the repository, don't forget to install the project's local dependencies:
+
+```bash
+pnpm install
+```
+
+### Environment variables
+
+Create a `.env` file similar to [`.env.example`](./.env.example).
+
+Change [Clerk](https://dashboard.clerk.com/) variables according to your project.
+
+```env
+# ...
+
+# Clerk Keys
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="YOUR_CLERK_PUBLISHABLE_KEY"
+CLERK_SECRET_KEY="YOUR_CLERK_SECRET_KEY"
+NEXT_PUBLIC_CLERK_JWT_TEMPLATE_NAME="YOUR_JWT_TEMPLATE_NAME"
+
+# Clerk Routes
+NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/"
+
+# ...
+```
+
+### Run the project
+
+To run the project locally, just run the command below:
+
+```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- go to <http://localhost:3000> to see the application.
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the **MIT** License - see the [LICENSE](../LICENSE) file for details
