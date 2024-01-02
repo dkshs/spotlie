@@ -32,3 +32,4 @@ class MusicSchemaIn(Schema):
 class MusicSchemaUpdateIn(Schema):
     title: str = None
     release_date: datetime | None = None
+    update_image: bool = False

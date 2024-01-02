@@ -76,11 +76,12 @@ def update_music(
         music_dict["artist_id"] = is_authenticated.user.id
         if music.artist_id != music_dict["artist_id"]:
             raise ApiProcessError(403, "Forbidden", "You are not the owner of this music")
+        update_image = music_dict.pop("update_image", False)
         for key, value in music_dict.items():
             setattr(music, key, value)
         if audio:
             music.audio = audio
-        if image:
+        if update_image:
             music.image = image
         music.save()
         return 200, music
