@@ -59,7 +59,7 @@ function VerticalMusicCard({
             playlist={playlist.musics}
           />
         ) : (
-          <ControlButton music={music} playlist={musics} />
+          !isPlaylist && <ControlButton music={music} playlist={musics} />
         )}
       </div>
       <div className="z-20 flex w-full flex-col items-start truncate">
