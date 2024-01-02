@@ -40,7 +40,7 @@ class PlaylistSchemaOut(UserPlaylistSchema):
 class PlaylistSchemaIn(Schema):
     name: str
     description: str = None
-    musics: list[UUID] = None
+    musics: list[UUID] = []
     is_public: bool = False
 
 

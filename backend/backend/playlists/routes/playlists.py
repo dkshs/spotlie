@@ -43,7 +43,7 @@ def get_playlist(request, id: uuid.UUID):
         return api_error(500, "Internal server error", str(e))
 
 
-@router.post("/", response={201: PlaylistSchemaOut, 400: ErrorSchema, 401: ErrorSchema})
+@router.post("/", response={201: PlaylistSchemaOut, 400: ErrorSchema, 401: ErrorSchema, 500: ErrorSchema})
 def create_playlist(request, playlist: PlaylistSchemaIn, image: UploadedFile = None):
     try:
         is_authenticated = token_is_valid(request, True)
