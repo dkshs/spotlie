@@ -50,18 +50,6 @@ export function PlaylistMenu({
         musics: playlist?.musics.map((m) => m.id) || [],
       };
       const data = new FormData();
-      if (externalId) {
-        pl.name = pl.name.replace(/ #\d+$/, "");
-        const { data: playlists } = await fetcher<PlaylistPropsWithMusics[]>(
-          "/playlists/",
-          {
-            searchParams: { object_id: externalId, name__icontains: pl.name },
-          },
-        );
-        if (playlists && playlists.length > 0) {
-          pl.name = `${pl.name} #${playlists.length + 1}`;
-        }
-      }
       data.append("playlist", JSON.stringify(pl));
       await fetcher("/playlists/", {
         method: "POST",
@@ -85,14 +73,7 @@ export function PlaylistMenu({
       });
       console.error(error);
     }
-  }, [
-    externalId,
-    fetcher,
-    playlist.description,
-    playlist?.musics,
-    playlist.name,
-    router,
-  ]);
+  }, [fetcher, playlist.description, playlist?.musics, playlist.name, router]);
 
   const handlePlaylistIsPublic = useCallback(async () => {
     const toastLoading = toast.loading("Updating playlist...");

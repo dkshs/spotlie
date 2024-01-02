@@ -127,16 +127,7 @@ export function MusicMenu({
     async (name: string, musicId: string) => {
       const toastLoading = toast.loading("Creating playlist...");
       const data = new FormData();
-      let playlistName = name.replace(/ #\d+$/, "");
-      if (playlists && playlists.length > 0) {
-        playlistName = `${playlistName} #${
-          playlists.map((p) => p.name).length
-        }`;
-      }
-      data.append(
-        "playlist",
-        JSON.stringify({ name: playlistName, musics: [musicId] }),
-      );
+      data.append("playlist", JSON.stringify({ name, musics: [musicId] }));
       try {
         await fetcher("/playlists/", {
           method: "POST",
@@ -164,7 +155,7 @@ export function MusicMenu({
         console.error(error);
       }
     },
-    [fetcher, playlists, refetch, router],
+    [fetcher, refetch, router],
   );
 
   return (
