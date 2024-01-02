@@ -1,13 +1,12 @@
 "use client";
 
-import type { MusicProps } from "@/utils/types";
-
 import { useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
+import { useRouter } from "next/navigation";
 
-import { toast } from "react-toastify";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { Button } from "@/components/ui/Button";
 import {
   Dialog,
   DialogContent,
@@ -25,16 +24,9 @@ import {
 } from "@/components/ui/Tooltip";
 import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
 import { InputFile } from "@/components/ui/InputFile";
 
-import { PencilSimple, Spinner, X } from "@phosphor-icons/react";
-
-export interface EditMusicDialogProps extends React.PropsWithChildren {
-  music: MusicProps;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { Plus, PencilSimple, Spinner, X } from "@phosphor-icons/react";
 
 interface DataType {
   title: string;
@@ -43,67 +35,55 @@ interface DataType {
   audio: File | null;
 }
 
-export function EditMusicDialog({
-  music,
-  children,
-  setOpen,
-  open = false,
-}: EditMusicDialogProps) {
-  const router = useRouter();
+export function CreateMusic() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<DataType>({
-    title: music.title,
-    release_date: music.release_date,
+    title: "",
     image: null,
     audio: null,
   });
-  const [imgChanged, setImgChanged] = useState(false);
-  const [imgPreview, setImgPreview] = useState<string | undefined>(music.image);
+  const [imgPreview, setImgPreview] = useState<string | undefined>();
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
   const { fetcher } = useApi();
 
   const dataChanged = useMemo(() => {
-    return (
-      data.title !== music.title ||
-      data.release_date !== music.release_date ||
-      data.audio !== null ||
-      imgChanged
-    );
-  }, [data, imgChanged, music]);
+    return data.title !== "" && data.audio !== null;
+  }, [data.audio, data.title]);
 
-  const updateMusic = useCallback(
+  const createMusic = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       setLoading(true);
       e.preventDefault();
       if (!dataChanged) {
         setLoading(false);
-        setOpen && setOpen(false);
+        setOpen(false);
         return;
       }
-      const toastLoading = toast.loading("Updating...");
-      const m = {
-        title: data.title,
-        release_date: data.release_date || null,
-        update_image: imgChanged,
-      };
-      const formData = new FormData();
-      formData.append("music", JSON.stringify(m));
-      formData.append("image", data.image || "");
-      formData.append("audio", data.audio || "");
+      const toastLoading = toast.loading("Creating music...");
       try {
-        await fetcher(`/musics/${music.id}`, {
-          method: "PATCH",
+        const m = {
+          title: data.title,
+          release_date: data.release_date,
+        };
+        const formData = new FormData();
+        formData.append("music", JSON.stringify(m));
+        formData.append("image", data.image || "");
+        formData.append("audio", data.audio || "");
+        await fetcher("/musics/", {
+          method: "POST",
           needAuth: true,
           body: formData,
         });
         toast.update(toastLoading, {
-          render: "Music updated!",
+          render: "Music created!",
           type: "success",
           isLoading: false,
           autoClose: 1000,
         });
         router.refresh();
       } catch (error) {
-        const msg = (error as Error).message || "Failed to update music!";
+        const msg = (error as Error).message || "Failed to create music!";
         toast.update(toastLoading, {
           render: msg,
           type: "error",
@@ -112,17 +92,16 @@ export function EditMusicDialog({
         });
         console.error(error);
       }
-      setOpen && setOpen(false);
+      setOpen(false);
       setLoading(false);
     },
-    [data, dataChanged, fetcher, imgChanged, music.id, router, setOpen],
+    [data, dataChanged, fetcher, router],
   );
 
   const handleImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
-      setImgChanged(true);
       setImgPreview(URL.createObjectURL(file));
       setData((prev) => ({ ...prev, image: file }));
     }
@@ -139,13 +118,33 @@ export function EditMusicDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                radius="full"
+                variant="outline"
+                className="flex scale-100 gap-2 hover:scale-100"
+                aria-label="Create music"
+                onClick={() => setOpen(true)}
+              >
+                <Plus size={18} weight="bold" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Create a new music</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </DialogTrigger>
       <DialogContent>
-        <form onSubmit={(e) => updateMusic(e)}>
+        <form onSubmit={(e) => createMusic(e)}>
           <DialogHeader>
-            <DialogTitle>Edit details</DialogTitle>
+            <DialogTitle>Create a new music</DialogTitle>
             <DialogDescription>
-              Make changes to your music here. Click save when you&apos;re done.
+              You can create a new music by clicking the button below.
             </DialogDescription>
           </DialogHeader>
           <div className="mt-6 flex flex-col gap-4 md:flex-row">
@@ -153,7 +152,7 @@ export function EditMusicDialog({
               {imgPreview && (
                 <Image
                   src={imgPreview}
-                  alt={music.title}
+                  alt="Music image preview"
                   className="aspect-square object-cover"
                   fill
                 />
@@ -182,9 +181,6 @@ export function EditMusicDialog({
                         radius="full"
                         variant="destructive"
                         onClick={() => {
-                          if (music.image) {
-                            setImgChanged(true);
-                          }
                           setImgPreview(undefined);
                           setData((prev) => ({ ...prev, image: null }));
                         }}
@@ -259,7 +255,7 @@ export function EditMusicDialog({
               {loading ? (
                 <Spinner className="animate-spin" size={18} weight="bold" />
               ) : (
-                "Save"
+                "Create music"
               )}
             </Button>
           </DialogFooter>

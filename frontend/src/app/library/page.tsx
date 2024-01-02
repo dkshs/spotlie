@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { MusicCard } from "@/components/MusicCard";
 import { CreatePlaylist } from "./CreatePlaylist";
+import { CreateMusic } from "./CreateMusic";
 
 export const metadata: Metadata = {
   title: "Library",
@@ -74,11 +75,14 @@ export default async function LibraryPage() {
         <section className="px-4 md:px-9">
           <header className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold">Musics</h2>
-            <Button size="sm" radius="full" className="px-4" asChild>
-              <Link href="/my/musics">
-                <span className="text-sm font-bold uppercase">See more</span>
-              </Link>
-            </Button>
+            <div className="flex flex-wrap justify-end gap-1 self-end sm:gap-3">
+              <CreateMusic />
+              <Button size="sm" radius="full" className="px-4" asChild>
+                <Link href="/my/musics">
+                  <span className="text-sm font-bold uppercase">See more</span>
+                </Link>
+              </Button>
+            </div>
           </header>
           <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
             <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">

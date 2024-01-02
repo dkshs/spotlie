@@ -6,14 +6,14 @@ import { useRouter } from "next/navigation";
 
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/Button";
-
-import { Plus } from "@phosphor-icons/react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
+
+import { Plus } from "@phosphor-icons/react";
 
 export function CreatePlaylist() {
   const router = useRouter();
