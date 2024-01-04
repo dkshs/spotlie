@@ -5,6 +5,7 @@ from ninja import NinjaAPI
 from ninja.parser import Parser
 
 from backend.artists.api import router as artists_router
+from backend.music_contexts.api import router as music_contexts_router
 from backend.musics.api import router as musics_router
 from backend.playlists.api import router as playlists_router
 from backend.users.api import router as users_router
@@ -27,3 +28,4 @@ api.add_router("/", users_router)
 api.add_router("/", artists_router)
 api.add_router("/", musics_router)
 api.add_router("/", playlists_router)
+api.add_router("/", music_contexts_router)

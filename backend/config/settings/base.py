@@ -66,6 +66,7 @@ LOCAL_APPS = [
     "backend.artists",
     "backend.musics",
     "backend.playlists",
+    "backend.music_contexts",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
