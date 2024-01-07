@@ -26,9 +26,7 @@ class Playlist(models.Model):
     owner = GenericForeignKey("content_type", "object_id")
 
     def get_image_url(self):
-        if self.image:
-            return BASE_URL + self.image.url
-        return None
+        return BASE_URL + self.image.url if self.image else None
 
     def get_musics_order(self):
         return self.musics.through.objects.filter(playlist=self).order_by("order")

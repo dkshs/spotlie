@@ -127,10 +127,10 @@ def add_musics_to_playlist(request, id: uuid.UUID, musics: list[uuid.UUID]):
             raise ApiProcessError(403, "Forbidden", "You are not the owner of this playlist")
         order = playlist.get_musics_order().count() + 1
         for i, music in enumerate(musics, order):
-            music_obj = Music.objects.filter(id=music).first()
-            if not music_obj:
+            if music_obj := Music.objects.filter(id=music).first():
+                MusicOrder.objects.create(playlist=playlist, order=i, music_id=music, added_at=datetime.now())
+            else:
                 raise ApiProcessError(400, "Music not found", "Music not found")
-            MusicOrder.objects.create(playlist=playlist, order=i, music_id=music, added_at=datetime.now())
         playlist.save()
         return 200, playlist
     except Playlist.DoesNotExist:

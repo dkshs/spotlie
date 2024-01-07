@@ -18,10 +18,7 @@ class PlaylistSchemaOut(UserPlaylistSchema):
 
     @staticmethod
     def resolve_owner_is_artist(obj):
-        if obj.owner.is_artist():
-            return True
-        else:
-            return False
+        return bool(obj.owner.is_artist())
 
     @staticmethod
     def resolve_musics(obj):

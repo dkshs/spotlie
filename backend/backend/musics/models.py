@@ -18,9 +18,7 @@ class Music(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_image_url(self):
-        if self.image:
-            return BASE_URL + self.image.url
-        return None
+        return BASE_URL + self.image.url if self.image else None
 
     def get_audio_url(self):
         return BASE_URL + self.audio.url

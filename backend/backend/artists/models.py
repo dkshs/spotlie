@@ -14,9 +14,7 @@ class Artist(AbstractUser):
     is_verified = models.BooleanField(default=False)
 
     def get_cover_url(self):
-        if self.cover:
-            return BASE_URL + self.cover.url
-        return None
+        return BASE_URL + self.cover.url if self.cover else None
 
     def __str__(self):
         return self.get_full_name()
