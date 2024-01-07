@@ -50,7 +50,7 @@ INSTALLED_APPS += ["storages"]  # noqa: F405
 GS_BUCKET_NAME = config("DJANGO_GCP_STORAGE_BUCKET_NAME")
 GS_DEFAULT_ACL = "publicRead"
 
-# STATIC
+# STATIC & MEDIA
 # ------------------------------------------------------------------------------
 STORAGES = {
     "default": {
@@ -60,12 +60,10 @@ STORAGES = {
         "BACKEND": "backend.utils.storages.StaticGoogleCloudStorage",
     },
 }
+
+MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
 COLLECTFAST_STRATEGY = "collectfast.strategies.gcloud.GoogleCloudStrategy"
 STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
-
-# MEDIA
-# ------------------------------------------------------------------------------
-MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
 
 # EMAIL
 # ------------------------------------------------------------------------------
