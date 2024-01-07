@@ -33,10 +33,6 @@
     --ring: 262 83% 60%;
 
     --radius: 0.5rem;
-
-    /* Toastify */
-    --toastify-z-index: 99999;
-    --toastify-color-dark: hsl(var(--background));
   }
 }
 
@@ -68,6 +64,12 @@
 }
 
 /* Toastify */
+.Toastify__toast-container {
+  @apply z-[99999];
+}
 .Toastify__toast-body {
   @apply font-merriweatherSans text-foreground;
+}
+.Toastify__toast {
+  @apply bg-background;
 }
