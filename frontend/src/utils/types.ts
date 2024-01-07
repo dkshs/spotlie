@@ -33,6 +33,7 @@ export interface MusicProps {
   title: string;
   artist: ArtistProps;
   release_date?: Date;
+  order_id?: number;
   image?: string;
   audio: string;
   created_at: Date;

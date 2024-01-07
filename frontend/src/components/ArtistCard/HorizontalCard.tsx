@@ -49,7 +49,7 @@ function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
           <ControlButton
             music={artist.musics[0]!}
             artistId={artist.id}
-            playlist={artist.musics}
+            musics={artist.musics}
             buttonFocus={buttonFocus}
             radius="rounded-full"
             orientation="horizontal"

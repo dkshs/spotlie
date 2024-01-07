@@ -64,7 +64,7 @@ export function MusicControls() {
         onClick={() =>
           musicState === "playing"
             ? pauseMusic()
-            : playMusic(currentMusic, playlist)
+            : playMusic({ music: currentMusic, otherPlaylist: playlist })
         }
       >
         {musicState === "playing" ? (

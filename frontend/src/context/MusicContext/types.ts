@@ -1,4 +1,4 @@
-import type { MusicProps } from "@/utils/types";
+import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 export interface MusicTimeProps {
   currentTime: string;
@@ -10,6 +10,12 @@ export interface MusicTimeProps {
 
 export type MusicStateProps = "playing" | "paused";
 
+export interface PlayMusicProps {
+  music: MusicProps;
+  otherPlaylist?: PlaylistPropsWithMusics | null;
+  musics?: MusicProps[];
+}
+
 export interface MusicContextProps {
   currentMusic: MusicProps | null;
   musicState: MusicStateProps;
@@ -18,9 +24,8 @@ export interface MusicContextProps {
   repeatMusic: boolean;
   shufflePlaylist: boolean;
   mutatedMusic: boolean;
-  playlist: MusicProps[];
-  DBPlaylist: MusicProps[];
-  playMusic: (music: MusicProps, playlist?: MusicProps[]) => void;
+  playlist: PlaylistPropsWithMusics | null;
+  playMusic: (props: PlayMusicProps) => void;
   pauseMusic: () => void;
   toggleRepeatMusic: () => void;
   toggleShufflePlaylist: () => void;

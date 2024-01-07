@@ -2,8 +2,13 @@ import type {
   MusicContextProps,
   MusicStateProps,
   MusicTimeProps,
+  PlayMusicProps,
 } from "./types";
-import type { MusicProps } from "@/utils/types";
+import type {
+  MusicProps,
+  PlaylistMusicProps,
+  PlaylistPropsWithMusics,
+} from "@/utils/types";
 
 import {
   createContext,
@@ -17,54 +22,16 @@ import { useLocalStorage } from "usehooks-ts";
 import { useApi } from "@/hooks/useApi";
 
 import { musicTimeFormatter } from "@/utils/formatters";
-
-const ctxInitialValues: MusicContextProps = {
-  currentMusic: null,
-  musicState: "paused",
-  musicTime: {
-    currentTime: "00:00",
-    currentTimeNum: 0,
-    duration: "00:00",
-    durationNum: 0,
-    progress: 0,
-  },
-  musicVolume: 1,
-  repeatMusic: false,
-  shufflePlaylist: false,
-  mutatedMusic: false,
-  playlist: [],
-  DBPlaylist: [],
-  playMusic: (): void => {
-    throw new Error("playMusic() not implemented.");
-  },
-  pauseMusic: (): void => {
-    throw new Error("pauseMusic() not implemented.");
-  },
-  toggleRepeatMusic: (): void => {
-    throw new Error("toggleRepeatMusic() not implemented.");
-  },
-  toggleShufflePlaylist: (): void => {
-    throw new Error("toggleShufflePlaylist() not implemented.");
-  },
-  skipMusic: (): void => {
-    throw new Error("skipMusic() not implemented.");
-  },
-  previousMusic: (): void => {
-    throw new Error("previousMusic() not implemented.");
-  },
-  handleMusicVolume: (): void => {
-    throw new Error("handleMusicVolume() not implemented.");
-  },
-  handleMusicTime: (): void => {
-    throw new Error("handleMusicTime() not implemented.");
-  },
-};
+import { turnMusicsInPlaylist } from "@/utils/turnMusicsInPlaylist";
+import { ctxInitialValues } from "./ctxInitialValues";
 
 export const MusicContext = createContext<MusicContextProps>(ctxInitialValues);
 
 export function MusicContextProvider(props: PropsWithChildren) {
   const { fetcher } = useApi();
-  const [playlist, setPlaylist] = useState<MusicProps[]>([]);
+  const [playlist, setPlaylist] = useState<PlaylistPropsWithMusics | null>(
+    null,
+  );
   const [currentMusic, setCurrentMusic] = useState<MusicProps | null>(null);
   const [musicState, setMusicState] = useLocalStorage<MusicStateProps>(
     "musicState",
@@ -82,6 +49,8 @@ export function MusicContextProvider(props: PropsWithChildren) {
 
   const [localCurrentMusic, setLocalCurrentMusic] =
     useLocalStorage<MusicProps | null>("currentMusic", null);
+  const [localPlaylist, setLocalPlaylist] =
+    useLocalStorage<PlaylistPropsWithMusics | null>("playlist", null);
   const [localRepeatMusic, setLocalRepeatMusic] = useLocalStorage(
     "repeatMusic",
     false,
@@ -91,7 +60,7 @@ export function MusicContextProvider(props: PropsWithChildren) {
     false,
   );
 
-  useQuery<MusicProps | null>({
+  useQuery({
     queryKey: ["verify-music"],
     queryFn: async () => {
       setMusicState("paused");
@@ -117,34 +86,45 @@ export function MusicContextProvider(props: PropsWithChildren) {
             };
           });
         };
-        return data || null;
       } catch (e) {
         setCurrentMusic(null);
         setLocalCurrentMusic(null);
-        return null;
+        setPlaylist(null);
+        setLocalPlaylist(null);
       }
+      return null;
     },
     refetchOnWindowFocus: false,
   });
 
-  const { data: DBPlaylist = [] } = useQuery<MusicProps[]>({
-    queryKey: ["DBPlaylist"],
+  useQuery({
+    queryKey: ["initialPlaylist"],
     queryFn: async () => {
       try {
+        if (localPlaylist && localPlaylist.musics.length > 0) {
+          setPlaylist(localPlaylist);
+          setLocalPlaylist(localPlaylist);
+          return null;
+        }
         const { data } = await fetcher<MusicProps[]>("/musics/?limit=10");
-        setPlaylist(data || []);
-        return data || [];
+        const pl =
+          playlist && playlist.musics.length > 0
+            ? playlist
+            : turnMusicsInPlaylist(data || []);
+        setPlaylist(pl);
+        setLocalPlaylist(pl);
       } catch (err) {
         console.error(err);
-        return [];
       }
+      return null;
     },
     refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
     setCurrentMusic(localCurrentMusic);
-  }, [localCurrentMusic]);
+    setPlaylist(localPlaylist);
+  }, [localCurrentMusic, localPlaylist]);
 
   useEffect(() => {
     if (
@@ -157,14 +137,15 @@ export function MusicContextProvider(props: PropsWithChildren) {
   }, [currentMusic, musicAudio, musicState]);
 
   const shufflePlaylists = useCallback(() => {
-    if (shufflePlaylist) {
-      const size = playlist.length;
+    const musics = playlist?.musics;
+    if (shufflePlaylist && musics && musics.length > 0) {
+      const size = musics.length;
       let currentIndex = size - 1;
       while (currentIndex > 0) {
         const randomIndex = Math.floor(Math.random() * size);
-        const aux = playlist[currentIndex];
-        playlist[currentIndex] = playlist[randomIndex] as MusicProps;
-        playlist[randomIndex] = aux as MusicProps;
+        const aux = musics[currentIndex];
+        musics[currentIndex] = musics[randomIndex] as PlaylistMusicProps;
+        musics[randomIndex] = aux as PlaylistMusicProps;
         currentIndex -= 1;
       }
     }
@@ -177,107 +158,109 @@ export function MusicContextProvider(props: PropsWithChildren) {
   }, [localRepeatMusic, localShufflePlaylist, shufflePlaylists]);
 
   const playMusic = useCallback(
-    (music: MusicProps, otherPlaylist?: MusicProps[]) => {
-      setPlaylist(otherPlaylist || DBPlaylist);
+    ({ music, otherPlaylist, musics = [] }: PlayMusicProps) => {
+      if (!music) return;
+      setMusicAudio((audio) => {
+        audio && audio.pause();
+        return audio;
+      });
+      const pl = otherPlaylist || turnMusicsInPlaylist(musics);
+      setPlaylist(pl);
+      setLocalPlaylist(pl);
 
       setCurrentMusic(music);
       setLocalCurrentMusic(music);
 
-      musicAudio?.pause();
-      const audio = new Audio(music?.audio);
-      if (musicAudio?.src === music.audio && !repeatMusic) {
-        audio.currentTime = musicTime.currentTimeNum;
-      }
-      setMusicAudio(audio);
-      audio.play();
+      setMusicAudio((musicAudio) => {
+        const audio = new Audio(music.audio);
+        if (audio.src === musicAudio?.src) {
+          return musicAudio;
+        }
+        return audio;
+      });
+      setMusicAudio((musicAudio) => {
+        musicAudio && musicAudio.play();
+        return musicAudio;
+      });
 
       setMusicState("playing");
     },
-    [
-      DBPlaylist,
-      musicAudio,
-      musicTime.currentTimeNum,
-      repeatMusic,
-      setLocalCurrentMusic,
-      setMusicState,
-    ],
+    [setLocalCurrentMusic, setLocalPlaylist, setMusicState],
   );
 
   const pauseMusic = useCallback(() => {
-    musicAudio && musicAudio.pause();
-    setMusicState("paused");
-  }, [musicAudio, setMusicState]);
+    setMusicAudio((musicAudio) => {
+      musicAudio && musicAudio.pause();
+      setMusicState("paused");
+      return musicAudio;
+    });
+  }, [setMusicState]);
 
   const skipMusic = useCallback(() => {
-    if (playlist.length === 0) return;
-    if (playlist.length === 1) {
-      playMusic(playlist[0]!, playlist);
+    const musics = playlist?.musics || [];
+    if (musics.length === 0) return;
+    if (musics.length === 1) {
+      musics[0] && playMusic({ music: musics[0], otherPlaylist: playlist });
       return;
     }
-    if (playlist.length > 1) {
-      for (let i = 0; i < playlist.length; i++) {
-        const music = playlist[i];
-        music?.id === currentMusic?.id && playMusic(playlist[i + 1]!, playlist);
+    if (musics.length > 1) {
+      for (let i = 0; i < musics.length; i++) {
+        const music = musics[i];
+        music?.id === currentMusic?.id &&
+          playMusic({ music: musics[i + 1]!, otherPlaylist: playlist });
       }
     }
   }, [currentMusic?.id, playMusic, playlist]);
 
   const previousMusic = useCallback(() => {
-    if (playlist.length === 0) return;
-    if (playlist.length === 1) {
-      playMusic(playlist[0]!, playlist);
+    const musics = playlist?.musics || [];
+    if (musics.length === 0) return;
+    if (musics.length === 1) {
+      musics[0] && playMusic({ music: musics[0], otherPlaylist: playlist });
       return;
     }
-    if (playlist.length > 1) {
-      for (let i = 0; i < playlist.length; i++) {
-        const music = playlist[i];
-        music?.id === currentMusic?.id && playMusic(playlist[i - 1]!, playlist);
+    if (musics.length > 1) {
+      for (let i = 0; i < musics.length; i++) {
+        const music = musics[i];
+        music?.id === currentMusic?.id &&
+          playMusic({ music: musics[i - 1]!, otherPlaylist: playlist });
       }
     }
   }, [currentMusic?.id, playMusic, playlist]);
 
   const toggleRepeatMusic = useCallback(() => {
-    if (repeatMusic) {
-      setRepeatMusic(false);
-      setLocalRepeatMusic(false);
-    } else {
-      setRepeatMusic(true);
-      setLocalRepeatMusic(true);
-    }
-  }, [repeatMusic, setLocalRepeatMusic]);
+    setRepeatMusic((prev) => !prev);
+    setLocalRepeatMusic((prev) => !prev);
+  }, [setLocalRepeatMusic]);
 
   const toggleShufflePlaylist = useCallback(() => {
-    if (shufflePlaylist) {
-      setShufflePlaylist(false);
-      setLocalShufflePlaylist(false);
-    } else {
-      setShufflePlaylist(true);
-      setLocalShufflePlaylist(true);
-    }
+    setShufflePlaylist((prev) => !prev);
+    setLocalShufflePlaylist((prev) => !prev);
     shufflePlaylists();
-  }, [setLocalShufflePlaylist, shufflePlaylist, shufflePlaylists]);
+  }, [setLocalShufflePlaylist, shufflePlaylists]);
 
   const updateMusicTime = useCallback(() => {
-    if (musicAudio) {
+    setMusicTime((prev) => {
+      if (!musicAudio) return prev;
       const musicDuration = musicAudio.duration;
       const musicCurrentTime = musicAudio.currentTime;
       const musicProgress = (musicCurrentTime * 100) / musicDuration;
       const { musicCurrentTime: musicCurrentTimeFormatted, musicDurationTime } =
         musicTimeFormatter(musicAudio);
 
-      setMusicTime({
+      return {
         currentTime: musicCurrentTimeFormatted,
         currentTimeNum: musicCurrentTime,
         duration: musicDurationTime,
         progress: Math.floor(musicProgress),
         durationNum: musicDuration,
-      });
-    }
+      };
+    });
   }, [musicAudio, setMusicTime]);
 
   const musicEnded = useCallback(() => {
     if (repeatMusic) {
-      playMusic(currentMusic!);
+      playMusic({ music: currentMusic! });
     } else {
       skipMusic();
     }
@@ -330,7 +313,6 @@ export function MusicContextProvider(props: PropsWithChildren) {
     <MusicContext.Provider
       value={{
         playlist,
-        DBPlaylist,
         currentMusic,
         musicState,
         musicTime,

@@ -152,7 +152,7 @@ export default async function MusicPage({ params }: Props) {
             </div>
           </div>
           <div className="group relative flex self-center md:mt-3 md:self-start [&_button]:relative [&_button]:translate-y-0 [&_button]:opacity-100">
-            <ControlButton music={music} />
+            <ControlButton music={music} musics={musics} />
             <div className="mt-1">
               <ActionMenu
                 music={music}

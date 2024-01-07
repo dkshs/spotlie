@@ -56,10 +56,11 @@ function VerticalMusicCard({
         {isPlaylist && playlist.musics.length > 0 ? (
           <ControlButton
             music={playlist.musics[0]!}
-            playlist={playlist.musics}
+            playlist={playlist}
+            isPlaylistBtn
           />
         ) : (
-          !isPlaylist && <ControlButton music={music} playlist={musics} />
+          !isPlaylist && <ControlButton music={music} musics={musics} />
         )}
       </div>
       <div className="z-20 flex w-full flex-col items-start truncate">

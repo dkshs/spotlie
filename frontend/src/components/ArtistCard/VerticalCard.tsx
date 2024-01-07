@@ -31,7 +31,7 @@ function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
           <ControlButton
             artistId={artist.id}
             music={artist.musics[0]!}
-            playlist={artist.musics}
+            musics={artist.musics}
           />
         )}
       </div>

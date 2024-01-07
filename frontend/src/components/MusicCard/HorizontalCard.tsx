@@ -20,13 +20,24 @@ function HorizontalMusicCard({
   music,
   musics,
   showArtist = true,
+  playlist,
   ...props
 }: HorizontalMusicCardProps) {
   const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
   const [buttonFocus, setButtonFocus] = useState(false);
   const musicIsPlaying = useMemo(
-    () => currentMusic?.id === music.id && musicState === "playing",
-    [currentMusic?.id, music.id, musicState],
+    () =>
+      currentMusic?.id === music.id &&
+      (playlist ? currentMusic?.order_id === music.order_id : true) &&
+      musicState === "playing",
+    [
+      currentMusic?.id,
+      currentMusic?.order_id,
+      music.id,
+      music.order_id,
+      musicState,
+      playlist,
+    ],
   );
 
   return (
@@ -43,10 +54,14 @@ function HorizontalMusicCard({
         title={`${musicIsPlaying ? "Pause" : "Play"} ${music.title}`}
         onKeyDown={(e) => {
           if (e.key !== "Enter" && e.key !== " ") return;
-          musicIsPlaying ? pauseMusic() : playMusic(music, musics);
+          musicIsPlaying
+            ? pauseMusic()
+            : playMusic({ music, otherPlaylist: playlist, musics });
         }}
         onDoubleClick={() =>
-          musicIsPlaying ? pauseMusic() : playMusic(music, musics)
+          musicIsPlaying
+            ? pauseMusic()
+            : playMusic({ music, otherPlaylist: playlist, musics })
         }
         onFocus={() => setButtonFocus(true)}
         onBlur={() => setButtonFocus(false)}
@@ -63,7 +78,8 @@ function HorizontalMusicCard({
         )}
         <ControlButton
           music={music}
-          playlist={musics}
+          playlist={playlist}
+          musics={musics}
           buttonFocus={buttonFocus}
           orientation="horizontal"
         />
@@ -86,6 +102,7 @@ function HorizontalMusicCard({
       </div>
       <ActionMenu
         {...props}
+        playlist={playlist}
         music={music}
         actionType="music"
         actionId={music.id}

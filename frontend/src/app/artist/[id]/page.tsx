@@ -116,7 +116,7 @@ export default async function ArtistPage({ params }: Props) {
               {artist.musics && artist.musics.length > 0 && (
                 <ControlButton
                   music={artist.musics[0]!}
-                  playlist={artist.musics}
+                  musics={artist.musics}
                   artistId={artist.id}
                 />
               )}

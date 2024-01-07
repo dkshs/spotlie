@@ -159,7 +159,8 @@ export default async function PlaylistPage({ params }: Props) {
             {playlist.musics && playlist.musics.length > 0 && (
               <ControlButton
                 music={playlist.musics[0]!}
-                playlist={playlist.musics}
+                playlist={playlist}
+                isPlaylistBtn
               />
             )}
             <div className="mt-1">
@@ -180,7 +181,6 @@ export default async function PlaylistPage({ params }: Props) {
                 <div key={i} className="w-full">
                   <MusicCard
                     music={music}
-                    musics={playlist.musics}
                     orientation="horizontal"
                     actionId={music.id}
                     playlist={playlist}

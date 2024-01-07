@@ -1,6 +1,6 @@
 "use client";
 
-import type { MusicProps } from "@/utils/types";
+import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 import { useCallback, useMemo } from "react";
 import { useMusic } from "@/hooks/useMusic";
@@ -12,7 +12,9 @@ import { Pause, Play } from "@phosphor-icons/react";
 
 interface ControlButtonProps {
   music: MusicProps;
-  playlist?: MusicProps[];
+  playlist?: PlaylistPropsWithMusics;
+  musics?: MusicProps[];
+  isPlaylistBtn?: boolean;
   buttonFocus?: boolean;
   radius?: "rounded-lg" | "rounded-full";
   orientation?: "horizontal" | "vertical";
@@ -66,21 +68,51 @@ function ButtonContent({
 export function ControlButton({
   music,
   playlist,
+  musics,
   artistId,
+  isPlaylistBtn = false,
   radius = "rounded-lg",
   buttonFocus = false,
   orientation = "vertical",
 }: ControlButtonProps) {
-  const { currentMusic, musicState, playMusic, pauseMusic } = useMusic();
+  const {
+    currentMusic,
+    musicState,
+    playMusic,
+    pauseMusic,
+    playlist: ctxPlaylist,
+  } = useMusic();
   const artistIsPlaying = useMemo(
     () => (artistId ? currentMusic?.artist.id === artistId : false),
     [artistId, currentMusic?.artist?.id],
   );
+  const playlistIsPlaying = useMemo(() => {
+    if (playlist && isPlaylistBtn) {
+      return (
+        isPlaylistBtn &&
+        playlist.name === ctxPlaylist?.name &&
+        playlist.id === ctxPlaylist?.id
+      );
+    }
+    return false;
+  }, [ctxPlaylist?.id, ctxPlaylist?.name, isPlaylistBtn, playlist]);
   const musicIsPlaying = useMemo(
     () =>
-      (currentMusic?.id === music.id || artistIsPlaying) &&
+      ((currentMusic?.id === music.id &&
+        (playlist ? currentMusic?.order_id === music.order_id : true)) ||
+        playlistIsPlaying ||
+        artistIsPlaying) &&
       musicState === "playing",
-    [artistIsPlaying, currentMusic?.id, music.id, musicState],
+    [
+      artistIsPlaying,
+      currentMusic?.id,
+      currentMusic?.order_id,
+      music.id,
+      music.order_id,
+      musicState,
+      playlist,
+      playlistIsPlaying,
+    ],
   );
   const title = useMemo(() => {
     const state = musicIsPlaying ? "Pause" : "Play";
@@ -93,13 +125,14 @@ export function ControlButton({
       pauseMusic();
     } else {
       const song = artistIsPlaying && currentMusic ? currentMusic : music;
-      playMusic(song, playlist);
+      playMusic({ music: song, otherPlaylist: playlist, musics });
     }
   }, [
     artistIsPlaying,
     currentMusic,
     music,
     musicIsPlaying,
+    musics,
     pauseMusic,
     playMusic,
     playlist,
