@@ -65,11 +65,11 @@
 
 /* Toastify */
 .Toastify__toast-container {
-  @apply z-[99999];
+  @apply z-[99999] !important;
 }
 .Toastify__toast-body {
-  @apply font-merriweatherSans text-foreground;
+  @apply font-merriweatherSans text-foreground !important;
 }
 .Toastify__toast {
-  @apply bg-background;
+  @apply bg-background !important;
 }
