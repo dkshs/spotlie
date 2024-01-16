@@ -73,6 +73,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 newestOnTop={true}
                 pauseOnFocusLoss={false}
                 limit={3}
+                closeOnClick
+                stacked
               />
               <Header />
               <div className="pb-20 pt-[72px]">{children}</div>
