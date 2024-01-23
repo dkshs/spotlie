@@ -33,7 +33,7 @@
     "react-dom": "^18",
     "react-toastify": "^10.0.4",
     "sharp": "^0.33.2",
-    "tailwind-merge": "^2.2.0",
+    "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^2.9.5",
     "uuid": "^9.0.1",
