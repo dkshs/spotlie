@@ -54,10 +54,18 @@ GS_DEFAULT_ACL = "publicRead"
 # ------------------------------------------------------------------------------
 STORAGES = {
     "default": {
-        "BACKEND": "backend.utils.storages.MediaGoogleCloudStorage",
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "location": "media",
+            "file_overwrite": False,
+        },
     },
     "staticfiles": {
-        "BACKEND": "backend.utils.storages.StaticGoogleCloudStorage",
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "location": "static",
+            "default_acl": "publicRead",
+        },
     },
 }
 
