@@ -10,7 +10,7 @@ PyJWT==2.8.0  # https://github.com/jpadilla/pyjwt
 # Django
 # ------------------------------------------------------------------------------
 django==4.2.9  # https://www.djangoproject.com/
-django-cleanup==8.0.0  # https://github.com/un1t/django-cleanup
+django-cleanup==8.1.0  # https://github.com/un1t/django-cleanup
 dj-database-url==2.1.0  # https://github.com/jazzband/dj-database-url
 django-ninja==1.1.0  # https://github.com/vitalik/django-ninja
 orjson==3.9.12  # https://github.com/ijl/orjson
