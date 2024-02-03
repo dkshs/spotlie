@@ -45,8 +45,8 @@ dependencies:
     specifier: ^0.8.0
     version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
   '@tanstack/react-query':
-    specifier: ^5.18.0
-    version: 5.18.0(react@18.2.0)
+    specifier: ^5.18.1
+    version: 5.18.1(react@18.2.0)
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
@@ -75,8 +75,8 @@ dependencies:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.1)
   usehooks-ts:
-    specifier: ^2.11.0
-    version: 2.11.0(react@18.2.0)
+    specifier: ^2.12.1
+    version: 2.12.1(react@18.2.0)
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
@@ -1494,16 +1494,16 @@ packages:
       zod: 3.22.4
     dev: false
 
-  /@tanstack/query-core@5.18.0:
-    resolution: {integrity: sha512-8c6nxeAnGHxIDZIyDmHdmgFt4D+LprAQaJmjsnM4szcIjsWOyFlzxdqQUuQ/XuQRvUgqYaqlJTtDADlSS7pTPQ==}
+  /@tanstack/query-core@5.18.1:
+    resolution: {integrity: sha512-fYhrG7bHgSNbnkIJF2R4VUXb4lF7EBiQjKkDc5wOlB7usdQOIN4LxxHpDxyE3qjqIst1WBGvDtL48T0sHJGKCw==}
     dev: false
 
-  /@tanstack/react-query@5.18.0(react@18.2.0):
-    resolution: {integrity: sha512-7FKxNfxxKEL7n3ADpwp81Fy4FX85hNkYVzQQVQsF0JAPl93c3d1gmNZMIbEtOqgYfom1/ontGh3FiZGYj3xyWA==}
+  /@tanstack/react-query@5.18.1(react@18.2.0):
+    resolution: {integrity: sha512-PdI07BbsahZ+04PxSuDQsQvBWe008eWFk/YYWzt8fvzt2sALUM0TpAJa/DFpqa7+SSo7j1EQR6Jx6znXNHyaXw==}
     peerDependencies:
       react: ^18.0.0
     dependencies:
-      '@tanstack/query-core': 5.18.0
+      '@tanstack/query-core': 5.18.1
       react: 18.2.0
     dev: false
 
@@ -3363,6 +3363,10 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: false
+
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
@@ -4544,16 +4548,13 @@ packages:
       react: 18.2.0
     dev: false
 
-  /usehooks-ts@2.11.0(react@18.2.0):
-    resolution: {integrity: sha512-JRRTyS7QXR4Qv9laNQE3BOMWsvPlrOolu1nfIGXQLCOGJhbim/STBFopKOoi0ktK6PDFAEx+Xa0Yn0PKIQVgzQ==}
+  /usehooks-ts@2.12.1(react@18.2.0):
+    resolution: {integrity: sha512-meo93qn2hyBJdHVczbalnsU2FU2WQ1ZVRmppRn8+P6TXo9hORNe10pFVKJfIBYfb2FFapqNuF5vUviLRSy/vAw==}
     engines: {node: '>=16.15.0'}
     peerDependencies:
-      lodash.debounce: ^4
       react: ^16.8.0  || ^17 || ^18
-    peerDependenciesMeta:
-      lodash.debounce:
-        optional: true
     dependencies:
+      lodash.debounce: 4.0.8
       react: 18.2.0
     dev: false
 
