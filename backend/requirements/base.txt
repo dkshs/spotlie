@@ -2,7 +2,7 @@ python-slugify==8.0.4  # https://github.com/un33k/python-slugify
 Pillow==10.2.0  # https://github.com/python-pillow/Pillow
 python-decouple==3.8  # https://github.com/HBNetwork/python-decouple
 argon2-cffi==23.1.0  # https://github.com/hynek/argon2_cffi
-svix==1.17.0  # https://pypi.org/project/svix/
+svix==1.18.0  # https://pypi.org/project/svix/
 requests==2.31.0  # https://github.com/psf/requests
 cryptography==42.0.2  # https://github.com/pyca/cryptography
 PyJWT==2.8.0  # https://github.com/jpadilla/pyjwt
