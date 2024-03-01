@@ -18,6 +18,22 @@ updates:
   # Enable version updates for NPM
   - package-ecosystem: "npm"
     directory: "frontend/"
+    groups:
+      definitely-typed:
+        patterns:
+          - "@types*"
+        update-types:
+          - "minor"
+          - "patch"
+      clerk:
+        patterns:
+          - "@clerk*"
+      radix-ui:
+        patterns:
+          - "@radix-ui*"
+    ignore:
+      - dependency-name: "@types*"
+        update-types: ["version-update:semver-major"]
     # Every weekday
     schedule:
       interval: "daily"
