@@ -10,10 +10,10 @@ updates:
     schedule:
       interval: "daily"
     labels:
-      - "update"
+      - "deps update"
     commit-message:
       include: scope
-      prefix: update
+      prefix: chore
 
   # Enable version updates for NPM
   - package-ecosystem: "npm"
@@ -22,10 +22,10 @@ updates:
     schedule:
       interval: "daily"
     labels:
-      - "update"
+      - "deps update"
     commit-message:
       include: scope
-      prefix: update
+      prefix: chore
 
   # Enable version updates for Docker
   # We need to specify each Dockerfile in a separate entry because Dependabot doesn't
@@ -38,10 +38,10 @@ updates:
     schedule:
       interval: "daily"
     labels:
-      - "update"
+      - "deps update"
     commit-message:
       include: scope
-      prefix: update
+      prefix: chore
     # Ignore minor version updates (3.10 -> 3.11) but update patch versions
     ignore:
       - dependency-name: "*"
@@ -56,10 +56,10 @@ updates:
     schedule:
       interval: "daily"
     labels:
-      - "update"
+      - "deps update"
     commit-message:
       include: scope
-      prefix: update
+      prefix: chore
     # Ignore minor version updates (3.10 -> 3.11) but update patch versions
     ignore:
       - dependency-name: "*"
@@ -72,10 +72,10 @@ updates:
     schedule:
       interval: "daily"
     labels:
-      - "update"
+      - "deps update"
     commit-message:
       include: scope
-      prefix: update
+      prefix: chore
 
   # Enable version updates for Python/Pip - Production
   - package-ecosystem: "pip"
@@ -86,7 +86,7 @@ updates:
     schedule:
       interval: "daily"
     labels:
-      - "update"
+      - "deps update"
     commit-message:
       include: scope
-      prefix: update
+      prefix: chore
