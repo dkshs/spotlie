@@ -1,5 +1,3 @@
-"use server";
-
 import { cache } from "react";
 import { auth } from "@clerk/nextjs";
 import { env } from "@/env.mjs";
