@@ -99,11 +99,11 @@ ADMIN_URL = config("DJANGO_ADMIN_URL")
 INSTALLED_APPS += ["anymail"]  # noqa: F405
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 # https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
-# https://anymail.readthedocs.io/en/stable/esps/sendinblue/
-EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
+# https://anymail.readthedocs.io/en/stable/esps/brevo/
+EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
 ANYMAIL = {
-    "SENDINBLUE_API_KEY": config("SENDINBLUE_API_KEY"),
-    "SENDINBLUE_API_URL": config("SENDINBLUE_API_URL", default="https://api.sendinblue.com/v3/"),
+    "BREVO_API_KEY": config("BREVO_API_KEY"),
+    "BREVO_API_URL": config("BREVO_API_URL", default="https://api.brevo.com/v3/"),
 }
 
 # Collectfast
