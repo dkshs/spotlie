@@ -30,6 +30,14 @@
       "automerge": true,
       "matchPackagePatterns": ["^@types/"],
       "matchUpdateTypes": ["patch", "minor"]
+    },
+    {
+      "matchFileNames": ["frontend/**"],
+      "semanticCommitScope": "deps-frontend"
+    },
+    {
+      "matchFileNames": ["backend/**"],
+      "semanticCommitScope": "deps-backend"
     }
   ],
   "pip_requirements": {
