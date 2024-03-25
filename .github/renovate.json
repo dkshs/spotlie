@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":disableRateLimiting",
+    ":semanticCommitType(chore)"
+  ],
+  "schedule": ["before 5am every weekday"],
+  "dependencyDashboard": false,
+  "semanticCommits": "enabled",
+  "commitMessageTopic": "{{depName}}",
+  "rebaseWhen": "conflicted",
+  "rangeStrategy": "bump",
+  "configMigration": true,
+  "packageRules": [
+    {
+      "enabled": false,
+      "matchDatasources": ["docker"],
+      "matchDepPatterns": ["python"],
+      "matchUpdateTypes": ["major", "minor"]
+    },
+    {
+      "enabled": false,
+      "matchDatasources": ["pypi"],
+      "matchDepNames": ["django"],
+      "matchUpdateTypes": ["major", "minor"]
+    },
+    {
+      "groupName": "definitelyTyped",
+      "automerge": true,
+      "matchPackagePatterns": ["^@types/"],
+      "matchUpdateTypes": ["patch", "minor"]
+    }
+  ],
+  "pip_requirements": {
+    "fileMatch": [
+      "(^|/)[\\w-]*requirements(-\\w+)?\\.(txt|pip)$",
+      "^.*/requirements/.*.txt$"
+    ]
+  }
+}
