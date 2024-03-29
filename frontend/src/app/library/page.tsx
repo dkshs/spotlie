@@ -71,7 +71,7 @@ export default async function LibraryPage() {
           </ScrollArea>
         </section>
       )}
-      {isArtist && musics && musics.length > 0 && (
+      {isArtist && (
         <section className="px-4 md:px-9">
           <header className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold">Musics</h2>
@@ -84,19 +84,21 @@ export default async function LibraryPage() {
               </Button>
             </div>
           </header>
-          <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
-            <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
-              {musics.map((music) => (
-                <MusicCard
-                  key={music.id}
-                  music={music}
-                  showArtist={false}
-                  actionId={music.id}
-                  text="Music"
-                />
-              ))}
-            </div>
-          </ScrollArea>
+          {musics && musics.length > 0 && (
+            <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
+              <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
+                {musics.map((music) => (
+                  <MusicCard
+                    key={music.id}
+                    music={music}
+                    showArtist={false}
+                    actionId={music.id}
+                    text="Music"
+                  />
+                ))}
+              </div>
+            </ScrollArea>
+          )}
         </section>
       )}
     </div>
