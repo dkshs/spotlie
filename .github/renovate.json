@@ -33,11 +33,11 @@
     },
     {
       "matchFileNames": ["frontend/**"],
-      "semanticCommitScope": "deps-frontend"
+      "semanticCommitScope": "frontend-deps"
     },
     {
       "matchFileNames": ["backend/**"],
-      "semanticCommitScope": "deps-backend"
+      "semanticCommitScope": "backend-deps"
     }
   ],
   "pip_requirements": {
