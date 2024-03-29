@@ -40,6 +40,7 @@ function ButtonContent({
         } group-hover:hidden group-focus/button:hidden group-focus:hidden`}
         height={24}
         width={24}
+        unoptimized
       />
       <Pause
         size={24}
