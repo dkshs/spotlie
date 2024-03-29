@@ -35,7 +35,7 @@ export function VolumeControls() {
         <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-secondary">
           <SliderPrimitive.Range className="absolute h-full bg-foreground/80 group-focus-within:bg-primary group-hover:bg-primary" />
         </SliderPrimitive.Track>
-        <SliderPrimitive.Thumb className="block h-3.5 w-3.5 rounded-full bg-foreground opacity-0 ring-offset-background duration-200 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 group-focus-within:opacity-100 group-hover:opacity-100" />
+        <SliderPrimitive.Thumb className="block h-3.5 w-3.5 cursor-grab rounded-full bg-foreground opacity-0 ring-offset-background duration-200 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:cursor-grabbing group-focus-within:opacity-100 group-hover:opacity-100" />
       </SliderPrimitive.Root>
     </div>
   );
