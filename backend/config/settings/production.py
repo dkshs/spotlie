@@ -1,4 +1,6 @@
-from .base import *  # noqa
+from .base import *  # noqa: F403
+from .base import DATABASES
+from .base import INSTALLED_APPS
 from .base import config
 
 # GENERAL
@@ -20,7 +22,7 @@ CORS_ALLOWED_ORIGINS = config(
 
 # DATABASES
 # ------------------------------------------------------------------------------
-DATABASES["default"]["CONN_MAX_AGE"] = config("CONN_MAX_AGE", default=60)  # noqa: F405
+DATABASES["default"]["CONN_MAX_AGE"] = config("CONN_MAX_AGE", default=60)
 
 # SECURITY
 # ------------------------------------------------------------------------------
@@ -37,16 +39,24 @@ CSRF_COOKIE_SECURE = True
 # TODO: set this to 60 seconds first and then to 518400 once you prove the former works
 SECURE_HSTS_SECONDS = 518400
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
-SECURE_HSTS_INCLUDE_SUBDOMAINS = config("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", cast=bool, default=True)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config(
+    "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS",
+    cast=bool,
+    default=True,
+)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
 SECURE_HSTS_PRELOAD = config("DJANGO_SECURE_HSTS_PRELOAD", cast=bool, default=True)
 # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
-SECURE_CONTENT_TYPE_NOSNIFF = config("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", cast=bool, default=True)
+SECURE_CONTENT_TYPE_NOSNIFF = config(
+    "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF",
+    cast=bool,
+    default=True,
+)
 
 # STORAGES
 # ------------------------------------------------------------------------------
 # https://django-storages.readthedocs.io/en/latest/#installation
-INSTALLED_APPS += ["storages"]  # noqa: F405
+INSTALLED_APPS += ["storages"]
 GS_BUCKET_NAME = config("DJANGO_GCP_STORAGE_BUCKET_NAME")
 GS_DEFAULT_ACL = "publicRead"
 
@@ -96,7 +106,7 @@ ADMIN_URL = config("DJANGO_ADMIN_URL")
 # Anymail
 # ------------------------------------------------------------------------------
 # https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
-INSTALLED_APPS += ["anymail"]  # noqa: F405
+INSTALLED_APPS += ["anymail"]
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 # https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
 # https://anymail.readthedocs.io/en/stable/esps/brevo/
@@ -109,7 +119,7 @@ ANYMAIL = {
 # Collectfast
 # ------------------------------------------------------------------------------
 # https://github.com/antonagestam/collectfast#installation
-INSTALLED_APPS = ["collectfast"] + INSTALLED_APPS  # noqa: F405
+INSTALLED_APPS = ["collectfast", *INSTALLED_APPS]
 
 # LOGGING
 # ------------------------------------------------------------------------------
@@ -125,7 +135,7 @@ LOGGING = {
     "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",  # noqa: E501
         },
     },
     "handlers": {

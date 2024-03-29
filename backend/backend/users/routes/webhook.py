@@ -2,12 +2,13 @@ from secrets import token_hex
 
 from django.conf import settings
 from django.http import HttpRequest
-from ninja import Router, Schema
-from svix.webhooks import Webhook, WebhookVerificationError
+from ninja import Router
+from ninja import Schema
+from svix.webhooks import Webhook
+from svix.webhooks import WebhookVerificationError
 
 from backend.artists.models import Artist
-
-from ..models import User
+from backend.users.models import User
 
 
 class Response(Schema):
@@ -35,8 +36,8 @@ def webhook(request: HttpRequest):
     try:
         external_id = data["id"]
         if event_type in ["user.created", "user.updated"]:
-            first_name = data["first_name"] if "first_name" in data else None
-            last_name = data["last_name"] if "last_name" in data else None
+            first_name = data.get("first_name", "") or ""
+            last_name = data.get("last_name", "") or ""
             email = data["email_addresses"][0]["email_address"]
             username = data["username"] or f"user_{token_hex(8)}"
             image = data["profile_image_url"]
@@ -44,10 +45,13 @@ def webhook(request: HttpRequest):
                 image = "https://img.clerk.com/preview.png"
             public_metadata = data["public_metadata"]
 
-            is_artist = public_metadata["is_artist"] if "is_artist" in public_metadata else False
+            is_artist = public_metadata.get("is_artist", False)
             public_metadata["is_artist"] = is_artist
             if is_artist:
-                Artist.objects.update_or_create(external_id=external_id, defaults={"email": email})
+                Artist.objects.update_or_create(
+                    external_id=external_id,
+                    defaults={"email": email},
+                )
             user = User.objects.filter(external_id=external_id)
             artist = Artist.objects.filter(external_id=external_id)
             if artist.exists() or is_artist:
@@ -85,7 +89,7 @@ def webhook(request: HttpRequest):
             artist.delete() if artist.exists() else None
         else:
             return 400, {"message": f"invalid event type: {event_type}"}
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return 400, {"message": f"Error processing webhook: {e}"}
 
     return 200, {"message": "ok"}

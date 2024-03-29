@@ -9,7 +9,9 @@ from .api.main import api
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("api/", api.urls),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Media files
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+]
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

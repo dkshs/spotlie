@@ -8,9 +8,9 @@ BASE_URL = getattr(settings, "BASE_URL", "")
 
 class Artist(AbstractUser):
     cover = models.ImageField(blank=True, null=True, upload_to="artists/covers/")
-    about = models.TextField(blank=True, null=True)
-    twitter_link = models.URLField(blank=True, null=True)
-    instagram_link = models.URLField(blank=True, null=True)
+    about = models.TextField(blank=True, default="")
+    twitter_link = models.URLField(blank=True, default="")
+    instagram_link = models.URLField(blank=True, default="")
     is_verified = models.BooleanField(default=False)
 
     def get_cover_url(self):

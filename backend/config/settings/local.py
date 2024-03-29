@@ -1,4 +1,6 @@
-from .base import *  # noqa
+# ruff: noqa: E501
+from .base import *  # noqa: F403
+from .base import INSTALLED_APPS
 from .base import config
 
 # GENERAL
@@ -11,7 +13,12 @@ SECRET_KEY = config(
     default="k*zpSb*jMcXatzx!hfmepS^k@^^@9$tgVK7H5KirTt34Q$3!CtZ*zns6bfSyZZ",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "notable-primarily-guppy.ngrok-free.app"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "0.0.0.0",  # noqa: S104
+    "127.0.0.1",
+    "notable-primarily-guppy.ngrok-free.app",
+]
 # https://github.com/adamchainz/django-cors-headers#configuration
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
@@ -27,4 +34,4 @@ EMAIL_PORT = 1025
 # django-extensions
 # ------------------------------------------------------------------------------
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ["django_extensions"]  # noqa: F405
+INSTALLED_APPS += ["django_extensions"]

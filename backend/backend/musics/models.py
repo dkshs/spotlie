@@ -17,11 +17,11 @@ class Music(models.Model):
     audio = models.FileField(upload_to="musics/audios/")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
+
     def get_image_url(self):
         return BASE_URL + self.image.url if self.image else None
 
     def get_audio_url(self):
         return BASE_URL + self.audio.url
-
-    def __str__(self):
-        return self.title

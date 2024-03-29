@@ -4,7 +4,8 @@ from uuid import UUID
 from ninja import Schema
 
 from backend.musics.schemas import MusicSchemaOut
-from backend.users.schemas import UserPlaylistSchema, UserSchemaOut
+from backend.users.schemas import UserPlaylistSchema
+from backend.users.schemas import UserSchemaOut
 
 
 class PlaylistMusicOrderSchema(MusicSchemaOut):
@@ -36,7 +37,7 @@ class PlaylistSchemaOut(UserPlaylistSchema):
 
 class PlaylistSchemaIn(Schema):
     name: str
-    description: str = None
+    description: str = ""
     musics: list[UUID] = []
     is_public: bool = False
 

@@ -13,7 +13,7 @@ BASE_URL = getattr(settings, "BASE_URL", "")
 class Playlist(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, default="")
     image = models.ImageField(blank=True, null=True, upload_to="playlists")
     musics = models.ManyToManyField(Music, blank=True, through="MusicOrder")
     is_public = models.BooleanField(default=False)
@@ -25,6 +25,9 @@ class Playlist(models.Model):
     object_id = models.UUIDField()
     owner = GenericForeignKey("content_type", "object_id")
 
+    def __str__(self):
+        return self.name
+
     def get_image_url(self):
         return BASE_URL + self.image.url if self.image else None
 
@@ -34,9 +37,6 @@ class Playlist(models.Model):
     def get_musics(self):
         return [m.music for m in self.get_musics_order()]
 
-    def __str__(self):
-        return self.name
-
 
 class MusicOrder(models.Model):
     order = models.PositiveIntegerField(default=0)
@@ -44,10 +44,10 @@ class MusicOrder(models.Model):
     playlist = models.ForeignKey("Playlist", on_delete=models.CASCADE)
     added_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.playlist.name} - {self.music.title}"
-
     class Meta:
         ordering = ["order"]
         verbose_name = "Music Order"
         verbose_name_plural = "Music Orders"
+
+    def __str__(self):
+        return f"{self.playlist.name} - {self.music.title}"
