@@ -15,8 +15,8 @@ importers:
         specifier: ^1.7.12
         version: 1.7.12(react@18.2.0)
       '@phosphor-icons/react':
-        specifier: ^2.1.4
-        version: 2.1.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^2.1.5
+        version: 2.1.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-alert-dialog':
         specifier: ^1.0.5
         version: 1.0.5(@types/react-dom@18.2.25)(@types/react@18.2.79)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -456,8 +456,8 @@ packages:
     resolution: {integrity: sha512-eK4C6WTNYxoI7JOabMoZICiyqRRtJB220bh0Mbj5RwRycleZf9BPyZoxsTvpP0FpmVS2aS13NKOuh5/tN3sIRw==}
     engines: {node: '>=10.12.0'}
 
-  '@phosphor-icons/react@2.1.4':
-    resolution: {integrity: sha512-EeNwgcg1aeK5vG/JYVTullnZzk5zjftOrjLb1iYetyhn5ImFFREc+xG0FAB/dAY277DGDSF8pNdNbqG1SUKIxQ==}
+  '@phosphor-icons/react@2.1.5':
+    resolution: {integrity: sha512-B7vRm/w+P/+eavWZP5CB5Ul0ffK4Y7fpd/auWKuGvm+8pVgAJzbOK8O0s+DqzR+TwWkh5pHtJTuoAtaSvgCPzg==}
     engines: {node: '>=10'}
     peerDependencies:
       react: '>= 16.8'
@@ -2989,7 +2989,7 @@ snapshots:
       tslib: 2.6.2
       webcrypto-core: 1.7.8
 
-  '@phosphor-icons/react@2.1.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+  '@phosphor-icons/react@2.1.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
