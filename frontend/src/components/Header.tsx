@@ -85,7 +85,7 @@ export async function Header() {
             </HeaderLink>
           </SignedOut>
           <SignedIn>
-            {/* @ts-expect-error */}
+            {/* @ts-expect-error `userProfileMode` is not accepting the "modal" prop */}
             <UserButton
               userProfileMode={externalId ? "navigation" : "modal"}
               userProfileUrl={`/${isArtist ? "artist" : "user"}/${externalId}`}
