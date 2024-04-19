@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { serverFetcher } from "@/utils/api";
 
 import Link from "next/link";

@@ -7,10 +7,10 @@
     --background: 0 0% 0%;
     --foreground: 210 20% 98%;
 
-    --card: 0, 0%, 0%;
+    --card: 0 0% 0%;
     --card-foreground: 210 20% 98%;
 
-    --popover: 0, 0%, 0%;
+    --popover: 0 0% 0%;
     --popover-foreground: 210 20% 98%;
 
     --primary: 262 83% 60%;
@@ -47,20 +47,6 @@
   body {
     @apply bg-background font-merriweatherSans text-foreground;
   }
-}
-
-/* Clerk */
-.cl-pageScrollBox::-webkit-scrollbar {
-  @apply h-2 w-2;
-}
-.cl-pageScrollBox::-webkit-scrollbar-track {
-  @apply rounded-md bg-primary bg-gradient-to-b from-background/60 to-secondary;
-}
-.cl-pageScrollBox::-webkit-scrollbar-thumb {
-  @apply rounded-md bg-zinc-400/20 backdrop-blur hover:bg-zinc-500/50;
-}
-.cl-internal-b3fm6y {
-  @apply hidden;
 }
 
 /* Toastify */

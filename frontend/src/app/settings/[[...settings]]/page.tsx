@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import { currentUser, UserProfile } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
+import { UserProfile } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import NextLink from "next/link";
@@ -31,19 +32,7 @@ export default async function UserSettingsPage() {
             </Link>
           </h1>
         )}
-        <UserProfile
-          path="/settings"
-          routing="path"
-          appearance={{
-            elements: {
-              navbar: "hidden",
-              navbarMobileMenuRow: "hidden",
-              card: "mx-0 shadow-none",
-              pageScrollBox: "px-4 sm:px-8 py-9",
-              rootBox: "w-full flex justify-center",
-            },
-          }}
-        />
+        <UserProfile path="/settings" />
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function SignUpPage() {
   return (
     <div className="my-20 flex items-center justify-center">
-      <SignUp path="/sign-up" routing="path" />
+      <SignUp />
     </div>
   );
 }

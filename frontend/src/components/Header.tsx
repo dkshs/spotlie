@@ -1,6 +1,7 @@
 import type { AnchorHTMLAttributes } from "react";
+import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { SignedIn, SignedOut, UserButton, currentUser } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import { House, SpotifyLogo, Headphones } from "@phosphor-icons/react/dist/ssr";
 
@@ -84,10 +85,10 @@ export async function Header() {
             </HeaderLink>
           </SignedOut>
           <SignedIn>
+            {/* @ts-expect-error */}
             <UserButton
               userProfileMode={externalId ? "navigation" : "modal"}
               userProfileUrl={`/${isArtist ? "artist" : "user"}/${externalId}`}
-              afterSignOutUrl="/"
             />
           </SignedIn>
         </div>
