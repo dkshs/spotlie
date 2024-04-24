@@ -5,19 +5,18 @@ import type { ArtistPropsWithMusics } from "@/utils/types";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { Spinner } from "@phosphor-icons/react";
 import { useApi } from "@/hooks/useApi";
 
 import { ArtistCard } from "@/components/ArtistCard";
 import { Button } from "@/components/ui/Button";
-
-import { Spinner } from "@phosphor-icons/react";
 
 export function ArtistsList() {
   const router = useRouter();
   const [artists, setArtists] = useState<ArtistPropsWithMusics[]>([]);
   const [offset, setOffset] = useState(0);
   const { fetcher } = useApi();
-  const skeletons = [...Array(12).keys()].map((i) => i + 1);
+  const skeletons = [...Array.from({ length: 12 }).keys()].map((i) => i + 1);
 
   const { isFetching, refetch } = useQuery<ArtistPropsWithMusics[]>({
     queryKey: ["artists"],
@@ -33,7 +32,7 @@ export function ArtistsList() {
           setOffset((prevOffset) => prevOffset + 1);
         }
         return data || [];
-      } catch (err) {
+      } catch {
         return [];
       }
     },
@@ -69,26 +68,26 @@ export function ArtistsList() {
         )}
       </div>
       {!isFetching &&
-        artists &&
-        artists.length >= skeletons.length &&
-        artists.length % 2 === 0 && (
-          <div className="flex w-full justify-center">
-            <Button
-              onClick={async () => {
-                await refetch();
-                router.push(`#${artists[artists.length - 1]?.id}`);
-              }}
-              className="mt-4 size-fit"
-              radius="full"
-            >
-              {isFetching ? (
-                <Spinner size={20} className="animate-spin" />
-              ) : (
-                "Load more"
-              )}
-            </Button>
-          </div>
-        )}
+      artists &&
+      artists.length >= skeletons.length &&
+      artists.length % 2 === 0 ? (
+        <div className="flex w-full justify-center">
+          <Button
+            onClick={async () => {
+              await refetch();
+              router.push(`#${artists.at(-1)?.id}`);
+            }}
+            className="mt-4 size-fit"
+            radius="full"
+          >
+            {isFetching ? (
+              <Spinner size={20} className="animate-spin" />
+            ) : (
+              "Load more"
+            )}
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }

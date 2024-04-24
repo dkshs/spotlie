@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 import { currentUser } from "@clerk/nextjs/server";
+import Link from "next/link";
+import { CreatePlaylist } from "./CreatePlaylist";
+import { CreateMusic } from "./CreateMusic";
 import { serverFetcher } from "@/utils/api";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { MusicCard } from "@/components/MusicCard";
-import { CreatePlaylist } from "./CreatePlaylist";
-import { CreateMusic } from "./CreateMusic";
 
 export const metadata: Metadata = {
   title: "Library",
@@ -39,7 +39,7 @@ export default async function LibraryPage() {
 
   return (
     <div className="my-8 flex flex-col gap-8">
-      {playlists && (
+      {playlists ? (
         <section className="px-4 md:px-9">
           <header className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold">Playlists</h2>
@@ -70,8 +70,8 @@ export default async function LibraryPage() {
             </div>
           </ScrollArea>
         </section>
-      )}
-      {isArtist && (
+      ) : null}
+      {isArtist ? (
         <section className="px-4 md:px-9">
           <header className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold">Musics</h2>
@@ -84,7 +84,7 @@ export default async function LibraryPage() {
               </Button>
             </div>
           </header>
-          {musics && musics.length > 0 && (
+          {musics && musics.length > 0 ? (
             <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
               <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
                 {musics.map((music) => (
@@ -98,9 +98,9 @@ export default async function LibraryPage() {
                 ))}
               </div>
             </ScrollArea>
-          )}
+          ) : null}
         </section>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -3,17 +3,17 @@
 import type { MusicProps } from "@/utils/types";
 
 import { useMemo, useState } from "react";
-import { useMusic } from "@/hooks/useMusic";
 
 import Image from "next/image";
 import Link from "next/link";
-import { ControlButton } from "./ControlButton";
 import { ActionMenu, type ActionMenuProps } from "../ActionMenu";
+import { ControlButton } from "./ControlButton";
+import { useMusic } from "@/hooks/useMusic";
 
 interface HorizontalMusicCardProps extends ActionMenuProps {
-  music: MusicProps;
-  musics?: MusicProps[];
-  showArtist?: boolean;
+  readonly music: MusicProps;
+  readonly musics?: MusicProps[];
+  readonly showArtist?: boolean;
 }
 
 function HorizontalMusicCard({
@@ -65,9 +65,10 @@ function HorizontalMusicCard({
         }
         onFocus={() => setButtonFocus(true)}
         onBlur={() => setButtonFocus(false)}
+        aria-label={`${musicIsPlaying ? "Pause" : "Play"} ${music.title}`}
       />
       <div className="relative size-[50px] min-w-fit rounded-lg bg-background bg-gradient-to-tr from-background/60 to-primary/20">
-        {music.image && (
+        {music.image ? (
           <Image
             alt={music.title}
             src={music.image}
@@ -75,7 +76,7 @@ function HorizontalMusicCard({
             width={50}
             height={50}
           />
-        )}
+        ) : null}
         <ControlButton
           music={music}
           playlist={playlist}
@@ -91,14 +92,14 @@ function HorizontalMusicCard({
         >
           {music.title}
         </Link>
-        {showArtist && (
+        {showArtist ? (
           <Link
             href={`/artist/${music.artist.id}`}
             className="w-full max-w-fit truncate rounded-lg border border-transparent text-sm text-foreground/60 hover:underline focus-visible:border-ring focus-visible:outline-none"
           >
             {music.artist.full_name}
           </Link>
-        )}
+        ) : null}
       </div>
       <ActionMenu
         {...props}

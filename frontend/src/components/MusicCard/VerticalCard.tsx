@@ -2,15 +2,15 @@ import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 import Image from "next/image";
 import Link from "next/link";
-import { ControlButton } from "./ControlButton";
 import { ActionMenu } from "../ActionMenu";
+import { ControlButton } from "./ControlButton";
 
 interface VerticalMusicCardProps {
-  music: MusicProps;
-  musics?: MusicProps[];
-  playlist?: PlaylistPropsWithMusics;
-  showArtist?: boolean;
-  text?: string;
+  readonly music: MusicProps;
+  readonly musics?: MusicProps[];
+  readonly playlist?: PlaylistPropsWithMusics;
+  readonly showArtist?: boolean;
+  readonly text?: string;
 }
 
 function VerticalMusicCard({
@@ -31,7 +31,7 @@ function VerticalMusicCard({
         }`}
         className="absolute inset-0 z-10"
         tabIndex={-1}
-        aria-hidden={true}
+        aria-hidden
         aria-label={isPlaylist ? playlist.name : music.title}
       />
       <div className="relative h-[65%] min-h-[65%] w-36 overflow-hidden rounded-lg bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60 md:w-44">

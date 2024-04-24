@@ -7,7 +7,7 @@ import { VerticalMusicCard, type VerticalMusicCardProps } from "./VerticalCard";
 interface MusicCardProps
   extends HorizontalMusicCardProps,
     VerticalMusicCardProps {
-  orientation?: "horizontal" | "vertical";
+  readonly orientation?: "horizontal" | "vertical";
 }
 
 export function MusicCard(props: MusicCardProps) {

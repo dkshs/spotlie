@@ -3,15 +3,15 @@
 import type { ArtistPropsWithMusics } from "@/utils/types";
 
 import { useMemo, useState } from "react";
-import { useMusic } from "@/hooks/useMusic";
 
 import Image from "next/image";
 import Link from "next/link";
 import { ControlButton } from "../MusicCard";
 import { ActionMenu } from "../ActionMenu";
+import { useMusic } from "@/hooks/useMusic";
 
 interface HorizontalArtistCardProps {
-  artist: ArtistPropsWithMusics;
+  readonly artist: ArtistPropsWithMusics;
 }
 
 function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
@@ -37,14 +37,14 @@ function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
       />
       <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
       <div className="relative size-[50px] min-h-[50px] min-w-[50px] rounded-full bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60">
-        {artist.image && (
+        {artist.image ? (
           <Image
             alt={artist.full_name}
             src={artist.image}
             className="aspect-square rounded-full object-cover"
             fill
           />
-        )}
+        ) : null}
         {artist.musics?.length > 0 && (
           <ControlButton
             music={artist.musics[0]!}

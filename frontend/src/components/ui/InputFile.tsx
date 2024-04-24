@@ -1,12 +1,12 @@
-import { forwardRef, type ReactNode, type InputHTMLAttributes } from "react";
+import { type InputHTMLAttributes, type ReactNode, forwardRef } from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 import { Button } from "./Button";
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
   TooltipProvider,
+  TooltipTrigger,
 } from "./Tooltip";
 import { cn } from "@/lib/utils";
 
@@ -16,22 +16,22 @@ const inputFileVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/90 focus-within:ring-ring dark:hover:bg-primary/80",
+          "bg-primary text-primary-foreground focus-within:ring-ring hover:bg-primary/90 dark:hover:bg-primary/80",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/80 focus-within:ring-destructive",
+          "bg-destructive text-destructive-foreground focus-within:ring-destructive hover:bg-destructive/80",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground focus-within:ring-ring",
+          "border border-input bg-background focus-within:ring-ring hover:bg-accent hover:text-accent-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/60 focus-within:ring-ring dark:hover:bg-secondary/80",
+          "bg-secondary text-secondary-foreground focus-within:ring-ring hover:bg-secondary/60 dark:hover:bg-secondary/80",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground focus-within:ring-ring",
+          "focus-within:ring-ring hover:bg-accent hover:text-accent-foreground",
         none: "",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 px-3",
         lg: "h-11 px-8",
-        icon: "h-10 w-10",
+        icon: "size-10",
       },
     },
     defaultVariants: {
@@ -42,10 +42,10 @@ const inputFileVariants = cva(
 );
 
 interface InputFileProps extends InputHTMLAttributes<HTMLInputElement> {
-  variant?: VariantProps<typeof inputFileVariants>["variant"];
-  btnSize?: VariantProps<typeof inputFileVariants>["size"];
-  labelText?: string | ReactNode;
-  tooltipContent?: ReactNode;
+  readonly variant?: VariantProps<typeof inputFileVariants>["variant"];
+  readonly btnSize?: VariantProps<typeof inputFileVariants>["size"];
+  readonly labelText?: string | ReactNode;
+  readonly tooltipContent?: ReactNode;
 }
 
 export const InputFile = forwardRef<HTMLInputElement, InputFileProps>(

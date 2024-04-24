@@ -23,15 +23,16 @@ export default async function UserSettingsPage() {
   return (
     <div className="mx-auto my-10 flex justify-center sm:container">
       <div className="flex flex-col items-start space-y-6">
-        {externalId && (
+        {externalId ? (
           <h1 className="px-2">
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <Link asChild className="text-3xl">
               <NextLink href={`/${isArtist ? "artist" : "user"}/${externalId}`}>
                 @{user.username}
               </NextLink>
             </Link>
           </h1>
-        )}
+        ) : null}
         <UserProfile path="/settings" />
       </div>
     </div>

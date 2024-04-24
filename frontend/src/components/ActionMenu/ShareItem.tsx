@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { useCopyToClipboard } from "usehooks-ts";
 
 import { toast } from "react-toastify";
+import { Copy, Export } from "@phosphor-icons/react";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -14,11 +15,9 @@ import {
   DropdownMenuSubTrigger,
 } from "@/components/ui/DropdownMenu";
 
-import { Copy, Export } from "@phosphor-icons/react";
-
 interface ShareItemProps {
-  id: string;
-  path?: ActionType;
+  readonly id: string;
+  readonly path?: ActionType;
 }
 
 export function ShareItem({ id, path = "music" }: ShareItemProps) {

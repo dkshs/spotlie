@@ -1,11 +1,6 @@
 "use client";
 
-import { useMusic } from "@/hooks/useMusic";
 import { useWindowSize } from "usehooks-ts";
-
-import { cn } from "@/lib/utils";
-import { Button, type ButtonProps } from "../ui/Button";
-
 import {
   Pause,
   Play,
@@ -15,6 +10,10 @@ import {
   SkipBack,
   SkipForward,
 } from "@phosphor-icons/react";
+import { Button, type ButtonProps } from "../ui/Button";
+import { useMusic } from "@/hooks/useMusic";
+
+import { cn } from "@/lib/utils";
 
 function ControlButton({ className, ...props }: ButtonProps) {
   return (

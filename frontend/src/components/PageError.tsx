@@ -2,8 +2,8 @@ import NextLink from "next/link";
 import { Link } from "./ui/Link";
 
 interface PageErrorProps {
-  title: string;
-  description: string;
+  readonly title: string;
+  readonly description: string;
 }
 
 export function PageError({ title, description }: PageErrorProps) {
@@ -13,7 +13,7 @@ export function PageError({ title, description }: PageErrorProps) {
       <p className="mt-4 text-lg">{description}</p>
       <p className="mt-2 text-base">
         Go back to the{" "}
-        <Link asChild>
+        <Link asChild href="/">
           <NextLink href="/">home</NextLink>
         </Link>
         .

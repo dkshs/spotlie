@@ -3,14 +3,14 @@
 import { useWindowSize } from "usehooks-ts";
 
 interface DataTitleProps {
-  title: string;
+  readonly title: string;
 }
 
 export function DataTitle({ title }: DataTitleProps) {
   const { width } = useWindowSize();
 
   const truncate = (str: string, len = 12) => {
-    return str.length > len ? `${str.substring(0, len)}...` : str;
+    return str.length > len ? `${str.slice(0, Math.max(0, len))}...` : str;
   };
 
   return (

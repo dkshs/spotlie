@@ -5,10 +5,10 @@ import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
-import { useApi } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
 
 import { toast } from "react-toastify";
+import { PencilSimple, Plus, TrashSimple } from "@phosphor-icons/react";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -18,14 +18,14 @@ import {
   DropdownMenuSubTrigger,
 } from "@/components/ui/DropdownMenu";
 
-import { PencilSimple, Plus, TrashSimple } from "@phosphor-icons/react";
+import { useApi } from "@/hooks/useApi";
 
 export interface MusicMenuProps {
-  music: MusicProps;
-  playlist?: PlaylistPropsWithMusics;
-  orderId?: number;
-  setEditDialogOpen: (open: boolean) => void;
-  setDeleteDialogOpen: (open: boolean) => void;
+  readonly music: MusicProps;
+  readonly playlist?: PlaylistPropsWithMusics;
+  readonly orderId?: number;
+  readonly setEditDialogOpen: (open: boolean) => void;
+  readonly setDeleteDialogOpen: (open: boolean) => void;
 }
 
 export function MusicMenu({
@@ -55,7 +55,7 @@ export function MusicMenu({
           searchParams: { object_id: externalId },
         });
         return res.data || null;
-      } catch (error) {
+      } catch {
         return null;
       }
     },
@@ -161,7 +161,7 @@ export function MusicMenu({
   return (
     user && (
       <>
-        {isArtist && ownsTheMusic && (
+        {isArtist && ownsTheMusic ? (
           <>
             <DropdownMenuItem
               className="flex gap-2"
@@ -179,7 +179,7 @@ export function MusicMenu({
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
-        )}
+        ) : null}
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="flex gap-2">
             <Plus weight="bold" size={18} />
@@ -194,7 +194,9 @@ export function MusicMenu({
                 <Plus weight="bold" size={18} />
                 <span>Create Playlist</span>
               </DropdownMenuItem>
-              {playlists && playlists.length > 0 && <DropdownMenuSeparator />}
+              {playlists && playlists.length > 0 ? (
+                <DropdownMenuSeparator />
+              ) : null}
               {playlists?.map((playlist) => (
                 <DropdownMenuItem
                   key={playlist.id}
@@ -206,7 +208,7 @@ export function MusicMenu({
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
         </DropdownMenuSub>
-        {playlist && ownsThePlaylist && (
+        {playlist && ownsThePlaylist ? (
           <DropdownMenuItem
             className="flex gap-2"
             onClick={() =>
@@ -216,7 +218,7 @@ export function MusicMenu({
             <TrashSimple weight="bold" size={18} />
             <span>Delete from this playlist</span>
           </DropdownMenuItem>
-        )}
+        ) : null}
       </>
     )
   );

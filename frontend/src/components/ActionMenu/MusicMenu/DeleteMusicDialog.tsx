@@ -3,10 +3,10 @@
 import type { MusicProps } from "@/utils/types";
 
 import { useCallback } from "react";
-import { useApi } from "@/hooks/useApi";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { toast } from "react-toastify";
+import { useApi } from "@/hooks/useApi";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,9 +20,9 @@ import {
 } from "@/components/ui/AlertDialog";
 
 export interface DeleteMusicDialogProps extends React.PropsWithChildren {
-  music: MusicProps;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly music: MusicProps;
+  readonly open?: boolean;
+  readonly setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function DeleteMusicDialog({

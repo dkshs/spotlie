@@ -1,8 +1,8 @@
-import type { MusicProps, ArtistPropsWithMusics } from "@/utils/types";
-
-import { serverFetcher } from "@/utils/api";
+import type { ArtistPropsWithMusics, MusicProps } from "@/utils/types";
 
 import Link from "next/link";
+import { serverFetcher } from "@/utils/api";
+
 import { Button } from "@/components/ui/Button";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { MusicCard } from "@/components/MusicCard";

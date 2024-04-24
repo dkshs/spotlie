@@ -6,7 +6,7 @@ import { ControlButton } from "../MusicCard";
 import { ActionMenu } from "../ActionMenu";
 
 interface VerticalArtistCardProps {
-  artist: ArtistPropsWithMusics;
+  readonly artist: ArtistPropsWithMusics;
 }
 
 function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
@@ -19,14 +19,14 @@ function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
       />
       <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
       <div className="relative size-36 rounded-full bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60 md:size-44">
-        {artist.image && (
+        {artist.image ? (
           <Image
             alt={artist.full_name}
             src={artist.image}
             className="aspect-square size-36 rounded-full object-cover md:size-44"
             fill
           />
-        )}
+        ) : null}
         {artist.musics?.length > 0 && (
           <ControlButton
             artistId={artist.id}

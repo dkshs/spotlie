@@ -1,8 +1,7 @@
 import { cache } from "react";
 import { auth } from "@clerk/nextjs/server";
-import { env } from "@/env.mjs";
-
 import { type FetcherOpts, fetcher } from "./fetcher";
+import { env } from "@/env.mjs";
 
 export const serverFetcher = cache(
   async <T>(path: string, opts?: FetcherOpts & { needAuth?: boolean }) => {

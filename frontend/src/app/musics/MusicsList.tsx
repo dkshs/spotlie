@@ -5,19 +5,18 @@ import type { MusicProps } from "@/utils/types";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { Spinner } from "@phosphor-icons/react";
 import { useApi } from "@/hooks/useApi";
 
 import { MusicCard } from "@/components/MusicCard";
 import { Button } from "@/components/ui/Button";
-
-import { Spinner } from "@phosphor-icons/react";
 
 export function MusicsList() {
   const router = useRouter();
   const [musics, setMusics] = useState<MusicProps[]>([]);
   const [offset, setOffset] = useState(0);
   const { fetcher } = useApi();
-  const skeletons = [...Array(12).keys()].map((i) => i + 1);
+  const skeletons = [...Array.from({ length: 12 }).keys()].map((i) => i + 1);
 
   const { isFetching, refetch } = useQuery<MusicProps[]>({
     queryKey: ["musics"],
@@ -33,7 +32,7 @@ export function MusicsList() {
           setOffset((prevOffset) => prevOffset + 1);
         }
         return data || [];
-      } catch (err) {
+      } catch {
         return [];
       }
     },
@@ -71,26 +70,26 @@ export function MusicsList() {
         )}
       </div>
       {!isFetching &&
-        musics &&
-        musics.length >= skeletons.length &&
-        musics.length % 2 === 0 && (
-          <div className="flex w-full justify-center">
-            <Button
-              onClick={async () => {
-                await refetch();
-                router.push(`/musics#${musics[musics.length - 1]?.id}`);
-              }}
-              className="mt-4 size-fit"
-              radius="full"
-            >
-              {isFetching ? (
-                <Spinner size={20} className="animate-spin" />
-              ) : (
-                "Load more"
-              )}
-            </Button>
-          </div>
-        )}
+      musics &&
+      musics.length >= skeletons.length &&
+      musics.length % 2 === 0 ? (
+        <div className="flex w-full justify-center">
+          <Button
+            onClick={async () => {
+              await refetch();
+              router.push(`/musics#${musics.at(-1)?.id}`);
+            }}
+            className="mt-4 size-fit"
+            radius="full"
+          >
+            {isFetching ? (
+              <Spinner size={20} className="animate-spin" />
+            ) : (
+              "Load more"
+            )}
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }

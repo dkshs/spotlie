@@ -3,22 +3,21 @@
 import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 import { useCallback, useMemo } from "react";
+import Image from "next/image";
+import { Pause, Play } from "@phosphor-icons/react";
 import { useMusic } from "@/hooks/useMusic";
 
 import { Button } from "@/components/ui/Button";
-import Image from "next/image";
-
-import { Pause, Play } from "@phosphor-icons/react";
 
 interface ControlButtonProps {
-  music: MusicProps;
-  playlist?: PlaylistPropsWithMusics;
-  musics?: MusicProps[];
-  isPlaylistBtn?: boolean;
-  buttonFocus?: boolean;
-  radius?: "rounded-lg" | "rounded-full";
-  orientation?: "horizontal" | "vertical";
-  artistId?: string;
+  readonly music: MusicProps;
+  readonly playlist?: PlaylistPropsWithMusics;
+  readonly musics?: MusicProps[];
+  readonly isPlaylistBtn?: boolean;
+  readonly buttonFocus?: boolean;
+  readonly radius?: "rounded-lg" | "rounded-full";
+  readonly orientation?: "horizontal" | "vertical";
+  readonly artistId?: string;
 }
 
 function ButtonContent({
@@ -26,9 +25,9 @@ function ButtonContent({
   buttonFocus = false,
   orientation = "vertical",
 }: {
-  musicIsPlaying?: boolean;
-  buttonFocus?: boolean;
-  orientation?: "horizontal" | "vertical";
+  readonly musicIsPlaying?: boolean;
+  readonly buttonFocus?: boolean;
+  readonly orientation?: "horizontal" | "vertical";
 }) {
   return musicIsPlaying ? (
     <>
@@ -142,7 +141,7 @@ export function ControlButton({
   return orientation === "vertical" ? (
     <Button
       type="button"
-      className={`group/button absolute bottom-0 right-0 z-20 mb-2 mr-3 h-12 w-12 ${
+      className={`group/button absolute bottom-0 right-0 z-20 mb-2 mr-3 size-12 ${
         musicIsPlaying ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
       } focus:translate-y-0 focus:opacity-100 group-hover:translate-y-0 group-hover:opacity-100`}
       radius="full"
@@ -164,6 +163,7 @@ export function ControlButton({
       } duration-200 focus:opacity-100 focus:outline-none focus-visible:border-primary group-hover:opacity-100`}
       onClick={() => onClick()}
       title={title}
+      aria-label={title}
     >
       <ButtonContent
         musicIsPlaying={musicIsPlaying}

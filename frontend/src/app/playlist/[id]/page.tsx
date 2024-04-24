@@ -3,10 +3,10 @@ import type { PlaylistPropsWithMusics } from "@/utils/types";
 
 import { cache } from "react";
 import { notFound } from "next/navigation";
-import { serverFetcher } from "@/utils/api";
 
 import Image from "next/image";
 import Link from "next/link";
+import { serverFetcher } from "@/utils/api";
 import { ControlButton, MusicCard } from "@/components/MusicCard";
 import {
   HoverCard,
@@ -17,7 +17,7 @@ import { DataTitle } from "@/components/DataTitle";
 import { ActionMenu } from "@/components/ActionMenu";
 
 type Props = {
-  params: { id: string };
+  readonly params: { id: string };
 };
 
 const getPlaylists = cache(async () => {
@@ -87,7 +87,7 @@ export default async function PlaylistPage({ params }: Props) {
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
       <div className="flex flex-col justify-center text-center md:min-h-[280px] md:flex-row md:justify-start md:text-start">
-        {(playlist.image || playlist.musics[0]?.image) && (
+        {playlist.image || playlist.musics[0]?.image ? (
           <>
             <div className="absolute inset-0 z-[-1] bg-center md:h-80">
               <Image
@@ -108,7 +108,7 @@ export default async function PlaylistPage({ params }: Props) {
               />
             </div>
           </>
-        )}
+        ) : null}
         <div className="flex min-h-[280px] flex-col justify-evenly gap-2 md:justify-around">
           <div className="flex flex-col gap-2">
             <small className="text-xs font-extrabold uppercase text-white md:mt-4">
@@ -117,7 +117,7 @@ export default async function PlaylistPage({ params }: Props) {
             <DataTitle title={playlist.name} />
             <div className="flex items-center gap-2 self-center md:self-start">
               <div className="flex items-center gap-2 after:content-['•']">
-                {playlist.owner?.image && (
+                {playlist.owner?.image ? (
                   <Image
                     src={playlist.owner.image}
                     alt={playlist.owner.full_name}
@@ -125,7 +125,7 @@ export default async function PlaylistPage({ params }: Props) {
                     width={24}
                     height={24}
                   />
-                )}
+                ) : null}
                 <Link
                   href={`/${playlist.owner_is_artist ? "artist" : "user"}/${
                     playlist.owner.id
@@ -148,21 +148,21 @@ export default async function PlaylistPage({ params }: Props) {
                   })}
                 </HoverCardContent>
               </HoverCard>
-              {playlist.musics && (
+              {playlist.musics ? (
                 <div className="before:mr-1.5 before:content-['•']">
                   {playlist.musics.length} musics
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
           <div className="group relative flex self-center md:mt-3 md:self-start [&_button]:relative [&_button]:translate-y-0 [&_button]:opacity-100">
-            {playlist.musics && playlist.musics.length > 0 && (
+            {playlist.musics && playlist.musics.length > 0 ? (
               <ControlButton
                 music={playlist.musics[0]!}
                 playlist={playlist}
                 isPlaylistBtn
               />
-            )}
+            ) : null}
             <div className="mt-1">
               <ActionMenu
                 playlist={playlist}
@@ -173,12 +173,12 @@ export default async function PlaylistPage({ params }: Props) {
           </div>
         </div>
       </div>
-      {playlist.musics && playlist.musics.length > 0 && (
+      {playlist.musics && playlist.musics.length > 0 ? (
         <div className="mt-20 flex w-full flex-col gap-2 lg:max-w-[50%]">
           {playlist.musics.map(
-            (music, i) =>
+            (music) =>
               music && (
-                <div key={i} className="w-full">
+                <div key={music.order_id} className="w-full">
                   <MusicCard
                     music={music}
                     orientation="horizontal"
@@ -190,7 +190,7 @@ export default async function PlaylistPage({ params }: Props) {
               ),
           )}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

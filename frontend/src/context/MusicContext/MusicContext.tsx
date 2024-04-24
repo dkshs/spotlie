@@ -11,19 +11,20 @@ import type {
 } from "@/utils/types";
 
 import {
+  type PropsWithChildren,
   createContext,
-  PropsWithChildren,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "usehooks-ts";
+import { ctxInitialValues } from "./ctxInitialValues";
 import { useApi } from "@/hooks/useApi";
 
 import { musicTimeFormatter } from "@/utils/formatters";
 import { turnMusicsInPlaylist } from "@/utils/turnMusicsInPlaylist";
-import { ctxInitialValues } from "./ctxInitialValues";
 
 export const MusicContext = createContext<MusicContextProps>(ctxInitialValues);
 
@@ -65,16 +66,17 @@ export function MusicContextProvider(props: PropsWithChildren) {
     queryFn: async () => {
       setMusicState("paused");
       try {
-        if (!localCurrentMusic || !localCurrentMusic.id) throw Error("");
+        if (!localCurrentMusic || !localCurrentMusic.id)
+          throw new Error("No music");
         const { data } = await fetcher<MusicProps>(
           `/musics/${localCurrentMusic.id}`,
         );
-        if (!data || !data.id) throw Error("");
+        if (!data || !data.id) throw new Error("No data");
         setCurrentMusic(data);
         setLocalCurrentMusic(data);
         const audio = new Audio(data.audio);
         audio.currentTime = musicTime.currentTimeNum;
-        audio.onloadedmetadata = () => {
+        audio.addEventListener("loadedmetadata", () => {
           const duration = audio.duration;
           const { musicDurationTime } = musicTimeFormatter(audio);
           setMusicAudio(audio);
@@ -85,8 +87,8 @@ export function MusicContextProvider(props: PropsWithChildren) {
               durationNumber: duration,
             };
           });
-        };
-      } catch (e) {
+        });
+      } catch {
         setCurrentMusic(null);
         setLocalCurrentMusic(null);
         setPlaylist(null);
@@ -113,8 +115,8 @@ export function MusicContextProvider(props: PropsWithChildren) {
             : turnMusicsInPlaylist(data || []);
         setPlaylist(pl);
         setLocalPlaylist(pl);
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
       }
       return null;
     },
@@ -309,27 +311,47 @@ export function MusicContextProvider(props: PropsWithChildren) {
     [musicAudio],
   );
 
+  const contextValues = useMemo(
+    () => ({
+      playlist,
+      currentMusic,
+      musicState,
+      musicTime,
+      musicVolume,
+      repeatMusic,
+      shufflePlaylist,
+      mutatedMusic,
+      playMusic,
+      pauseMusic,
+      skipMusic,
+      previousMusic,
+      toggleRepeatMusic,
+      toggleShufflePlaylist,
+      handleMusicTime,
+      handleMusicVolume,
+    }),
+    [
+      currentMusic,
+      handleMusicTime,
+      handleMusicVolume,
+      musicState,
+      musicTime,
+      musicVolume,
+      mutatedMusic,
+      pauseMusic,
+      playMusic,
+      playlist,
+      previousMusic,
+      repeatMusic,
+      shufflePlaylist,
+      skipMusic,
+      toggleRepeatMusic,
+      toggleShufflePlaylist,
+    ],
+  );
+
   return (
-    <MusicContext.Provider
-      value={{
-        playlist,
-        currentMusic,
-        musicState,
-        musicTime,
-        musicVolume,
-        repeatMusic,
-        shufflePlaylist,
-        mutatedMusic,
-        playMusic,
-        pauseMusic,
-        skipMusic,
-        previousMusic,
-        toggleRepeatMusic,
-        toggleShufflePlaylist,
-        handleMusicTime,
-        handleMusicVolume,
-      }}
-    >
+    <MusicContext.Provider value={contextValues}>
       {props.children}
     </MusicContext.Provider>
   );

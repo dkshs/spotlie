@@ -24,7 +24,7 @@ export async function fetcher<T = unknown>(
     try {
       const json = JSON.parse(await res.text());
       msg = json.full_message || msg;
-    } catch (error) {}
+    } catch {}
     throw new Error(msg);
   }
   const data =

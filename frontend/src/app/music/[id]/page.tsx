@@ -3,10 +3,11 @@ import type { MusicProps } from "@/utils/types";
 
 import { cache } from "react";
 import { notFound } from "next/navigation";
-import { serverFetcher } from "@/utils/api";
-
 import Image from "next/image";
 import Link from "next/link";
+import { MusicDuration } from "./MusicDuration";
+import { serverFetcher } from "@/utils/api";
+
 import { ControlButton, MusicCard } from "@/components/MusicCard";
 import {
   HoverCard,
@@ -14,12 +15,11 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/HoverCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
-import { MusicDuration } from "./MusicDuration";
 import { DataTitle } from "@/components/DataTitle";
 import { ActionMenu } from "@/components/ActionMenu";
 
 type Props = {
-  params: { id: string };
+  readonly params: { id: string };
 };
 
 const getMusics = cache(async () => {
@@ -85,7 +85,7 @@ export default async function MusicPage({ params }: Props) {
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
       <div className="flex flex-col justify-center text-center md:min-h-[280px] md:flex-row md:justify-start md:text-start">
-        {music.image && (
+        {music.image ? (
           <>
             <div className="absolute inset-0 z-[-1] bg-center md:h-80">
               <Image
@@ -106,7 +106,7 @@ export default async function MusicPage({ params }: Props) {
               />
             </div>
           </>
-        )}
+        ) : null}
         <div className="flex min-h-[280px] flex-col justify-evenly gap-2 md:justify-around">
           <div className="flex flex-col gap-2">
             <small className="text-xs font-extrabold uppercase text-white md:mt-4">
@@ -115,7 +115,7 @@ export default async function MusicPage({ params }: Props) {
             <DataTitle title={music.title} />
             <div className="flex items-center gap-2 self-center md:self-start">
               <div className="flex items-center gap-2 after:content-['•']">
-                {music.artist?.image && (
+                {music.artist?.image ? (
                   <Image
                     src={music.artist.image}
                     alt={music.artist.full_name}
@@ -123,7 +123,7 @@ export default async function MusicPage({ params }: Props) {
                     width={24}
                     height={24}
                   />
-                )}
+                ) : null}
                 <Link
                   href={`/artist/${music.artist.id}`}
                   title={music.artist.full_name}
@@ -132,7 +132,7 @@ export default async function MusicPage({ params }: Props) {
                   {music.artist.full_name}
                 </Link>
               </div>
-              {music.release_date && (
+              {music.release_date ? (
                 <HoverCard openDelay={200} closeDelay={100}>
                   <HoverCardTrigger className="after:ml-1.5 after:content-['•']">
                     {new Date(music.release_date).getFullYear()}
@@ -145,7 +145,7 @@ export default async function MusicPage({ params }: Props) {
                     })}
                   </HoverCardContent>
                 </HoverCard>
-              )}
+              ) : null}
               <div>
                 <MusicDuration src={music.audio} />
               </div>
@@ -163,7 +163,7 @@ export default async function MusicPage({ params }: Props) {
           </div>
         </div>
       </div>
-      {musics && musics.length > 0 && (
+      {musics && musics.length > 0 ? (
         <section className="mt-20">
           <header className="flex items-center justify-between">
             <h2 className="text-xl font-bold">
@@ -180,8 +180,9 @@ export default async function MusicPage({ params }: Props) {
                     showArtist={false}
                     actionId={music.id}
                     text={
-                      music.release_date &&
-                      new Date(music.release_date).getFullYear().toString()
+                      music.release_date
+                        ? new Date(music.release_date).getFullYear().toString()
+                        : null
                     }
                   />
                 </div>
@@ -190,7 +191,7 @@ export default async function MusicPage({ params }: Props) {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </section>
-      )}
+      ) : null}
     </div>
   );
 }

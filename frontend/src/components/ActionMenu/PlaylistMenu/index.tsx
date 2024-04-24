@@ -5,27 +5,26 @@ import type { PlaylistPropsWithMusics } from "@/utils/types";
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { toast } from "react-toastify";
+import {
+  Copy,
+  LockSimple,
+  LockSimpleOpen,
+  PencilSimple,
+  TrashSimple,
+} from "@phosphor-icons/react";
 import { useApi } from "@/hooks/useApi";
 
-import { toast } from "react-toastify";
 import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
 
-import {
-  PencilSimple,
-  TrashSimple,
-  Copy,
-  LockSimple,
-  LockSimpleOpen,
-} from "@phosphor-icons/react";
-
 export interface PlaylistMenuProps {
-  playlist: PlaylistPropsWithMusics;
-  setDeleteDialogOpen: (open: boolean) => void;
-  setEditDialogOpen: (open: boolean) => void;
+  readonly playlist: PlaylistPropsWithMusics;
+  readonly setDeleteDialogOpen: (open: boolean) => void;
+  readonly setEditDialogOpen: (open: boolean) => void;
 }
 
 export function PlaylistMenu({

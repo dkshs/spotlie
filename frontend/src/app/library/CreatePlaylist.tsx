@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback } from "react";
-import { useApi } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
-
 import { toast } from "react-toastify";
+import { Plus } from "@phosphor-icons/react";
+import { useApi } from "@/hooks/useApi";
+
 import { Button } from "@/components/ui/Button";
 import {
   Tooltip,
@@ -12,8 +13,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
-
-import { Plus } from "@phosphor-icons/react";
 
 export function CreatePlaylist() {
   const router = useRouter();

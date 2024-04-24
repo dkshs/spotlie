@@ -4,11 +4,11 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Merriweather_Sans as MerriweatherSans } from "next/font/google";
 
-import { env } from "@/env.mjs";
-import { Providers } from "./providers";
 import { ToastContainer } from "react-toastify";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Providers } from "./providers";
 import { clerkTheme } from "./clerkTheme";
+import { env } from "@/env.mjs";
 
 import { Header } from "@/components/Header";
 import { Player } from "@/components/Player";
@@ -60,7 +60,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  readonly children: ReactNode;
+}) {
   return (
     <ClerkProvider appearance={{ baseTheme: clerkTheme }}>
       <html lang="en" className={merriweatherSans.variable}>
@@ -70,7 +74,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <ToastContainer
                 autoClose={3000}
                 theme="dark"
-                newestOnTop={true}
+                newestOnTop
                 pauseOnFocusLoss={false}
                 limit={3}
                 closeOnClick

@@ -1,18 +1,18 @@
 import type { Metadata, ResolvingMetadata } from "next";
-import type { UserProps, PlaylistPropsWithMusics } from "@/utils/types";
+import type { PlaylistPropsWithMusics, UserProps } from "@/utils/types";
 
 import { cache } from "react";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { serverFetcher } from "@/utils/api";
 
-import Image from "next/image";
 import { MusicCard } from "@/components/MusicCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { DataTitle } from "@/components/DataTitle";
 import { ActionMenu } from "@/components/ActionMenu";
 
 type Props = {
-  params: { id: string };
+  readonly params: { id: string };
 };
 
 const getUsers = cache(async () => {
@@ -79,7 +79,7 @@ export default async function UserPage({ params }: Props) {
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
       <div className="flex flex-col justify-center text-center md:min-h-[280px] md:flex-row md:justify-start md:text-start">
-        {user.image && (
+        {user.image ? (
           <div className="absolute inset-0 z-[-1] bg-center md:h-80">
             <Image
               src={user.image}
@@ -89,8 +89,8 @@ export default async function UserPage({ params }: Props) {
               className="aspect-video bg-cover bg-center bg-no-repeat object-cover opacity-50 blur-3xl"
             />
           </div>
-        )}
-        {user.image && (
+        ) : null}
+        {user.image ? (
           <div className="flex justify-center self-center rounded-full bg-background/50 md:mr-8 md:max-h-[280px] md:max-w-[280px]">
             <Image
               src={user.image}
@@ -101,20 +101,20 @@ export default async function UserPage({ params }: Props) {
               priority
             />
           </div>
-        )}
+        ) : null}
         <div className="mt-12 flex flex-col gap-2 md:mt-auto md:min-h-[280px] md:pt-12">
           <div className="flex flex-col gap-4">
             <small className="text-xs font-extrabold uppercase text-white md:mt-4">
               Profile
             </small>
             <DataTitle title={user.full_name} />
-            {playlists && playlists.length > 0 && (
+            {playlists && playlists.length > 0 ? (
               <div className="flex items-center gap-2 self-center md:self-start">
                 <span className="text-sm">
                   {playlists.length} Public Playlists
                 </span>
               </div>
-            )}
+            ) : null}
           </div>
           <div className="group relative flex self-center md:mt-3 md:self-start">
             <ActionMenu
@@ -126,7 +126,7 @@ export default async function UserPage({ params }: Props) {
           </div>
         </div>
       </div>
-      {playlists && playlists.length > 0 && (
+      {playlists && playlists.length > 0 ? (
         <section className="mt-14 md:px-9">
           <header className="flex items-center justify-between">
             <h2 className="text-xl font-bold">Public Playlists</h2>
@@ -150,7 +150,7 @@ export default async function UserPage({ params }: Props) {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </section>
-      )}
+      ) : null}
     </div>
   );
 }

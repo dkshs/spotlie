@@ -4,10 +4,11 @@ import type { PlaylistPropsWithMusics } from "@/utils/types";
 
 import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useApi } from "@/hooks/useApi";
-
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { PencilSimple, Spinner, X } from "@phosphor-icons/react";
+import { useApi } from "@/hooks/useApi";
+
 import {
   Dialog,
   DialogContent,
@@ -29,12 +30,10 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { InputFile } from "@/components/ui/InputFile";
 
-import { PencilSimple, Spinner, X } from "@phosphor-icons/react";
-
 export interface EditPlaylistDialogProps extends React.PropsWithChildren {
-  playlist: PlaylistPropsWithMusics;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly playlist: PlaylistPropsWithMusics;
+  readonly open?: boolean;
+  readonly setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface DataType {
@@ -118,6 +117,7 @@ export function EditPlaylistDialog({
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
       setImgChanged(true);
+      // eslint-disable-next-line node/no-unsupported-features/node-builtins
       setImgPreview(URL.createObjectURL(file));
       setData((prev) => ({ ...prev, image: file }));
     }
@@ -138,21 +138,21 @@ export function EditPlaylistDialog({
           </DialogHeader>
           <div className="mt-6 flex flex-col gap-4 md:flex-row">
             <div className="group relative size-44 self-center rounded-lg bg-background bg-gradient-to-tr from-background/60 to-primary/20 shadow-lg shadow-background/60">
-              {imgPreview && (
+              {imgPreview ? (
                 <Image
                   src={imgPreview}
                   alt={playlist.name}
                   className="aspect-square object-cover"
                   fill
                 />
-              )}
+              ) : null}
               <InputFile
                 id="image"
                 variant="none"
                 name="image"
                 accept="image/*"
                 onChange={handleImage}
-                className="absolute inset-0 z-10 flex size-full flex-col items-center justify-center gap-3 bg-black/50 px-0 py-0 opacity-0 outline-none duration-200 focus-within:opacity-100 group-hover:opacity-100 group-focus:opacity-100"
+                className="absolute inset-0 z-10 flex size-full flex-col items-center justify-center gap-3 bg-black/50 p-0 opacity-0 outline-none duration-200 focus-within:opacity-100 group-hover:opacity-100 group-focus:opacity-100"
                 labelText={
                   <div className="-mt-3 flex size-full flex-col items-center justify-center gap-3">
                     <PencilSimple weight="bold" size={40} />
@@ -161,7 +161,7 @@ export function EditPlaylistDialog({
                 }
                 tooltipContent={"Choose photo"}
               />
-              {imgPreview && (
+              {imgPreview ? (
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -187,7 +187,7 @@ export function EditPlaylistDialog({
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              )}
+              ) : null}
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
@@ -216,7 +216,7 @@ export function EditPlaylistDialog({
                       description: e.target.value,
                     }))
                   }
-                ></Textarea>
+                />
               </div>
             </div>
           </div>

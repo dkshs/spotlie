@@ -10,7 +10,7 @@ import {
 interface ArtistCardProps
   extends HorizontalArtistCardProps,
     VerticalArtistCardProps {
-  orientation?: "horizontal" | "vertical";
+  readonly orientation?: "horizontal" | "vertical";
 }
 
 export function ArtistCard(props: ArtistCardProps) {

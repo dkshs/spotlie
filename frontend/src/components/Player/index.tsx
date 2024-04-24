@@ -1,6 +1,5 @@
 "use client";
 
-import { useMusic } from "@/hooks/useMusic";
 import { useWindowSize } from "usehooks-ts";
 
 import * as SliderPrimitive from "@radix-ui/react-slider";
@@ -8,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MusicControls } from "./MusicControls";
 import { VolumeControls } from "./VolumeControls";
+import { useMusic } from "@/hooks/useMusic";
 
 export function Player() {
   const { width } = useWindowSize();
@@ -29,7 +29,7 @@ export function Player() {
           <SliderPrimitive.Track className="absolute h-0.5 w-full grow cursor-pointer overflow-hidden rounded-full bg-secondary">
             <SliderPrimitive.Range className="absolute h-full rounded-full bg-foreground/60 group-focus-within/player:bg-foreground/80 group-hover/player:bg-foreground/80" />
           </SliderPrimitive.Track>
-          <SliderPrimitive.Thumb className="block h-3.5 w-3.5 cursor-grab rounded-full bg-foreground opacity-0 ring-offset-background duration-200 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:cursor-grabbing group-focus-within/player:opacity-100 group-hover/player:opacity-100" />
+          <SliderPrimitive.Thumb className="block size-3.5 cursor-grab rounded-full bg-foreground opacity-0 ring-offset-background duration-200 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:cursor-grabbing group-focus-within/player:opacity-100 group-hover/player:opacity-100" />
         </div>
       </SliderPrimitive.Root>
       <div className="mx-auto flex size-full max-w-[1600px] items-center justify-between px-3 md:px-6">
@@ -38,7 +38,7 @@ export function Player() {
           <span className="text-xs opacity-75">{musicTime.duration}</span>
         </div>
         <div className="flex items-center gap-2 truncate">
-          {currentMusic.image && (
+          {currentMusic.image ? (
             <Image
               src={currentMusic.image}
               alt={currentMusic.title}
@@ -46,7 +46,7 @@ export function Player() {
               height={56}
               className="aspect-square size-12 rounded-md object-cover md:size-14"
             />
-          )}
+          ) : null}
           <div className="flex flex-col">
             <Link
               className="truncate font-bold hover:underline md:text-lg"

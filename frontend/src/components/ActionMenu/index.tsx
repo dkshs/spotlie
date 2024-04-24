@@ -5,16 +5,14 @@ import type { ActionMenuProps, ActionType } from "./types";
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 
-import { cn } from "@/lib/utils";
-
 import Link from "next/link";
-import { ShareItem } from "./ShareItem";
-import { EditMusicDialog, MusicMenu, DeleteMusicDialog } from "./MusicMenu";
 import {
-  PlaylistMenu,
-  DeletePlaylistDialog,
-  EditPlaylistDialog,
-} from "./PlaylistMenu";
+  DotsThree,
+  MusicNote,
+  User,
+  UserCircleGear,
+  UserCirclePlus,
+} from "@phosphor-icons/react";
 import { Button } from "../ui/Button";
 import {
   DropdownMenu,
@@ -23,14 +21,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/DropdownMenu";
-
+import { ShareItem } from "./ShareItem";
+import { DeleteMusicDialog, EditMusicDialog, MusicMenu } from "./MusicMenu";
 import {
-  DotsThree,
-  MusicNote,
-  User,
-  UserCircleGear,
-  UserCirclePlus,
-} from "@phosphor-icons/react";
+  DeletePlaylistDialog,
+  EditPlaylistDialog,
+  PlaylistMenu,
+} from "./PlaylistMenu";
+
+import { cn } from "@/lib/utils";
 
 export function ActionMenu({
   actionId,
@@ -72,36 +71,36 @@ export function ActionMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-fit">
         {externalId &&
-          user &&
-          (actionType === "artist" || actionType === "user") && (
-            <>
-              {externalId !== user.id ? (
-                <DropdownMenuItem className="flex gap-2">
-                  <UserCirclePlus weight="bold" size={18} />
-                  <span>Follow</span>
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem asChild>
-                  <Link className="flex gap-2" href="/settings">
-                    <UserCircleGear weight="bold" size={18} />
-                    <span>Edit profile</span>
-                  </Link>
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuSeparator />
-            </>
-          )}
-        {playlist && actionType === "playlist" && (
+        user &&
+        (actionType === "artist" || actionType === "user") ? (
+          <>
+            {externalId !== user.id ? (
+              <DropdownMenuItem className="flex gap-2">
+                <UserCirclePlus weight="bold" size={18} />
+                <span>Follow</span>
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem asChild>
+                <Link className="flex gap-2" href="/settings">
+                  <UserCircleGear weight="bold" size={18} />
+                  <span>Edit profile</span>
+                </Link>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuSeparator />
+          </>
+        ) : null}
+        {playlist && actionType === "playlist" ? (
           <>
             <PlaylistMenu
               playlist={playlist}
               setDeleteDialogOpen={setDeletePlaylistDialogOpen}
               setEditDialogOpen={setEditPlaylistDialogOpen}
             />
-            {clerkUser && <DropdownMenuSeparator />}
+            {clerkUser ? <DropdownMenuSeparator /> : null}
           </>
-        )}
-        {music && actionType === "music" && (
+        ) : null}
+        {music && actionType === "music" ? (
           <>
             <MusicMenu
               music={music}
@@ -110,12 +109,12 @@ export function ActionMenu({
               setEditDialogOpen={setEditMusicDialogOpen}
               setDeleteDialogOpen={setDeleteMusicDialogOpen}
             />
-            {clerkUser && (showGoToArtist || showGoToMusic) && (
+            {clerkUser && (showGoToArtist || showGoToMusic) ? (
               <DropdownMenuSeparator />
-            )}
+            ) : null}
           </>
-        )}
-        {music && showGoToMusic && actionType === "music" && (
+        ) : null}
+        {music && showGoToMusic && actionType === "music" ? (
           <>
             <DropdownMenuItem asChild>
               <Link href={`/music/${music.id}`} className="flex gap-2">
@@ -125,8 +124,8 @@ export function ActionMenu({
             </DropdownMenuItem>
             {!showGoToArtist && <DropdownMenuSeparator />}
           </>
-        )}
-        {music && showGoToArtist && actionType === "music" && (
+        ) : null}
+        {music && showGoToArtist && actionType === "music" ? (
           <>
             <DropdownMenuItem asChild>
               <Link href={`/artist/${music.artist.id}`} className="flex gap-2">
@@ -136,10 +135,10 @@ export function ActionMenu({
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
-        )}
+        ) : null}
         <ShareItem id={actionId} path={actionType} />
       </DropdownMenuContent>
-      {playlist && actionType === "playlist" && (
+      {playlist && actionType === "playlist" ? (
         <>
           <DeletePlaylistDialog
             playlist={playlist}
@@ -152,8 +151,8 @@ export function ActionMenu({
             setOpen={setEditPlaylistDialogOpen}
           />
         </>
-      )}
-      {music && actionType === "music" && isArtist && (
+      ) : null}
+      {music && actionType === "music" && isArtist ? (
         <>
           <DeleteMusicDialog
             music={music}
@@ -166,7 +165,7 @@ export function ActionMenu({
             setOpen={setEditMusicDialogOpen}
           />
         </>
-      )}
+      ) : null}
     </DropdownMenu>
   );
 }
