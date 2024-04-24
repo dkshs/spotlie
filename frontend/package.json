@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.2",
-    "@clerk/themes": "^2.0.0",
+    "@clerk/themes": "^2.0.1",
     "@phosphor-icons/react": "^2.1.5",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
