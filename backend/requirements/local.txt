@@ -5,7 +5,7 @@ psycopg[binary]==3.1.18  # https://github.com/psycopg/psycopg
 
 # Testing
 # ------------------------------------------------------------------------------
-mypy==1.9.0  # https://github.com/python/mypy
+mypy==1.10.0  # https://github.com/python/mypy
 
 # Code quality
 # ------------------------------------------------------------------------------
