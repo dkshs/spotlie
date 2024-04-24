@@ -182,7 +182,7 @@ export default async function MusicPage({ params }: Props) {
                     text={
                       music.release_date
                         ? new Date(music.release_date).getFullYear().toString()
-                        : null
+                        : undefined
                     }
                   />
                 </div>

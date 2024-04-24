@@ -7,14 +7,14 @@ import type {
 export type ActionType = "artist" | "user" | "music" | "playlist";
 
 export interface ActionMenuProps {
-  actionId: string;
-  actionType?: ActionType;
-  triggerClassName?: string;
-  label?: string;
-  playlist?: PlaylistPropsWithMusics;
-  music?: MusicProps;
-  user?: UserProps;
-  orderId?: number;
-  showGoToArtist?: boolean;
-  showGoToMusic?: boolean;
+  readonly actionId: string;
+  readonly actionType?: ActionType;
+  readonly triggerClassName?: string;
+  readonly label?: string;
+  readonly playlist?: PlaylistPropsWithMusics;
+  readonly music?: MusicProps;
+  readonly user?: UserProps;
+  readonly orderId?: number;
+  readonly showGoToArtist?: boolean;
+  readonly showGoToMusic?: boolean;
 }
