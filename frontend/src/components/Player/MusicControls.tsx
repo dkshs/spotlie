@@ -10,10 +10,10 @@ import {
   SkipBack,
   SkipForward,
 } from "@phosphor-icons/react";
-import { Button, type ButtonProps } from "../ui/Button";
 import { useMusic } from "@/hooks/useMusic";
 
 import { cn } from "@/lib/utils";
+import { Button, type ButtonProps } from "../ui/Button";
 
 function ControlButton({ className, ...props }: ButtonProps) {
   return (

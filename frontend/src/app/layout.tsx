@@ -6,12 +6,12 @@ import { Merriweather_Sans as MerriweatherSans } from "next/font/google";
 
 import { ToastContainer } from "react-toastify";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Providers } from "./providers";
-import { clerkTheme } from "./clerkTheme";
 import { env } from "@/env.mjs";
 
 import { Header } from "@/components/Header";
 import { Player } from "@/components/Player";
+import { clerkTheme } from "./clerkTheme";
+import { Providers } from "./providers";
 
 const merriweatherSans = MerriweatherSans({
   subsets: ["latin"],

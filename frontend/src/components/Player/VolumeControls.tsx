@@ -3,8 +3,8 @@
 import * as SliderPrimitive from "@radix-ui/react-slider";
 
 import { SpeakerHigh, SpeakerSimpleSlash } from "@phosphor-icons/react";
-import { Button } from "../ui/Button";
 import { useMusic } from "@/hooks/useMusic";
+import { Button } from "../ui/Button";
 
 export function VolumeControls() {
   const { handleMusicVolume, musicVolume, mutatedMusic } = useMusic();

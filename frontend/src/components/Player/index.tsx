@@ -5,9 +5,9 @@ import { useWindowSize } from "usehooks-ts";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import Image from "next/image";
 import Link from "next/link";
+import { useMusic } from "@/hooks/useMusic";
 import { MusicControls } from "./MusicControls";
 import { VolumeControls } from "./VolumeControls";
-import { useMusic } from "@/hooks/useMusic";
 
 export function Player() {
   const { width } = useWindowSize();

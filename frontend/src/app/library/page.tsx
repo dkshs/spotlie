@@ -3,13 +3,13 @@ import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { CreatePlaylist } from "./CreatePlaylist";
-import { CreateMusic } from "./CreateMusic";
 import { serverFetcher } from "@/utils/api";
 
 import { Button } from "@/components/ui/Button";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { MusicCard } from "@/components/MusicCard";
+import { CreateMusic } from "./CreateMusic";
+import { CreatePlaylist } from "./CreatePlaylist";
 
 export const metadata: Metadata = {
   title: "Library",

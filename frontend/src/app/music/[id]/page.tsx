@@ -5,7 +5,6 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { MusicDuration } from "./MusicDuration";
 import { serverFetcher } from "@/utils/api";
 
 import { ControlButton, MusicCard } from "@/components/MusicCard";
@@ -17,6 +16,7 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { DataTitle } from "@/components/DataTitle";
 import { ActionMenu } from "@/components/ActionMenu";
+import { MusicDuration } from "./MusicDuration";
 
 type Props = {
   readonly params: { id: string };

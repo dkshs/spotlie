@@ -6,9 +6,9 @@ import { useMemo, useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
+import { useMusic } from "@/hooks/useMusic";
 import { ControlButton } from "../MusicCard";
 import { ActionMenu } from "../ActionMenu";
-import { useMusic } from "@/hooks/useMusic";
 
 interface HorizontalArtistCardProps {
   readonly artist: ArtistPropsWithMusics;

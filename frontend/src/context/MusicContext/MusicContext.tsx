@@ -20,11 +20,11 @@ import {
 } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "usehooks-ts";
-import { ctxInitialValues } from "./ctxInitialValues";
 import { useApi } from "@/hooks/useApi";
 
 import { musicTimeFormatter } from "@/utils/formatters";
 import { turnMusicsInPlaylist } from "@/utils/turnMusicsInPlaylist";
+import { ctxInitialValues } from "./ctxInitialValues";
 
 export const MusicContext = createContext<MusicContextProps>(ctxInitialValues);
 
