@@ -9,7 +9,7 @@ mypy==1.9.0  # https://github.com/python/mypy
 
 # Code quality
 # ------------------------------------------------------------------------------
-ruff==0.4.1 # https://github.com/astral-sh/ruff
+ruff==0.4.2 # https://github.com/astral-sh/ruff
 pre-commit==3.7.0  # https://github.com/pre-commit/pre-commit
 
 # Django
