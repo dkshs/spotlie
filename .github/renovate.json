@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>dkshs/renovate-config:ts"],
+  "extends": ["github>dkshs/renovate-config"],
   "packageRules": [
     {
       "enabled": false,
@@ -22,11 +22,5 @@
       "matchFileNames": ["backend/**"],
       "semanticCommitScope": "backend-deps"
     }
-  ],
-  "pip_requirements": {
-    "fileMatch": [
-      "(^|/)[\\w-]*requirements(-\\w+)?\\.(txt|pip)$",
-      "^.*/requirements/.*.txt$"
-    ]
-  }
+  ]
 }
