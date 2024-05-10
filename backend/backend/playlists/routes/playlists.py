@@ -37,7 +37,15 @@ def get_playlists(
     filters: GetPlaylistsFilter = Query(...),  # noqa: B008
 ):
     try:
+        user = token_is_valid(request, return_user=True).user
         playlists = filters.filter(Playlist.objects.all())
+        for playlist in playlists:
+            if not playlist.is_public:
+                if user is None:
+                    playlists = playlists.exclude(id=playlist.id)
+                    continue
+                if user.id != playlist.object_id:
+                    playlists = playlists.exclude(id=playlist.id)
         if order_by:
             playlists = playlists.order_by(*order_by.split(","))
         return 200, playlists[offset : offset + limit] if limit else playlists[offset:]
@@ -47,15 +55,38 @@ def get_playlists(
 
 @router.get(
     "/{id}",
-    response={200: PlaylistSchemaOut, 404: ErrorSchema, 500: ErrorSchema},
+    response={
+        200: PlaylistSchemaOut,
+        401: ErrorSchema,
+        404: ErrorSchema,
+        500: ErrorSchema,
+    },
 )
 def get_playlist(request, id: uuid.UUID):
     try:
-        return 200, Playlist.objects.get(id=id)
+        user = token_is_valid(request, return_user=True).user
+        playlist = Playlist.objects.get(id=id)
+        if not playlist.is_public:
+            if user is None:
+                raise ApiProcessError(
+                    401,
+                    "Unauthorized",
+                    "You are not logged in!",
+                )
+            if user.id != playlist.object_id:
+                raise ApiProcessError(
+                    401,
+                    "Unauthorized",
+                    "You are not allowed to access this playlist!",
+                )
     except Playlist.DoesNotExist:
         return api_error(404, "Playlist not found", "Playlist not found")
+    except ApiProcessError as e:
+        return api_error(**e.__dict__)
     except Exception as e:
         return api_error(500, "Internal server error", str(e))
+    else:
+        return 200, playlist
 
 
 @router.post(
