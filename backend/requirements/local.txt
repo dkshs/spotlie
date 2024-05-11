@@ -10,7 +10,7 @@ mypy==1.10.0  # https://github.com/python/mypy
 # Code quality
 # ------------------------------------------------------------------------------
 ruff==0.4.4 # https://github.com/astral-sh/ruff
-pre-commit==3.7.0  # https://github.com/pre-commit/pre-commit
+pre-commit==3.7.1  # https://github.com/pre-commit/pre-commit
 
 # Django
 # ------------------------------------------------------------------------------
