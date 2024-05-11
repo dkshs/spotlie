@@ -53,6 +53,7 @@ export function MusicMenu({
       try {
         const res = await fetcher<PlaylistPropsWithMusics[]>("/playlists/", {
           searchParams: { object_id: externalId },
+          needAuth: true,
         });
         return res.data || null;
       } catch {

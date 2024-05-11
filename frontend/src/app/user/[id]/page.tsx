@@ -72,8 +72,15 @@ export default async function UserPage({ params }: Props) {
   }
   const { data: playlists } = await serverFetcher<PlaylistPropsWithMusics[]>(
     "/playlists/",
-    { searchParams: { object_id: user.id }, next: { revalidate: 0 } },
+    {
+      searchParams: { object_id: user.id },
+      next: { revalidate: 0 },
+      needAuth: true,
+    },
   );
+  const publicPlaylistsLength =
+    playlists?.map((playlist) => playlist.is_public).filter(Boolean).length ||
+    0;
   const musics = playlists?.flatMap((playlist) => playlist.musics) || [];
 
   return (
@@ -108,10 +115,10 @@ export default async function UserPage({ params }: Props) {
               Profile
             </small>
             <DataTitle title={user.full_name} />
-            {playlists && playlists.length > 0 ? (
+            {publicPlaylistsLength > 0 ? (
               <div className="flex items-center gap-2 self-center md:self-start">
                 <span className="text-sm">
-                  {playlists.length} Public Playlists
+                  {publicPlaylistsLength} Public Playlists
                 </span>
               </div>
             ) : null}
@@ -129,7 +136,9 @@ export default async function UserPage({ params }: Props) {
       {playlists && playlists.length > 0 ? (
         <section className="mt-14 md:px-9">
           <header className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">Public Playlists</h2>
+            <h2 className="text-xl font-bold">
+              {publicPlaylistsLength > 0 && "Public"} Playlists
+            </h2>
           </header>
           <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
             <div className="flex w-max gap-3 px-1 pb-4 pt-3">

@@ -76,9 +76,13 @@ export default async function ArtistPage({ params }: Props) {
   }
   const { data: playlists } = await serverFetcher<PlaylistPropsWithMusics[]>(
     "/playlists/",
-    { searchParams: { object_id: artist.id }, next: { revalidate: 0 } },
+    {
+      searchParams: { object_id: artist.id },
+      next: { revalidate: 0 },
+      needAuth: true,
+    },
   );
-  const musics = playlists?.map((playlist) => playlist.musics) || [];
+  const musics = (playlists || []).map((playlist) => playlist.musics);
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">

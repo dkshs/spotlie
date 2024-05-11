@@ -20,17 +20,26 @@ type Props = {
   readonly params: { id: string };
 };
 
-const getPlaylists = cache(async () => {
-  const res = await serverFetcher<PlaylistPropsWithMusics[]>("/playlists/", {
-    next: { revalidate: 0 },
-  });
-  return res.data || [];
+const getPlaylist = cache(async (id: string) => {
+  try {
+    const { data } = await serverFetcher<PlaylistPropsWithMusics>(
+      `/playlists/${id}`,
+      { next: { revalidate: 0 }, needAuth: true },
+    );
+    if (!data) throw new Error("Playlist not found");
+    return data;
+  } catch {
+    notFound();
+  }
 });
 
 export async function generateStaticParams() {
-  const playlists = await getPlaylists();
+  const { data: playlists } = await serverFetcher<PlaylistPropsWithMusics[]>(
+    "/playlists/",
+    { next: { revalidate: 0 }, throwError: false },
+  );
 
-  return playlists.map((playlist) => ({
+  return (playlists || []).map((playlist) => ({
     id: playlist.id,
   }));
 }
@@ -39,15 +48,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id } = params;
-
-  const playlist = (await getPlaylists()).find(
-    (playlist) => playlist.id === id,
-  );
-
-  if (!playlist) {
-    notFound();
-  }
+  const playlist = await getPlaylist(params.id);
 
   const playlistUrl = `${(await parent).metadataBase}playlist/`;
   const description =
@@ -77,12 +78,7 @@ export async function generateMetadata(
 }
 
 export default async function PlaylistPage({ params }: Props) {
-  const playlist = (await getPlaylists()).find(
-    (playlist) => playlist.id === params.id,
-  );
-  if (!playlist) {
-    notFound();
-  }
+  const playlist = await getPlaylist(params.id);
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">

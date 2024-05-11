@@ -32,6 +32,7 @@ export default async function LibraryPage() {
     {
       searchParams: { object_id: externalId, limit: "10" },
       next: { revalidate: 0 },
+      needAuth: true,
     },
   );
   const playlistMusics =
