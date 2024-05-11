@@ -1,4 +1,4 @@
-import { env } from "@/env.mjs";
+import { env } from "@/env.js";
 
 export interface FetcherOpts extends RequestInit {
   token?: string | null;

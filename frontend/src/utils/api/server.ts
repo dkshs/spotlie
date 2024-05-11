@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { auth } from "@clerk/nextjs/server";
-import { env } from "@/env.mjs";
+import { env } from "@/env.js";
 import { type FetcherOpts, fetcher } from "./fetcher";
 
 export const serverFetcher = cache(

@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/nextjs";
 import { type FetcherOpts, fetcher } from "@/utils/api";
-import { env } from "@/env.mjs";
+import { env } from "@/env.js";
 
 export const useApi = () => {
   const { getToken } = useAuth();
