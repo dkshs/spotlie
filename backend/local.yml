@@ -1,5 +1,3 @@
-version: "3.8"
-
 volumes:
   backend_local_postgres_data: {}
   backend_local_postgres_data_backups: {}
