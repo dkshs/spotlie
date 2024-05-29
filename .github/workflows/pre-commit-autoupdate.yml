@@ -41,4 +41,4 @@ jobs:
           title: "chore(backend): update pre-commit hooks"
           commit-message: "chore(backend): update pre-commit hooks"
           body: Update versions of tools in pre-commit configs to latest version
-          labels: deps update
+          labels: dependencies
