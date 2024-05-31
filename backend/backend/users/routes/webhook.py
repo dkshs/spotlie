@@ -21,7 +21,7 @@ router = Router()
 
 
 @router.post("/webhook", response={200: Response, 400: Response})
-def webhook(request: HttpRequest):
+def webhook(request: HttpRequest):  # noqa: C901, PLR0912
     headers = request.headers
     payload = request.body
 
