@@ -53,6 +53,33 @@ def get_musics(
         return api_error(500, "Internal server error", str(e))
 
 
+@router.get(
+    "/liked",
+    response={
+        200: list[MusicSchemaOut],
+        401: ErrorSchema,
+        422: ErrorSchema,
+        500: ErrorSchema,
+    },
+)
+def get_liked_musics(request):
+    try:
+        token = token_is_valid(request, return_user=True)
+        if not token.is_valid:
+            raise ApiProcessError(
+                401,
+                "Unauthorized",
+                f"You are not logged in!\n{token.message}",
+            )
+        liked_musics = token.user.liked_musics.all()
+    except ApiProcessError as e:
+        return api_error(**e.__dict__)
+    except Exception as e:
+        return api_error(500, "Internal server error", str(e))
+    else:
+        return 200, liked_musics
+
+
 @router.get("/{id}", response={200: MusicSchemaOut, 404: ErrorSchema, 500: ErrorSchema})
 def get_music(request, id: uuid.UUID):
     try:
