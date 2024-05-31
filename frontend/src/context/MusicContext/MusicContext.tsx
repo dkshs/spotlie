@@ -23,7 +23,7 @@ import { useLocalStorage } from "usehooks-ts";
 import { useApi } from "@/hooks/useApi";
 
 import { musicTimeFormatter } from "@/utils/formatters";
-import { turnMusicsInPlaylist } from "@/utils/turnMusicsInPlaylist";
+import { turnMusicsInPlaylist } from "@/utils/transform";
 import { ctxInitialValues } from "./ctxInitialValues";
 
 export const MusicContext = createContext<MusicContextProps>(ctxInitialValues);

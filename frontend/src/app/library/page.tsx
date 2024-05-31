@@ -8,6 +8,7 @@ import { serverFetcher } from "@/utils/api";
 import { Button } from "@/components/ui/Button";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { MusicCard } from "@/components/MusicCard";
+import { createLikedMusicsPlaylist } from "@/utils/transform";
 import { CreateMusic } from "./CreateMusic";
 import { CreatePlaylist } from "./CreatePlaylist";
 
@@ -27,6 +28,13 @@ export default async function LibraryPage() {
         searchParams: { artist_id: externalId, limit: "10" },
       })
     : { data: [] };
+  const { data: likedMusics } = await serverFetcher<MusicProps[]>("/musics/", {
+    needAuth: true,
+    searchParams: {
+      [isArtist ? "liked_artists" : "liked_by"]: externalId,
+      limit: "10",
+    },
+  });
   const { data: playlists } = await serverFetcher<PlaylistPropsWithMusics[]>(
     "/playlists/",
     {
@@ -35,6 +43,7 @@ export default async function LibraryPage() {
       needAuth: true,
     },
   );
+  const playlist = likedMusics && createLikedMusicsPlaylist(likedMusics);
 
   return (
     <div className="my-8 flex flex-col gap-8">
@@ -53,6 +62,17 @@ export default async function LibraryPage() {
           </header>
           <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
             <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
+              {playlist ? (
+                <MusicCard
+                  key={playlist.id}
+                  music={playlist.musics[0]! || {}}
+                  href="/library/liked-musics"
+                  playlist={playlist}
+                  showArtist={false}
+                  actionId={playlist.id}
+                  text="Playlist"
+                />
+              ) : null}
               {playlists.map((playlist) => (
                 <MusicCard
                   key={playlist.id}

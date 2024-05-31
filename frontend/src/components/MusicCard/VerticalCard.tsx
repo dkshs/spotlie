@@ -11,6 +11,7 @@ interface VerticalMusicCardProps {
   readonly playlist?: PlaylistPropsWithMusics;
   readonly showArtist?: boolean;
   readonly text?: string;
+  readonly href?: string;
 }
 
 function VerticalMusicCard({
@@ -19,16 +20,20 @@ function VerticalMusicCard({
   playlist,
   text,
   showArtist = true,
+  href,
 }: VerticalMusicCardProps) {
   const isPlaylist = !!playlist;
+  const link =
+    href ||
+    `/${isPlaylist ? "playlist" : "music"}/${
+      isPlaylist ? playlist.id : music.id
+    }`;
 
   return (
     <div className="group relative flex h-60 w-40 cursor-pointer snap-center flex-col items-center gap-4 rounded-lg bg-secondary/50 p-2 md:h-72 md:w-52 md:p-4">
       <div className="absolute inset-0 z-[-1] size-full scale-95 rounded-lg bg-secondary opacity-0 duration-300 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100" />
       <Link
-        href={`/${isPlaylist ? "playlist" : "music"}/${
-          isPlaylist ? playlist.id : music.id
-        }`}
+        href={link}
         className="absolute inset-0 z-10"
         tabIndex={-1}
         aria-hidden
@@ -65,9 +70,7 @@ function VerticalMusicCard({
       </div>
       <div className="z-20 flex w-full flex-col items-start truncate">
         <Link
-          href={`/${isPlaylist ? "playlist" : "music"}/${
-            isPlaylist ? playlist.id : music.id
-          }`}
+          href={link}
           className="w-full max-w-fit truncate rounded-lg border border-transparent text-lg font-bold hover:underline focus-visible:border-ring focus-visible:outline-none"
         >
           {isPlaylist ? playlist.name : music.title}
