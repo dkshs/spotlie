@@ -93,7 +93,7 @@ export default async function PlaylistPage({ params }: Props) {
                 fill
               />
             </div>
-            <div className="flex justify-center self-center rounded-md bg-black/50 md:mr-8 md:max-h-[280px] md:max-w-[280px]">
+            <div className="flex justify-center self-center rounded-md min-w-[280px] bg-black/50 md:mr-8 md:max-h-[280px] md:max-w-[280px]">
               <Image
                 src={(playlist.image || playlist.musics[0]?.image)!}
                 alt={playlist.name}

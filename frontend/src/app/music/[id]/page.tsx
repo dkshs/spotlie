@@ -5,7 +5,7 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { serverFetcher } from "@/utils/api";
+import { fetcher, serverFetcher } from "@/utils/api";
 
 import { ControlButton, MusicCard } from "@/components/MusicCard";
 import {
@@ -22,12 +22,12 @@ type Props = {
   readonly params: { id: string };
 };
 
-const getMusics = cache(async () => {
-  return (await serverFetcher<MusicProps[]>("/musics/")).data || [];
+const getMusic = cache(async (id: string) => {
+  return (await serverFetcher<MusicProps>(`/musics/${id}`)).data;
 });
 
 export async function generateStaticParams() {
-  const musics = await getMusics();
+  const musics = (await serverFetcher<MusicProps[]>("/musics/")).data || [];
 
   return musics.map((music) => ({
     id: music.id,
@@ -39,8 +39,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = params;
-
-  const music = (await getMusics()).find((music) => music.id === id);
+  const music = await getMusic(id);
 
   if (!music) {
     notFound();
@@ -73,14 +72,13 @@ export async function generateMetadata(
 }
 
 export default async function MusicPage({ params }: Props) {
-  let musics = await getMusics();
-  const music = musics.find((music) => music.id === params.id);
+  const music = await getMusic(params.id);
   if (!music) {
     notFound();
   }
-  musics = musics.filter(
-    (m) => m.id !== params.id && m.artist.id === music.artist.id,
-  );
+  const artistMusics = (
+    await fetcher<MusicProps[]>(`/musics/?artist_id=${music.artist.id}`)
+  ).data?.filter((m) => m.id !== music.id);
 
   return (
     <div className="mb-20 mt-10 px-4 sm:px-9 md:mt-20">
@@ -95,7 +93,7 @@ export default async function MusicPage({ params }: Props) {
                 fill
               />
             </div>
-            <div className="flex justify-center self-center rounded-md bg-black/50 md:mr-8 md:max-h-[280px] md:max-w-[280px]">
+            <div className="flex justify-center self-center rounded-md min-w-[280px] bg-black/50 md:mr-8 md:max-h-[280px] md:max-w-[280px]">
               <Image
                 src={music.image}
                 alt={music.title}
@@ -152,7 +150,7 @@ export default async function MusicPage({ params }: Props) {
             </div>
           </div>
           <div className="group relative flex self-center md:mt-3 md:self-start [&_button]:relative [&_button]:translate-y-0 [&_button]:opacity-100">
-            <ControlButton music={music} musics={musics} />
+            <ControlButton music={music} musics={artistMusics || undefined} />
             <div className="mt-1">
               <ActionMenu
                 music={music}
@@ -163,7 +161,7 @@ export default async function MusicPage({ params }: Props) {
           </div>
         </div>
       </div>
-      {musics && musics.length > 0 ? (
+      {artistMusics && artistMusics.length > 0 ? (
         <section className="mt-20">
           <header className="flex items-center justify-between">
             <h2 className="text-xl font-bold">
@@ -172,11 +170,11 @@ export default async function MusicPage({ params }: Props) {
           </header>
           <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
             <div className="flex w-max gap-3 px-1 pb-4 pt-3">
-              {musics.map((music) => (
+              {artistMusics.map((music) => (
                 <div key={music.id} className="w-full">
                   <MusicCard
                     music={music}
-                    musics={musics}
+                    musics={artistMusics}
                     showArtist={false}
                     actionId={music.id}
                     text={
