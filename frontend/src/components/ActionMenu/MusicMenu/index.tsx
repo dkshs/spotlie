@@ -8,7 +8,12 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
 import { toast } from "react-toastify";
-import { PencilSimple, Plus, TrashSimple } from "@phosphor-icons/react";
+import {
+  PencilSimple,
+  Plus,
+  PlusCircle,
+  TrashSimple,
+} from "@phosphor-icons/react";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -43,6 +48,21 @@ export function MusicMenu({
   const isArtist = (publicMetadata?.is_artist as boolean) || false;
   const ownsThePlaylist = playlist?.owner.id === externalId;
   const ownsTheMusic = music.artist.id === externalId;
+
+  const { data: isLikedMusic = false } = useQuery<boolean>({
+    queryKey: ["liked_music"],
+    queryFn: async () => {
+      if (!user || !externalId) return false;
+      try {
+        const res = await fetcher(`/musics/${music.id}/liked`, {
+          needAuth: true,
+        });
+        return !!res.data || false;
+      } catch {
+        return false;
+      }
+    },
+  });
 
   const { data: playlists, refetch } = useQuery<
     PlaylistPropsWithMusics[] | null
@@ -159,6 +179,36 @@ export function MusicMenu({
     [fetcher, refetch, router],
   );
 
+  const handleLikedMusics = useCallback(async () => {
+    const toastLoading = toast.loading(
+      `${isLikedMusic ? "Removing" : "Saving"} music...`,
+    );
+    try {
+      await fetcher(`/musics/${music.id}/handle_liked_musics`, {
+        method: "POST",
+        needAuth: true,
+      });
+      toast.update(toastLoading, {
+        render: `Music ${isLikedMusic ? "removed" : "saved"}!`,
+        type: "success",
+        isLoading: false,
+        autoClose: 1000,
+      });
+      router.refresh();
+    } catch (error) {
+      const msg =
+        (error as Error).message ||
+        `Failed to ${isLikedMusic ? "remove" : "save"} music!`;
+      toast.update(toastLoading, {
+        render: msg,
+        type: "error",
+        isLoading: false,
+        autoClose: 1000,
+      });
+      console.error(error);
+    }
+  }, [fetcher, isLikedMusic, music.id, router]);
+
   return (
     user && (
       <>
@@ -182,6 +232,19 @@ export function MusicMenu({
           </>
         ) : null}
         <DropdownMenuSub>
+          <DropdownMenuItem
+            className="flex gap-2"
+            onClick={() => handleLikedMusics()}
+          >
+            {isLikedMusic ? (
+              <TrashSimple weight="bold" size={18} />
+            ) : (
+              <PlusCircle weight="bold" size={18} />
+            )}
+            <span>
+              {isLikedMusic ? "Remove from" : "Save to"} your Liked Musics
+            </span>
+          </DropdownMenuItem>
           <DropdownMenuSubTrigger className="flex gap-2">
             <Plus weight="bold" size={18} />
             <span>Add to Playlist</span>
