@@ -63,6 +63,72 @@ def get_music(request, id: uuid.UUID):
         return api_error(500, "Internal server error", str(e))
 
 
+@router.get(
+    "/{id}/liked",
+    response={
+        200: MusicSchemaOut,
+        401: ErrorSchema,
+        404: ErrorSchema,
+        500: ErrorSchema,
+    },
+)
+def get_liked_music(request, id: uuid.UUID):
+    try:
+        token = token_is_valid(request, return_user=True)
+        if not token.is_valid:
+            raise ApiProcessError(
+                401,
+                "Unauthorized",
+                f"You are not logged in!\n{token.message}",
+            )
+        music = Music.objects.get(id=id)
+        if not token.user.liked_musics.filter(id=music.id).exists():
+            raise ApiProcessError(404, "Music not found", "Music not found")
+    except Music.DoesNotExist:
+        return api_error(404, "Music not found", "Music not found")
+    except ApiProcessError as e:
+        return api_error(**e.__dict__)
+    except Exception as e:
+        return api_error(500, "Internal server error", str(e))
+    else:
+        return 200, music
+
+
+@router.post(
+    "/{id}/handle_liked_musics",
+    response={
+        200: MusicSchemaOut,
+        401: ErrorSchema,
+        404: ErrorSchema,
+        500: ErrorSchema,
+    },
+)
+def handle_liked_musics(request, id: uuid.UUID):
+    try:
+        token = token_is_valid(request, return_user=True)
+        if not token.is_valid:
+            raise ApiProcessError(
+                401,
+                "Unauthorized",
+                f"You are not logged in!\n{token.message}",
+            )
+        music = Music.objects.get(id=id)
+        user = token.user
+        if user.liked_musics.filter(id=music.id).exists():
+            user.liked_musics.remove(music)
+        else:
+            user.liked_musics.add(music)
+        user.save()
+    except Music.DoesNotExist:
+        return api_error(404, "Music not found", "Music not found")
+    except ApiProcessError as e:
+        return api_error(**e.__dict__)
+    except Exception as e:
+        return api_error(500, "Internal server error", str(e))
+    else:
+        return 200, music
+
+
 @router.post("/", response={201: MusicSchemaOut, 400: ErrorSchema, 401: ErrorSchema})
 def create_music(
     request,
