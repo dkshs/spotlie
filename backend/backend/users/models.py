@@ -17,6 +17,11 @@ class AbstractUser(models.Model):
         blank=True,
         default="https://img.clerk.com/preview.png",
     )
+    liked_musics = models.ManyToManyField(
+        "musics.Music",
+        blank=True,
+        related_name="liked_by",
+    )
     public_metadata = models.JSONField(default=dict, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

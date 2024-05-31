@@ -20,9 +20,14 @@ router = Router()
 
 class MusicFilterSchema(FilterSchema):
     artist_id: uuid.UUID | None = None
+    liked_by: uuid.UUID | None = None
+    liked_artists: uuid.UUID | None = None
 
 
-@router.get("/", response={200: list[MusicSchemaOut], 500: ErrorSchema})
+@router.get(
+    "/",
+    response={200: list[MusicSchemaOut], 401: ErrorSchema, 500: ErrorSchema},
+)
 def get_musics(
     request,
     limit: int | None = None,
@@ -31,10 +36,19 @@ def get_musics(
     filters: MusicFilterSchema = Query(...),  # noqa: B008
 ):
     try:
+        token = token_is_valid(request, return_user=True)
+        if (filters.liked_artists or filters.liked_by) and not token.is_valid:
+            raise ApiProcessError(
+                401,
+                "Unauthorized",
+                f"You are not logged in!\n{token.message}",
+            )
         musics = filters.filter(Music.objects.all())
         if order_by:
             musics = musics.order_by(*order_by.split(","))
         return 200, musics[offset : offset + limit] if limit else musics[offset:]
+    except ApiProcessError as e:
+        return api_error(**e.__dict__)
     except Exception as e:
         return api_error(500, "Internal server error", str(e))
 

@@ -12,6 +12,11 @@ class Artist(AbstractUser):
     twitter_link = models.URLField(blank=True, default="")
     instagram_link = models.URLField(blank=True, default="")
     is_verified = models.BooleanField(default=False)
+    liked_musics = models.ManyToManyField(
+        "musics.Music",
+        related_name="liked_artists",
+        blank=True,
+    )
 
     def get_cover_url(self):
         return BASE_URL + self.cover.url if self.cover else None
