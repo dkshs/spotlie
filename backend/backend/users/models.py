@@ -60,6 +60,12 @@ class AbstractUser(models.Model):
     def is_artist(self) -> bool:
         return self.public_metadata.get("is_artist", False)
 
+    def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
+        # delete all playlists associated with this user
+        for playlist in self.get_playlists():
+            playlist.delete()
+        return super().delete(*args, **kwargs)
+
 
 class User(AbstractUser):
     def __str__(self):
