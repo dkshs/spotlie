@@ -19,7 +19,9 @@ type Props = {
 };
 
 const getArtists = cache(async () => {
-  const res = await serverFetcher<ArtistPropsWithMusics[]>("/artists/");
+  const res = await serverFetcher<ArtistPropsWithMusics[]>("/artists/", {
+    next: { revalidate: 15 },
+  });
   return res.data || [];
 });
 
