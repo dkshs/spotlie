@@ -54,7 +54,7 @@ export default async function LibraryPage() {
             <div className="flex flex-wrap justify-end gap-1 self-end sm:gap-3">
               <CreatePlaylist />
               <Button size="sm" radius="full" className="px-4" asChild>
-                <Link href="/my/playlists">
+                <Link href="/library/playlists">
                   <span className="text-sm font-bold uppercase">See more</span>
                 </Link>
               </Button>
@@ -94,7 +94,7 @@ export default async function LibraryPage() {
             <div className="flex flex-wrap justify-end gap-1 self-end sm:gap-3">
               <CreateMusic />
               <Button size="sm" radius="full" className="px-4" asChild>
-                <Link href="/my/musics">
+                <Link href="/library/musics">
                   <span className="text-sm font-bold uppercase">See more</span>
                 </Link>
               </Button>
