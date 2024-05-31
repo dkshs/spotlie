@@ -35,8 +35,6 @@ export default async function LibraryPage() {
       needAuth: true,
     },
   );
-  const playlistMusics =
-    playlists?.flatMap((playlist) => playlist.musics) || [];
 
   return (
     <div className="my-8 flex flex-col gap-8">
@@ -55,19 +53,16 @@ export default async function LibraryPage() {
           </header>
           <ScrollArea className="w-full max-w-[calc(100vw-20px)] whitespace-nowrap">
             <div className="flex w-max gap-2 px-1 pb-4 pt-2 md:gap-4">
-              {playlists.map(
-                (playlist) =>
-                  (playlist.musics.length > 0 || playlistMusics[0]) && (
-                    <MusicCard
-                      key={playlist.id}
-                      music={playlist.musics[0]! || playlistMusics[0]}
-                      playlist={playlist}
-                      showArtist={false}
-                      actionId={playlist.id}
-                      text="Playlist"
-                    />
-                  ),
-              )}
+              {playlists.map((playlist) => (
+                <MusicCard
+                  key={playlist.id}
+                  music={playlist.musics[0]!}
+                  playlist={playlist}
+                  showArtist={false}
+                  actionId={playlist.id}
+                  text="Playlist"
+                />
+              ))}
             </div>
           </ScrollArea>
         </section>
