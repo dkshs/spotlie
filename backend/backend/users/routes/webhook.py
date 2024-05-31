@@ -54,7 +54,10 @@ def webhook(request: HttpRequest):
                 )
             user = User.objects.filter(external_id=external_id)
             artist = Artist.objects.filter(external_id=external_id)
-            if artist.exists() or is_artist:
+            if artist.exists() and not is_artist:
+                public_metadata["is_artist"] = False
+                artist.delete()
+            elif artist.exists() or is_artist:
                 public_metadata["is_artist"] = True
                 user.delete() if user.exists() else None
                 user = artist
