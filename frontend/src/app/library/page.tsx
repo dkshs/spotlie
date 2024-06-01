@@ -6,7 +6,7 @@ import Link from "next/link";
 import { serverFetcher } from "@/utils/api";
 
 import { Button } from "@/components/ui/Button";
-import { ScrollArea } from "@/components/ui/ScrollArea";
+import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { MusicCard } from "@/components/MusicCard";
 import { createLikedMusicsPlaylist } from "@/utils/transform";
 import { CreateMusic } from "./CreateMusic";
@@ -84,6 +84,7 @@ export default async function LibraryPage() {
                 />
               ))}
             </div>
+            <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </section>
       ) : null}
@@ -113,6 +114,7 @@ export default async function LibraryPage() {
                   />
                 ))}
               </div>
+              <ScrollBar orientation="horizontal" />
             </ScrollArea>
           ) : null}
         </section>
