@@ -37,7 +37,7 @@ export function Player() {
           <span className="text-xs opacity-75">{musicTime.currentTime}</span>
           <span className="text-xs opacity-75">{musicTime.duration}</span>
         </div>
-        <div className="flex items-center gap-2 truncate">
+        <div className="flex justify-start items-center w-[30%] gap-2 truncate">
           {currentMusic.image ? (
             <Image
               src={currentMusic.image}
@@ -49,7 +49,7 @@ export function Player() {
           ) : null}
           <div className="flex flex-col">
             <Link
-              className="truncate font-bold hover:underline md:text-lg"
+              className="truncate font-bold hover:underline md:text-lg w-1/2 md:w-full"
               href={`/music/${currentMusic.id}`}
             >
               {currentMusic.title}

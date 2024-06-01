@@ -46,7 +46,7 @@ export function MusicControls() {
   if (!currentMusic) return null;
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 w-2/5 justify-center">
       {width >= 768 && (
         <ControlButton
           onClick={() => toggleShufflePlaylist()}
