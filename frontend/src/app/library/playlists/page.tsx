@@ -43,7 +43,7 @@ export default async function MyPlaylistsPage() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-2xl font-bold">My Playlists</h1>
       </div>
-      <div className="flex gap-2 flex-wrap px-1 my-4 md:gap-4">
+      <div className="my-4 flex flex-wrap gap-2 px-1 md:gap-4">
         {playlist ? (
           <MusicCard
             key={playlist.id}

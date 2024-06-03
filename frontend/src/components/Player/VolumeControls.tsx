@@ -10,7 +10,7 @@ export function VolumeControls() {
   const { handleMusicVolume, musicVolume, mutatedMusic } = useMusic();
 
   return (
-    <div className="group flex gap-1 md:gap-3 w-[30%] justify-end">
+    <div className="group flex w-[30%] justify-end gap-1 md:gap-3">
       <Button
         radius="full"
         variant="ghost"
