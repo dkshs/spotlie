@@ -88,8 +88,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@dkshs/eslint-config':
-        specifier: 2.6.1
-        version: 2.6.1(@types/eslint@8.56.10)(eslint@8.57.0)(tailwindcss@3.4.4)(typescript@5.5.2)
+        specifier: 2.7.0
+        version: 2.7.0(@types/eslint@8.56.10)(eslint@8.57.0)(tailwindcss@3.4.4)(typescript@5.5.2)
       '@types/node':
         specifier: ^20.14.7
         version: 20.14.7
@@ -182,8 +182,8 @@ packages:
     resolution: {integrity: sha512-QFeNKPYDmTJ88l5QYG0SPwbABk42wRMalW3M/wAtr+wnQxBCXyX2XRZe9h4g2rH1VF+wG4Xe56abeeD+xE4iEw==}
     engines: {node: '>=18.17.0'}
 
-  '@dkshs/eslint-config@2.6.1':
-    resolution: {integrity: sha512-CJtndA3RX3kEDjOi5NkGa3vX5RbslAGwJzeVCK1FsMHy75JmcAH5z4wfndw5nsdGJm5PjufB29sdVeX5VAETRA==}
+  '@dkshs/eslint-config@2.7.0':
+    resolution: {integrity: sha512-c57W/ttxUWOG8vpFotLSlo8tkVZd7Eu2x2nN6byWI/zjD0PltUbFTtnFvrOXUeTZQ7rrroSnfpJzIw+Qlbv4uA==}
     peerDependencies:
       eslint: '>=8.40.0'
 
@@ -2893,7 +2893,7 @@ snapshots:
     dependencies:
       csstype: 3.1.1
 
-  '@dkshs/eslint-config@2.6.1(@types/eslint@8.56.10)(eslint@8.57.0)(tailwindcss@3.4.4)(typescript@5.5.2)':
+  '@dkshs/eslint-config@2.7.0(@types/eslint@8.56.10)(eslint@8.57.0)(tailwindcss@3.4.4)(typescript@5.5.2)':
     dependencies:
       '@next/eslint-plugin-next': 14.2.4
       eslint: 8.57.0
@@ -4040,7 +4040,7 @@ snapshots:
   dot-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.6.3
 
   eastasianwidth@0.2.0: {}
 
@@ -4901,7 +4901,7 @@ snapshots:
 
   lower-case@2.0.2:
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.6.3
 
   lru-cache@10.2.2: {}
 
@@ -4996,7 +4996,7 @@ snapshots:
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.4.1
+      tslib: 2.6.3
 
   node-releases@2.0.14: {}
 
@@ -5414,7 +5414,7 @@ snapshots:
   snake-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.4.1
+      tslib: 2.6.3
 
   snakecase-keys@5.4.4:
     dependencies:
