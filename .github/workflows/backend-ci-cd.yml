@@ -44,8 +44,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Install Railway
-        run: bash <(curl -fsSL cli.new) -y
+        run: npm i -g @railway/cli
 
       - name: Deploy
         run: railway up -d -s ${{secrets.RAILWAY_BACK_SERVICE}}
