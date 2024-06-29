@@ -27,3 +27,6 @@ services:
       - production_postgres_data_backups:/backups
     env_file:
       - ./.envs/.production/.postgres
+
+  redis:
+    image: redis:7

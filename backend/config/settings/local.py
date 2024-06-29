@@ -24,6 +24,16 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 BASE_URL = config("BASE_URL", default="http://localhost:8000")
 
+# CACHES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#caches
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "",
+    },
+}
+
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-host
