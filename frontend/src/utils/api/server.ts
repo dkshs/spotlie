@@ -1,3 +1,5 @@
+"use server"
+
 import { cache } from "react";
 import { auth } from "@clerk/nextjs/server";
 import { env } from "@/env.js";
