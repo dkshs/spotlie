@@ -1,2 +1,2 @@
 export { MusicContext, MusicContextProvider } from "./MusicContext";
-export type { MusicTimeProps, MusicStateProps } from "./types";
+export type { MusicStateProps, MusicTimeProps } from "./types";

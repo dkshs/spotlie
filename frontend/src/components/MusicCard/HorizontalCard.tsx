@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMusic } from "@/hooks/useMusic";
-import { ActionMenu, type ActionMenuProps } from "../ActionMenu";
+import { type ActionMenuProps, ActionMenu } from "../ActionMenu";
 import { ControlButton } from "./ControlButton";
 
 interface HorizontalMusicCardProps extends ActionMenuProps {
@@ -113,4 +113,4 @@ function HorizontalMusicCard({
   );
 }
 
-export { HorizontalMusicCard, type HorizontalMusicCardProps };
+export { type HorizontalMusicCardProps, HorizontalMusicCard };

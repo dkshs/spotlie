@@ -1,8 +1,8 @@
 import {
-  HorizontalMusicCard,
   type HorizontalMusicCardProps,
+  HorizontalMusicCard,
 } from "./HorizontalCard";
-import { VerticalMusicCard, type VerticalMusicCardProps } from "./VerticalCard";
+import { type VerticalMusicCardProps, VerticalMusicCard } from "./VerticalCard";
 
 interface MusicCardProps
   extends HorizontalMusicCardProps,

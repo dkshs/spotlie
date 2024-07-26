@@ -105,4 +105,4 @@ function VerticalMusicCard({
   );
 }
 
-export { VerticalMusicCard, type VerticalMusicCardProps };
+export { type VerticalMusicCardProps, VerticalMusicCard };

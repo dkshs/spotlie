@@ -288,8 +288,8 @@ export function MusicMenu({
   );
 }
 
-export { EditMusicDialog, type EditMusicDialogProps } from "./EditMusicDialog";
+export { type EditMusicDialogProps, EditMusicDialog } from "./EditMusicDialog";
 export {
-  DeleteMusicDialog,
   type DeleteMusicDialogProps,
+  DeleteMusicDialog,
 } from "./DeleteMusicDialog";

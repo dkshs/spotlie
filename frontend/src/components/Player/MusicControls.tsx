@@ -13,7 +13,7 @@ import {
 import { useMusic } from "@/hooks/useMusic";
 
 import { cn } from "@/lib/utils";
-import { Button, type ButtonProps } from "../ui/Button";
+import { type ButtonProps, Button } from "../ui/Button";
 
 function ControlButton({ className, ...props }: ButtonProps) {
   return (

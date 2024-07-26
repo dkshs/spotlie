@@ -74,4 +74,4 @@ function HorizontalArtistCard({ artist }: HorizontalArtistCardProps) {
   );
 }
 
-export { HorizontalArtistCard, type HorizontalArtistCardProps };
+export { type HorizontalArtistCardProps, HorizontalArtistCard };

@@ -53,4 +53,4 @@ function VerticalArtistCard({ artist }: VerticalArtistCardProps) {
   );
 }
 
-export { VerticalArtistCard, type VerticalArtistCardProps };
+export { type VerticalArtistCardProps, VerticalArtistCard };

@@ -1,2 +1,2 @@
 export { serverFetcher } from "./server";
-export { fetcher, type FetcherOpts } from "./fetcher";
+export { type FetcherOpts, fetcher } from "./fetcher";

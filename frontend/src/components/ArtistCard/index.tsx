@@ -1,10 +1,10 @@
 import {
-  HorizontalArtistCard,
   type HorizontalArtistCardProps,
+  HorizontalArtistCard,
 } from "./HorizontalCard";
 import {
-  VerticalArtistCard,
   type VerticalArtistCardProps,
+  VerticalArtistCard,
 } from "./VerticalCard";
 
 interface ArtistCardProps
