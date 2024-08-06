@@ -10,7 +10,7 @@ pyjwt[crypto]==2.9.0  # https://github.com/jpadilla/pyjwt
 
 # Django
 # ------------------------------------------------------------------------------
-django==5.0.7  # https://www.djangoproject.com/
+django==5.0.8  # https://www.djangoproject.com/
 django-cleanup==8.1.0  # https://github.com/un1t/django-cleanup
 dj-database-url==2.2.0  # https://github.com/jazzband/dj-database-url
 django-redis==5.4.0  # https://github.com/jazzband/django-redis
