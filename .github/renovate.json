@@ -1,25 +1,45 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>dkshs/renovate-config"],
+  "extends": [
+    "github>dkshs/renovate-config"
+  ],
   "packageRules": [
     {
       "enabled": false,
-      "matchDatasources": ["docker"],
-      "matchDepPatterns": ["python"],
-      "matchUpdateTypes": ["major", "minor"]
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ],
+      "matchDepNames": [
+        "/python/"
+      ]
     },
     {
       "enabled": false,
-      "matchDatasources": ["pypi"],
-      "matchDepNames": ["django"],
-      "matchUpdateTypes": ["major", "minor"]
+      "matchDatasources": [
+        "pypi"
+      ],
+      "matchDepNames": [
+        "django"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor"
+      ]
     },
     {
-      "matchFileNames": ["frontend/**"],
+      "matchFileNames": [
+        "frontend/**"
+      ],
       "semanticCommitScope": "frontend-deps"
     },
     {
-      "matchFileNames": ["backend/**"],
+      "matchFileNames": [
+        "backend/**"
+      ],
       "semanticCommitScope": "backend-deps"
     }
   ]
