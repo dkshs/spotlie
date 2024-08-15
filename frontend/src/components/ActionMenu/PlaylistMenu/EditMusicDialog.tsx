@@ -117,7 +117,7 @@ export function EditPlaylistDialog({
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
       setImgChanged(true);
-      // eslint-disable-next-line node/no-unsupported-features/node-builtins
+
       setImgPreview(URL.createObjectURL(file));
       setData((prev) => ({ ...prev, image: file }));
     }

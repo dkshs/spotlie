@@ -101,7 +101,6 @@ export function CreateMusic() {
     setLoading(true);
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
-      // eslint-disable-next-line node/no-unsupported-features/node-builtins
       setImgPreview(URL.createObjectURL(file));
       setData((prev) => ({ ...prev, image: file }));
     }
