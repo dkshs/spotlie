@@ -14,35 +14,12 @@ ignore_errors = true
 
 
 [tool.ruff]
+target-version = "py312"
 # Exclude a variety of commonly ignored directories.
-exclude = [
-    ".bzr",
-    ".direnv",
-    ".eggs",
-    ".git",
-    ".git-rewrite",
-    ".hg",
-    ".mypy_cache",
-    ".nox",
-    ".pants.d",
-    ".pytype",
-    ".ruff_cache",
-    ".svn",
-    ".tox",
-    ".venv",
-    "__pypackages__",
-    "_build",
-    "buck-out",
-    "build",
-    "dist",
-    "node_modules",
-    "venv",
+extend-exclude = [
     "*/migrations/*.py",
-    "staticfiles/*"
+    "staticfiles/*",
 ]
-line-length = 88
-indent-width = 4
-target-version = "py311"
 
 [tool.ruff.lint]
 select = [
@@ -104,19 +81,17 @@ select = [
 ignore = [
     "S101", # Use of assert detected https://docs.astral.sh/ruff/rules/assert/
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
-    "SIM102" # sometimes it's better to nest
+    "SIM102", # sometimes it's better to nest
+    "UP038" # Checks for uses of isinstance/issubclass that take a tuple
+            # of types for comparison.
+            # Deactivated because it can make the code slow:
+            # https://github.com/astral-sh/ruff/issues/7871
 ]
-# Allow fix for all enabled rules (when `--fix`) is provided.
-fixable = ["ALL"]
-unfixable = []
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"
+# The fixes in extend-unsafe-fixes will require
+# provide the `--unsafe-fixes` flag when fixing.
+extend-unsafe-fixes = [
+    "UP038"
+]
 
 [tool.ruff.lint.isort]
 force-single-line = true
