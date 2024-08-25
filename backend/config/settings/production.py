@@ -1,3 +1,7 @@
+from ast import literal_eval
+
+from google.oauth2 import service_account
+
 from .base import *  # noqa: F403
 from .base import DATABASES
 from .base import INSTALLED_APPS
@@ -77,6 +81,10 @@ SECURE_CONTENT_TYPE_NOSNIFF = config(
 # https://django-storages.readthedocs.io/en/latest/#installation
 INSTALLED_APPS += ["storages"]
 GS_BUCKET_NAME = config("DJANGO_GCP_STORAGE_BUCKET_NAME")
+DJANGO_GCP_CREDENTIALS = config("DJANGO_GCP_CREDENTIALS", cast=literal_eval)
+GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
+    DJANGO_GCP_CREDENTIALS,
+)
 GS_DEFAULT_ACL = "publicRead"
 
 # STATIC & MEDIA

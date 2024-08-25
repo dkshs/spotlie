@@ -26,8 +26,7 @@ BREVO_API_KEY=""
 
 # GCP
 # ------------------------------------------------------------------------------
-GCP_CREDENTIALS_URL=""
-GOOGLE_APPLICATION_CREDENTIALS=""
+DJANGO_GCP_CREDENTIALS=''
 DJANGO_GCP_STORAGE_BUCKET_NAME=""
 
 # Redis

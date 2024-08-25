@@ -27,8 +27,6 @@ FROM python AS python-run-stage
 ARG BUILD_ENVIRONMENT=production
 ARG APP_HOME=/app
 ARG PORT=5000
-ARG GCP_CREDENTIALS_URL
-ARG GOOGLE_APPLICATION_CREDENTIALS=gcpCredentials.json
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -65,8 +63,6 @@ RUN chmod +x /entrypoint
 COPY --chown=django:django ./compose/production/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
-
-RUN curl "$GCP_CREDENTIALS_URL" -o /app/$GOOGLE_APPLICATION_CREDENTIALS
 
 # copy application code to WORKDIR
 COPY --chown=django:django . ${APP_HOME}
