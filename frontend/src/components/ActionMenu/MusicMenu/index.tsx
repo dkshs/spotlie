@@ -50,7 +50,7 @@ export function MusicMenu({
   const ownsTheMusic = music.artist.id === externalId;
 
   const { data: isLikedMusic = false } = useQuery<boolean>({
-    queryKey: ["liked_music"],
+    queryKey: ["liked_music", user, externalId],
     queryFn: async () => {
       if (!user || !externalId) return false;
       try {
@@ -67,7 +67,7 @@ export function MusicMenu({
   const { data: playlists, refetch } = useQuery<
     PlaylistPropsWithMusics[] | null
   >({
-    queryKey: ["playlists"],
+    queryKey: ["playlists", user, externalId],
     queryFn: async () => {
       if (!user || !externalId) return null;
       try {
