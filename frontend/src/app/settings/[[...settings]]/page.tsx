@@ -25,7 +25,6 @@ export default async function UserSettingsPage() {
       <div className="flex flex-col items-start space-y-6">
         {externalId ? (
           <h1 className="px-2">
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <Link asChild className="text-3xl">
               <NextLink href={`/${isArtist ? "artist" : "user"}/${externalId}`}>
                 @{user.username}
