@@ -14,8 +14,8 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
-    "@clerk/nextjs": "^5.3.7",
-    "@clerk/themes": "^2.1.25",
+    "@clerk/nextjs": "^5.4.0",
+    "@clerk/themes": "^2.1.26",
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
