@@ -22,12 +22,9 @@ router = Router()
 
 @router.post("/webhook", response={200: Response, 400: Response})
 def webhook(request: HttpRequest):  # noqa: C901
-    headers = request.headers
-    payload = request.body
-
     try:
         wh = Webhook(secret)
-        evt = wh.verify(payload, headers)
+        evt = wh.verify(request.body, request.headers)
     except WebhookVerificationError as e:
         return 400, {"message": f"invalid webhook: {e}"}
 
@@ -41,12 +38,13 @@ def webhook(request: HttpRequest):  # noqa: C901
             email = data["email_addresses"][0]["email_address"]
             username = data["username"] or f"user_{token_hex(8)}"
             image = data["profile_image_url"]
+            public_metadata = data["public_metadata"]
+            is_artist = public_metadata.get("is_artist", False)
+
             if image == "https://www.gravatar.com/avatar?d=mp":
                 image = "https://img.clerk.com/preview.png"
-            public_metadata = data["public_metadata"]
-
-            is_artist = public_metadata.get("is_artist", False)
             public_metadata["is_artist"] = is_artist
+
             if is_artist:
                 Artist.objects.update_or_create(
                     external_id=external_id,
@@ -59,7 +57,7 @@ def webhook(request: HttpRequest):  # noqa: C901
                 artist.delete()
             elif artist.exists() or is_artist:
                 public_metadata["is_artist"] = True
-                user.delete() if user.exists() else None
+                user.delete()
                 user = artist
             if user.exists():
                 user_f = user.first()
@@ -86,10 +84,8 @@ def webhook(request: HttpRequest):  # noqa: C901
             public_metadata["external_id"] = str(user.first().id)
             user.first().update_public_metadata(public_metadata)
         elif event_type == "user.deleted":
-            user = User.objects.filter(external_id=external_id)
-            artist = Artist.objects.filter(external_id=external_id)
-            user.delete() if user.exists() else None
-            artist.delete() if artist.exists() else None
+            User.objects.filter(external_id=external_id).delete()
+            Artist.objects.filter(external_id=external_id).delete()
         else:
             return 400, {"message": f"invalid event type: {event_type}"}
     except Exception as e:  # noqa: BLE001
