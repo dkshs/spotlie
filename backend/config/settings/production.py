@@ -76,10 +76,6 @@ SECURE_CONTENT_TYPE_NOSNIFF = config(
     default=True,
 )
 
-# STORAGES
-# ------------------------------------------------------------------------------
-# https://django-storages.readthedocs.io/en/latest/#installation
-INSTALLED_APPS += ["storages"]
 GS_BUCKET_NAME = config("DJANGO_GCP_STORAGE_BUCKET_NAME")
 DJANGO_GCP_CREDENTIALS = config("DJANGO_GCP_CREDENTIALS", cast=literal_eval)
 GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
