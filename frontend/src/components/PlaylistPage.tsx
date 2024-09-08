@@ -2,14 +2,14 @@ import type { PlaylistPropsWithMusics } from "@/utils/types";
 
 import Image from "next/image";
 import Link from "next/link";
+import { ActionMenu } from "@/components/ActionMenu";
+import { DataTitle } from "@/components/DataTitle";
 import { ControlButton, MusicCard } from "@/components/MusicCard";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/HoverCard";
-import { DataTitle } from "@/components/DataTitle";
-import { ActionMenu } from "@/components/ActionMenu";
 
 interface PlaylistPageProps {
   readonly playlist: PlaylistPropsWithMusics;

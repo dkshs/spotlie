@@ -1,9 +1,10 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import type { PlaylistPropsWithMusics } from "@/utils/types";
+
 import { cache } from "react";
 import { notFound } from "next/navigation";
-import { serverFetcher } from "@/utils/api";
 import { PlaylistPage as PlaylistPageComp } from "@/components/PlaylistPage";
+import { serverFetcher } from "@/utils/api";
 
 type Props = {
   readonly params: { id: string };

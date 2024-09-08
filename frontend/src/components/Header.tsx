@@ -1,9 +1,9 @@
 import type { AnchorHTMLAttributes } from "react";
-import { currentUser } from "@clerk/nextjs/server";
-import Link from "next/link";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { Headphones, House, SpotifyLogo } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 
 function HeaderLink({
   href = "/",

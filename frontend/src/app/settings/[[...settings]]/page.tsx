@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 
-import { currentUser } from "@clerk/nextjs/server";
 import { UserProfile } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-
+import { currentUser } from "@clerk/nextjs/server";
 import NextLink from "next/link";
+import { redirect } from "next/navigation";
 import { Link } from "@/components/ui/Link";
 
 export const metadata: Metadata = {

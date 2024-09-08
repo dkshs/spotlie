@@ -3,17 +3,16 @@
 import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 import { useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
-
 import { toast } from "react-toastify";
+import { useUser } from "@clerk/nextjs";
 import {
   PencilSimple,
   Plus,
   PlusCircle,
   TrashSimple,
 } from "@phosphor-icons/react";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -22,7 +21,6 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@/components/ui/DropdownMenu";
-
 import { useApi } from "@/hooks/useApi";
 
 export interface MusicMenuProps {
@@ -288,8 +286,8 @@ export function MusicMenu({
   );
 }
 
-export { type EditMusicDialogProps, EditMusicDialog } from "./EditMusicDialog";
 export {
   type DeleteMusicDialogProps,
   DeleteMusicDialog,
 } from "./DeleteMusicDialog";
+export { type EditMusicDialogProps, EditMusicDialog } from "./EditMusicDialog";

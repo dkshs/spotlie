@@ -2,11 +2,11 @@ import type { Metadata, ResolvingMetadata } from "next";
 import type { MusicProps } from "@/utils/types";
 
 import { cache } from "react";
-import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { fetcher, serverFetcher } from "@/utils/api";
-
+import { notFound } from "next/navigation";
+import { ActionMenu } from "@/components/ActionMenu";
+import { DataTitle } from "@/components/DataTitle";
 import { ControlButton, MusicCard } from "@/components/MusicCard";
 import {
   HoverCard,
@@ -14,8 +14,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/HoverCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
-import { DataTitle } from "@/components/DataTitle";
-import { ActionMenu } from "@/components/ActionMenu";
+import { fetcher, serverFetcher } from "@/utils/api";
 import { MusicDuration } from "./MusicDuration";
 
 type Props = {

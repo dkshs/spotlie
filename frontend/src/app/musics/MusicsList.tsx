@@ -3,13 +3,12 @@
 import type { MusicProps } from "@/utils/types";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "@phosphor-icons/react";
-import { useApi } from "@/hooks/useApi";
-
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { MusicCard } from "@/components/MusicCard";
 import { Button } from "@/components/ui/Button";
+import { useApi } from "@/hooks/useApi";
 
 export function MusicsList() {
   const router = useRouter();

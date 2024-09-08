@@ -3,10 +3,9 @@
 import type { ActionType } from "./types";
 
 import { useCallback } from "react";
-import { useCopyToClipboard } from "usehooks-ts";
-
 import { toast } from "react-toastify";
 import { Copy, Export } from "@phosphor-icons/react";
+import { useCopyToClipboard } from "usehooks-ts";
 import {
   DropdownMenuItem,
   DropdownMenuPortal,

@@ -1,12 +1,11 @@
 import type { ArtistPropsWithMusics, MusicProps } from "@/utils/types";
 
 import Link from "next/link";
-import { serverFetcher } from "@/utils/api";
-
+import { ArtistCard } from "@/components/ArtistCard";
+import { MusicCard } from "@/components/MusicCard";
 import { Button } from "@/components/ui/Button";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
-import { MusicCard } from "@/components/MusicCard";
-import { ArtistCard } from "@/components/ArtistCard";
+import { serverFetcher } from "@/utils/api";
 
 export const revalidate = 60 * 5; // 5 minutes
 
