@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
-import { redirect } from "next/navigation";
+
 import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { MusicCard } from "@/components/MusicCard";
 import { serverFetcher } from "@/utils/api";
 import { createLikedMusicsPlaylist } from "@/utils/transform";
-import { MusicCard } from "@/components/MusicCard";
 
 export const metadata: Metadata = {
   title: "My Playlists",

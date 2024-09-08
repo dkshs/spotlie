@@ -2,8 +2,8 @@ import type { ArtistPropsWithMusics } from "@/utils/types";
 
 import Image from "next/image";
 import Link from "next/link";
-import { ControlButton } from "../MusicCard";
 import { ActionMenu } from "../ActionMenu";
+import { ControlButton } from "../MusicCard";
 
 interface VerticalArtistCardProps {
   readonly artist: ArtistPropsWithMusics;

@@ -3,11 +3,10 @@
 import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 import { useCallback, useMemo } from "react";
-import Image from "next/image";
 import { Pause, Play } from "@phosphor-icons/react";
-import { useMusic } from "@/hooks/useMusic";
-
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { useMusic } from "@/hooks/useMusic";
 
 interface ControlButtonProps {
   readonly music: MusicProps;

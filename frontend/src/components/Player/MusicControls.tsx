@@ -1,6 +1,5 @@
 "use client";
 
-import { useWindowSize } from "usehooks-ts";
 import {
   Pause,
   Play,
@@ -10,8 +9,8 @@ import {
   SkipBack,
   SkipForward,
 } from "@phosphor-icons/react";
+import { useWindowSize } from "usehooks-ts";
 import { useMusic } from "@/hooks/useMusic";
-
 import { cn } from "@/lib/utils";
 import { type ButtonProps, Button } from "../ui/Button";
 

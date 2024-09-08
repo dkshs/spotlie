@@ -5,14 +5,13 @@ import type {
 } from "@/utils/types";
 
 import { cache } from "react";
-import { notFound } from "next/navigation";
 import Image from "next/image";
-import { serverFetcher } from "@/utils/api";
-
+import { notFound } from "next/navigation";
+import { ActionMenu } from "@/components/ActionMenu";
+import { DataTitle } from "@/components/DataTitle";
 import { ControlButton, MusicCard } from "@/components/MusicCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
-import { DataTitle } from "@/components/DataTitle";
-import { ActionMenu } from "@/components/ActionMenu";
+import { serverFetcher } from "@/utils/api";
 
 type Props = {
   readonly params: { id: string };

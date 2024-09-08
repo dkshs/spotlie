@@ -3,11 +3,10 @@ import type { MusicProps, PlaylistPropsWithMusics } from "@/utils/types";
 
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { serverFetcher } from "@/utils/api";
-
+import { MusicCard } from "@/components/MusicCard";
 import { Button } from "@/components/ui/Button";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
-import { MusicCard } from "@/components/MusicCard";
+import { serverFetcher } from "@/utils/api";
 import { createLikedMusicsPlaylist } from "@/utils/transform";
 import { CreateMusic } from "./CreateMusic";
 import { CreatePlaylist } from "./CreatePlaylist";

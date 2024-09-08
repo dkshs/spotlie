@@ -3,10 +3,8 @@
 import type { PlaylistPropsWithMusics } from "@/utils/types";
 
 import { useCallback } from "react";
-import { usePathname, useRouter } from "next/navigation";
-
 import { toast } from "react-toastify";
-import { useApi } from "@/hooks/useApi";
+import { usePathname, useRouter } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,6 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog";
+import { useApi } from "@/hooks/useApi";
 
 export interface DeletePlaylistDialogProps extends React.PropsWithChildren {
   readonly playlist: PlaylistPropsWithMusics;

@@ -3,12 +3,11 @@
 import type { PlaylistPropsWithMusics } from "@/utils/types";
 
 import { useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import Image from "next/image";
 import { PencilSimple, Spinner, X } from "@phosphor-icons/react";
-import { useApi } from "@/hooks/useApi";
-
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 import {
   Dialog,
   DialogContent,
@@ -18,17 +17,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
+import { Input } from "@/components/ui/Input";
+import { InputFile } from "@/components/ui/InputFile";
+import { Label } from "@/components/ui/Label";
+import { Textarea } from "@/components/ui/Textarea";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
-import { Label } from "@/components/ui/Label";
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
-import { Button } from "@/components/ui/Button";
-import { InputFile } from "@/components/ui/InputFile";
+import { useApi } from "@/hooks/useApi";
 
 export interface EditPlaylistDialogProps extends React.PropsWithChildren {
   readonly playlist: PlaylistPropsWithMusics;

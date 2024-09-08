@@ -1,8 +1,7 @@
 "use client";
 
-import * as SliderPrimitive from "@radix-ui/react-slider";
-
 import { SpeakerHigh, SpeakerSimpleSlash } from "@phosphor-icons/react";
+import * as SliderPrimitive from "@radix-ui/react-slider";
 import { useMusic } from "@/hooks/useMusic";
 import { Button } from "../ui/Button";
 

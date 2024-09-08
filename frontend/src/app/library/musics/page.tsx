@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import type { ArtistPropsWithMusics } from "@/utils/types";
-import { redirect } from "next/navigation";
+
 import { currentUser } from "@clerk/nextjs/server";
-import { serverFetcher } from "@/utils/api";
+import { redirect } from "next/navigation";
 import { MusicCard } from "@/components/MusicCard";
+import { serverFetcher } from "@/utils/api";
 
 export const metadata: Metadata = {
   title: "My Musics",

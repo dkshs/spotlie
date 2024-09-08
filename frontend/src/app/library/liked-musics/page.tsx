@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import type { MusicProps, UserProps } from "@/utils/types";
+
 import { redirect } from "next/navigation";
-import { serverFetcher } from "@/utils/api";
 import { PlaylistPage as PlaylistPageComp } from "@/components/PlaylistPage";
+import { serverFetcher } from "@/utils/api";
 import { createLikedMusicsPlaylist } from "@/utils/transform";
 
 export const metadata: Metadata = {

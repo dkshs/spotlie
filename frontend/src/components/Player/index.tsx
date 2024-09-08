@@ -1,10 +1,9 @@
 "use client";
 
-import { useWindowSize } from "usehooks-ts";
-
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import Image from "next/image";
 import Link from "next/link";
+import { useWindowSize } from "usehooks-ts";
 import { useMusic } from "@/hooks/useMusic";
 import { MusicControls } from "./MusicControls";
 import { VolumeControls } from "./VolumeControls";

@@ -1,14 +1,14 @@
 import type {
+  MusicProps,
+  PlaylistMusicProps,
+  PlaylistPropsWithMusics,
+} from "@/utils/types";
+import type {
   MusicContextProps,
   MusicStateProps,
   MusicTimeProps,
   PlayMusicProps,
 } from "./types";
-import type {
-  MusicProps,
-  PlaylistMusicProps,
-  PlaylistPropsWithMusics,
-} from "@/utils/types";
 
 import {
   type PropsWithChildren,
@@ -21,7 +21,6 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "usehooks-ts";
 import { useApi } from "@/hooks/useApi";
-
 import { musicTimeFormatter } from "@/utils/formatters";
 import { turnMusicsInPlaylist } from "@/utils/transform";
 import { ctxInitialValues } from "./ctxInitialValues";
