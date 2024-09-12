@@ -48,8 +48,8 @@ importers:
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.2)(zod@3.23.8)
       '@tanstack/react-query':
-        specifier: ^5.56.0
-        version: 5.56.0(react@18.3.1)
+        specifier: ^5.56.2
+        version: 5.56.2(react@18.3.1)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -89,10 +89,10 @@ importers:
     devDependencies:
       '@dkshs/eslint-config':
         specifier: 3.1.1
-        version: 3.1.1(@tanstack/eslint-plugin-query@5.53.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(@types/eslint@8.56.11)(@typescript-eslint/eslint-plugin@8.4.0(@typescript-eslint/parser@8.4.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(eslint@9.10.0(jiti@1.21.6))(tailwindcss@3.4.11)(typescript@5.6.2)
+        version: 3.1.1(@tanstack/eslint-plugin-query@5.56.1(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(@types/eslint@8.56.11)(@typescript-eslint/eslint-plugin@8.4.0(@typescript-eslint/parser@8.4.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(eslint@9.10.0(jiti@1.21.6))(tailwindcss@3.4.11)(typescript@5.6.2)
       '@tanstack/eslint-plugin-query':
-        specifier: ^5.53.0
-        version: 5.53.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2)
+        specifier: ^5.56.1
+        version: 5.56.1(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2)
       '@types/node':
         specifier: ^22.5.4
         version: 22.5.4
@@ -877,16 +877,16 @@ packages:
       typescript:
         optional: true
 
-  '@tanstack/eslint-plugin-query@5.53.0':
-    resolution: {integrity: sha512-Q3WgvK2YTGc3h5EaktDouRkKBPGl3QQFLPZBagpBa6zD70PiNoDY72wWrX9T4yKClMmSulAa0wg5Nj3LVXGkEw==}
+  '@tanstack/eslint-plugin-query@5.56.1':
+    resolution: {integrity: sha512-IUm2Zy5BXOqMbaa7QwNg3cPa5NP5Rm3pIFCFpe7Y3pLC7Ftp8Q0Y8GU2uNpCbMFW79jHJXdQ4Oxnu1eTQr8GXQ==}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
 
-  '@tanstack/query-core@5.56.0':
-    resolution: {integrity: sha512-Kgp2X6CqI1dh201OHI4I1Ji8NISzG6bylxxNopsMUh2gwaDGNZ11oaGkRDveQpEsaKgvy0nFTCxIypHi80gENA==}
+  '@tanstack/query-core@5.56.2':
+    resolution: {integrity: sha512-gor0RI3/R5rVV3gXfddh1MM+hgl0Z4G7tj6Xxpq6p2I03NGPaJ8dITY9Gz05zYYb/EJq9vPas/T4wn9EaDPd4Q==}
 
-  '@tanstack/react-query@5.56.0':
-    resolution: {integrity: sha512-3hb6IjBF7oNolv/dKPK5Vu8pcY9dcMCCsY6+JZlZuWILiALcoqCayAhP2vYTHbKdFmERK/3Ch/uOVJ9t9NRkAA==}
+  '@tanstack/react-query@5.56.2':
+    resolution: {integrity: sha512-SR0GzHVo6yzhN72pnRhkEFRAHMsUo5ZPzAxfTMvUxFIDVS6W9LYUp6nXW3fcHVdg0ZJl8opSH85jqahvm6DSVg==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -2954,7 +2954,7 @@ snapshots:
     dependencies:
       csstype: 3.1.1
 
-  '@dkshs/eslint-config@3.1.1(@tanstack/eslint-plugin-query@5.53.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(@types/eslint@8.56.11)(@typescript-eslint/eslint-plugin@8.4.0(@typescript-eslint/parser@8.4.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(eslint@9.10.0(jiti@1.21.6))(tailwindcss@3.4.11)(typescript@5.6.2)':
+  '@dkshs/eslint-config@3.1.1(@tanstack/eslint-plugin-query@5.56.1(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(@types/eslint@8.56.11)(@typescript-eslint/eslint-plugin@8.4.0(@typescript-eslint/parser@8.4.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2))(eslint@9.10.0(jiti@1.21.6))(tailwindcss@3.4.11)(typescript@5.6.2)':
     dependencies:
       '@eslint-community/eslint-plugin-eslint-comments': 4.4.0(eslint@9.10.0(jiti@1.21.6))
       '@eslint/markdown': 6.1.0(eslint@9.10.0(jiti@1.21.6))
@@ -2988,7 +2988,7 @@ snapshots:
       typescript-eslint: 8.4.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2)
       yaml-eslint-parser: 1.2.3
     optionalDependencies:
-      '@tanstack/eslint-plugin-query': 5.53.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2)
+      '@tanstack/eslint-plugin-query': 5.56.1(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2)
     transitivePeerDependencies:
       - '@types/eslint'
       - '@typescript-eslint/eslint-plugin'
@@ -3630,7 +3630,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.2
 
-  '@tanstack/eslint-plugin-query@5.53.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2)':
+  '@tanstack/eslint-plugin-query@5.56.1(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2)':
     dependencies:
       '@typescript-eslint/utils': 8.4.0(eslint@9.10.0(jiti@1.21.6))(typescript@5.6.2)
       eslint: 9.10.0(jiti@1.21.6)
@@ -3638,11 +3638,11 @@ snapshots:
       - supports-color
       - typescript
 
-  '@tanstack/query-core@5.56.0': {}
+  '@tanstack/query-core@5.56.2': {}
 
-  '@tanstack/react-query@5.56.0(react@18.3.1)':
+  '@tanstack/react-query@5.56.2(react@18.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.56.0
+      '@tanstack/query-core': 5.56.2
       react: 18.3.1
 
   '@types/debug@4.1.12':
