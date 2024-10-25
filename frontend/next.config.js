@@ -7,11 +7,20 @@ await import("./src/env.js");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: process.env.NEXT_PUBLIC_IMG_DOMAINS?.split(",").map(
-      (domain) => ({
-        hostname: domain,
-      }),
-    ),
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.clerk.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+      },
+    ],
   },
 };
 

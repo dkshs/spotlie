@@ -11,7 +11,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { serverFetcher } from "@/utils/api";
 
 type Props = {
-  readonly params: { id: string };
+  readonly params: Promise<{ id: string }>;
 };
 
 const getUsers = cache(async () => {
@@ -30,7 +30,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id } = params;
+  const { id } = await params;
 
   const user = (await getUsers()).find((user) => user.id === id);
 
@@ -64,8 +64,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function UserPage({ params }: Props) {
-  const user = (await getUsers()).find((user) => user.id === params.id);
+export default async function UserPage(props: Props) {
+  const { id } = await props.params;
+  const user = (await getUsers()).find((user) => user.id === id);
   if (!user) {
     notFound();
   }

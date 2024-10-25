@@ -14,7 +14,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { serverFetcher } from "@/utils/api";
 
 type Props = {
-  readonly params: { id: string };
+  readonly params: Promise<{ id: string }>;
 };
 
 const getArtists = cache(async () => {
@@ -36,7 +36,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id } = params;
+  const { id } = await params;
 
   const artist = (await getArtists()).find((artist) => artist.id === id);
 
@@ -70,7 +70,8 @@ export async function generateMetadata(
   };
 }
 
-export default async function ArtistPage({ params }: Props) {
+export default async function ArtistPage(props: Props) {
+  const params = await props.params;
   const artist = (await getArtists()).find((artist) => artist.id === params.id);
   if (!artist) {
     notFound();

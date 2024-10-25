@@ -7,7 +7,7 @@ import { PlaylistPage as PlaylistPageComp } from "@/components/PlaylistPage";
 import { serverFetcher } from "@/utils/api";
 
 type Props = {
-  readonly params: { id: string };
+  readonly params: Promise<{ id: string }>;
 };
 
 const getPlaylist = cache(async (id: string) => {
@@ -38,7 +38,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const playlist = await getPlaylist(params.id);
+  const playlist = await getPlaylist((await params).id);
 
   const playlistUrl = `${(await parent).metadataBase}playlist/`;
   const description =
@@ -68,7 +68,7 @@ export async function generateMetadata(
 }
 
 export default async function PlaylistPage({ params }: Props) {
-  const playlist = await getPlaylist(params.id);
+  const playlist = await getPlaylist((await params).id);
 
   return <PlaylistPageComp playlist={playlist} />;
 }

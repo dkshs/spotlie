@@ -18,7 +18,7 @@ import { fetcher, serverFetcher } from "@/utils/api";
 import { MusicDuration } from "./MusicDuration";
 
 type Props = {
-  readonly params: { id: string };
+  readonly params: Promise<{ id: string }>;
 };
 
 const getMusic = cache(async (id: string) => {
@@ -37,7 +37,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id } = params;
+  const { id } = await params;
   const music = await getMusic(id);
 
   if (!music) {
@@ -71,7 +71,7 @@ export async function generateMetadata(
 }
 
 export default async function MusicPage({ params }: Props) {
-  const music = await getMusic(params.id);
+  const music = await getMusic((await params).id);
   if (!music) {
     notFound();
   }

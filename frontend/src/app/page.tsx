@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 import { serverFetcher } from "@/utils/api";
 
-export const revalidate = 60 * 5; // 5 minutes
+export const revalidate = 300; // 5 minutes
 
 export default async function HomePage() {
   const searchParams = { limit: "10" };
