@@ -60,7 +60,7 @@ class AbstractUser(models.Model):
         first_name = getattr(self, "first_name", "")
         last_name = getattr(self, "last_name", "")
         full_name = f"{first_name or ''} {last_name or ''}".strip()
-        return full_name == "" and self.username or full_name
+        return full_name or self.username
 
     def is_artist(self) -> bool:
         return self.public_metadata.get("is_artist", False)
