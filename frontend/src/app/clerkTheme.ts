@@ -51,6 +51,7 @@ export const clerkTheme = createTheme({
     userButtonPopoverMain: "bg-card",
     userButtonPopoverFooter: "hidden",
     userButtonPopoverActionButton: "hover:bg-secondary/80",
+    userButtonPopoverCustomItemButton: "hover:bg-secondary/80",
     menuButton:
       "text-foreground hover:bg-secondary active:bg-secondary focus:ring-2 focus:ring-ring",
     menuItem: "hover:bg-secondary active:bg-secondary",

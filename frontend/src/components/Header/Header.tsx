@@ -1,9 +1,10 @@
 import type { AnchorHTMLAttributes } from "react";
 
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { Headphones, House, SpotifyLogo } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+import { UserButton } from "./UserButton";
 
 function HeaderLink({
   href = "/",
@@ -85,11 +86,7 @@ export async function Header() {
             </HeaderLink>
           </SignedOut>
           <SignedIn>
-            {/* @ts-expect-error `userProfileMode` is not accepting the "modal" prop */}
-            <UserButton
-              userProfileMode={externalId ? "navigation" : "modal"}
-              userProfileUrl={`/${isArtist ? "artist" : "user"}/${externalId}`}
-            />
+            <UserButton externalId={externalId} isArtist={isArtist} />
           </SignedIn>
         </div>
       </ul>
