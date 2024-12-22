@@ -8,7 +8,6 @@ await import("./src/env.js");
 const nextConfig = {
   images: {
     remotePatterns: [
-      { hostname: "localhost" },
       {
         protocol: "https",
         hostname: "img.clerk.com",
