@@ -72,7 +72,8 @@ COPY --chown=dev-user:dev-user ./compose/local/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
-COPY --chown=dev-user:dev-user ./compose/local/django/.p10k.zsh /home/dev-user
+RUN wget https://gist.githubusercontent.com/dkshs/46cbda109e29d1772416d8e44f148a64/raw/50564b1a3e6c326289754a7128ca98c627e0b355/.p10k.zsh && \
+  mv ./.p10k.zsh /home/dev-user
 
 # copy application code to WORKDIR
 COPY --chown=dev-user:dev-user . ${APP_HOME}
@@ -82,14 +83,14 @@ RUN chown dev-user:dev-user ${APP_HOME}
 USER dev-user
 
 # Adding zsh
-RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.2.1/zsh-in-docker.sh)" -- \
   -p git \
   -p git-flow \
   -p ssh-agent \
   -p https://github.com/zdharma-continuum/fast-syntax-highlighting \
   -p https://github.com/zsh-users/zsh-autosuggestions \
   -p https://github.com/zsh-users/zsh-completions \
-  -a "export TERM=xterm-256color"
+  -a "export TERM=xterm-256color" -x
 
 RUN echo "[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh" >> ~/.zshrc && \
   echo "HISTFILE=~/.zsh_history" >> ~/.zshrc && \
