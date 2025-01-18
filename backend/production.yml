@@ -1,6 +1,7 @@
 volumes:
   production_postgres_data: {}
   production_postgres_data_backups: {}
+  production_redis_data: {}
 
 services:
   django:
@@ -30,3 +31,5 @@ services:
 
   redis:
     image: redis:7
+    volumes:
+      - production_redis_data:/data

@@ -38,12 +38,3 @@ services:
     container_name: backend_local_mailpit
     ports:
       - "8025:8025"
-
-  pg_admin:
-    image: dpage/pgadmin4:latest
-    container_name: backend_local_pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=postgres@email.com
-      - PGADMIN_DEFAULT_PASSWORD=postgres
-    ports:
-      - 5050:80
