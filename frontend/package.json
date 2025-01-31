@@ -42,7 +42,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@dkshs/eslint-config": "3.4.0",
+    "@dkshs/eslint-config": "4.0.0",
     "@tanstack/eslint-plugin-query": "^5.64.2",
     "@types/node": "^22.10.10",
     "@types/react": "^19.0.8",
