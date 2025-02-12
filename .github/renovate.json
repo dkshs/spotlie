@@ -16,12 +16,24 @@
       "matchUpdateTypes": ["major", "minor"]
     },
     {
-      "matchFileNames": ["frontend/**"],
-      "semanticCommitScope": "frontend-deps"
+      "semanticCommitScope": "frontend-deps",
+      "matchFileNames": ["frontend/**"]
     },
     {
+      "semanticCommitScope": "backend-deps",
+      "matchFileNames": ["backend/**"]
+    },
+    {
+      "groupName": "all non-major backend dependencies",
       "matchFileNames": ["backend/**"],
-      "semanticCommitScope": "backend-deps"
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "all non-major frontend dependencies",
+      "matchFileNames": ["frontend/**"],
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["minor", "patch"]
     }
   ]
 }
