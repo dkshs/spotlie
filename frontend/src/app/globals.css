@@ -41,7 +41,7 @@
     @apply border-border selection:bg-primary/30;
   }
   html {
-    @apply scroll-smooth;
+    @apply scroll-smooth antialiased;
     color-scheme: dark;
   }
   body {

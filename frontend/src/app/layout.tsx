@@ -65,19 +65,19 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider appearance={{ baseTheme: clerkTheme }}>
-      <html lang="en" className={merriweatherSans.variable}>
-        <body>
+      <html lang="en" suppressHydrationWarning>
+        <body className={merriweatherSans.variable}>
           <Providers>
+            <ToastContainer
+              autoClose={3000}
+              theme="dark"
+              newestOnTop
+              pauseOnFocusLoss={false}
+              limit={3}
+              closeOnClick
+              stacked
+            />
             <div className="mx-auto min-w-[320px] max-w-[1600px]">
-              <ToastContainer
-                autoClose={3000}
-                theme="dark"
-                newestOnTop
-                pauseOnFocusLoss={false}
-                limit={3}
-                closeOnClick
-                stacked
-              />
               <Header />
               <div className="pb-20 pt-[72px]">{children}</div>
               <Player />
