@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.6.2",
-  "author": "DKSHS",
+  "author": "Nicolas Contiero (https://github.com/dkshs)",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
