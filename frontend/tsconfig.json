@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "incremental": true,
+    "incremental": false,
     "target": "ES2022",
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
