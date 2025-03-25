@@ -14,8 +14,8 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.12.6",
-    "@clerk/themes": "^2.2.22",
+    "@clerk/nextjs": "^6.12.9",
+    "@clerk/themes": "^2.2.23",
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/react-alert-dialog": "^1.1.6",
     "@radix-ui/react-dialog": "^1.1.6",
@@ -30,7 +30,7 @@
     "@tanstack/react-query": "^5.69.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "next": "15.2.3",
+    "next": "15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-toastify": "^11.0.5",
@@ -41,14 +41,14 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@dkshs/eslint-config": "4.5.0",
+    "@dkshs/eslint-config": "4.5.2",
     "@tanstack/eslint-plugin-query": "^5.68.0",
-    "@types/node": "^22.13.10",
+    "@types/node": "^22.13.13",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.21",
-    "eslint": "^9.22.0",
+    "eslint": "^9.23.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.2"
