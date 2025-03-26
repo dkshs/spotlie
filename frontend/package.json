@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.6.5",
+  "packageManager": "pnpm@10.7.0",
   "author": "Nicolas Contiero (https://github.com/dkshs)",
   "license": "MIT",
   "scripts": {
@@ -14,8 +14,8 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.12.9",
-    "@clerk/themes": "^2.2.23",
+    "@clerk/nextjs": "^6.12.10",
+    "@clerk/themes": "^2.2.24",
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/react-alert-dialog": "^1.1.6",
     "@radix-ui/react-dialog": "^1.1.6",
