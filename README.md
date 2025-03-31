@@ -19,7 +19,7 @@ Music app.
 
 ## Demo
 
-Demo of the project can be found here: <https://spotlie.dkshs.me/>
+Demo of the project can be found here: <https://spotlie.ncontiero.com/>
 
 ### Required tools
 
