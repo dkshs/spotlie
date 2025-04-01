@@ -15,7 +15,7 @@ export function Player() {
   if (!currentMusic) return null;
 
   return (
-    <div className="group/player fixed inset-x-0 bottom-0 z-[9999] h-16 border-t bg-card/95 backdrop-blur-xl sm:h-20">
+    <div className="group/player sticky inset-x-0 bottom-0 z-[9999] h-16 w-full border-t bg-card/95 backdrop-blur-xl sm:h-20">
       <SliderPrimitive.Root
         className="relative flex w-full touch-none select-none items-center"
         max={100}

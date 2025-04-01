@@ -81,9 +81,9 @@ export default function RootLayout({
             />
             <Header />
             <div className="mx-auto min-w-[320px] max-w-[1600px]">
-              <div className="">{children}</div>
-              <Player />
+              {children}
             </div>
+            <Player />
           </Providers>
         </body>
       </html>
