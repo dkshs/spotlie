@@ -15,13 +15,13 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 ALLOWED_HOSTS = config(
     "DJANGO_ALLOWED_HOSTS",
     cast=lambda v: [s.strip() for s in v.split(",")],
-    default="api.spotlie.dkshs.me",
+    default=".ncontiero.com",
 )
 # https://github.com/adamchainz/django-cors-headers#configuration
 CORS_ALLOWED_ORIGINS = config(
     "CORS_ALLOWED_ORIGINS",
     cast=lambda v: [s.strip() for s in v.split(",")],
-    default="https://spotlie.dkshs.me",
+    default="https://spotlie-api.ncontiero.com",
 )
 
 # DATABASES

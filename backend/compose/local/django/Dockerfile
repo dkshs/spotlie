@@ -72,7 +72,7 @@ COPY --chown=dev-user:dev-user ./compose/local/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
-RUN wget https://gist.githubusercontent.com/dkshs/46cbda109e29d1772416d8e44f148a64/raw/50564b1a3e6c326289754a7128ca98c627e0b355/.p10k.zsh && \
+RUN wget https://gist.githubusercontent.com/ncontiero/46cbda109e29d1772416d8e44f148a64/raw/50564b1a3e6c326289754a7128ca98c627e0b355/.p10k.zsh && \
   mv ./.p10k.zsh /home/dev-user
 
 # copy application code to WORKDIR

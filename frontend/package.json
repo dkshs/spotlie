@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.7.0",
-  "author": "Nicolas Contiero (https://github.com/dkshs)",
+  "author": "Nicolas Contiero <https://github.com/ncontiero>",
   "license": "MIT",
   "scripts": {
     "dev": "next dev --turbo",
@@ -41,7 +41,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@dkshs/eslint-config": "4.6.0",
+    "@ncontiero/eslint-config": "5.1.1",
     "@tanstack/eslint-plugin-query": "^5.68.0",
     "@types/node": "^22.13.14",
     "@types/react": "^19.0.12",
