@@ -45,14 +45,21 @@
     color-scheme: dark;
   }
   body {
-    @apply bg-background font-merriweatherSans text-foreground;
+    @apply relative bg-background font-merriweatherSans text-foreground overscroll-none;
   }
-}
 
-/* Toastify */
-.Toastify__toast-container {
-  @apply z-[99999] font-merriweatherSans text-foreground !important;
-}
-.Toastify__toast {
-  @apply bg-background !important;
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 5px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
 }

@@ -76,10 +76,12 @@ export default function RootLayout({
               limit={3}
               closeOnClick
               stacked
+              className="z-[999999] bg-background font-merriweatherSans text-foreground"
+              toastClassName="bg-background text-foreground"
             />
+            <Header />
             <div className="mx-auto min-w-[320px] max-w-[1600px]">
-              <Header />
-              <div className="pb-20 pt-[72px]">{children}</div>
+              <div className="">{children}</div>
               <Player />
             </div>
           </Providers>
