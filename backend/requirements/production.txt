@@ -8,5 +8,5 @@ Collectfasta==3.2.1 # https://github.com/jasongi/collectfasta
 
 # Django
 # ------------------------------------------------------------------------------
-django-storages[google]==1.14.5  # https://github.com/jschneier/django-storages
+django-storages[google]==1.14.6  # https://github.com/jschneier/django-storages
 django-anymail[brevo]==12.0  # https://github.com/anymail/django-anymail
