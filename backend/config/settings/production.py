@@ -1,7 +1,3 @@
-from ast import literal_eval
-
-from google.oauth2 import service_account
-
 from .base import *  # noqa: F403
 from .base import DATABASES
 from .base import INSTALLED_APPS
@@ -76,35 +72,48 @@ SECURE_CONTENT_TYPE_NOSNIFF = config(
     default=True,
 )
 
-GS_BUCKET_NAME = config("DJANGO_GCP_STORAGE_BUCKET_NAME")
-DJANGO_GCP_CREDENTIALS = config("DJANGO_GCP_CREDENTIALS", cast=literal_eval)
-GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
-    DJANGO_GCP_CREDENTIALS,
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_ACCESS_KEY_ID = config("DJANGO_AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("DJANGO_AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = config("DJANGO_AWS_STORAGE_BUCKET_NAME")
+AWS_QUERYSTRING_AUTH = False
+# DO NOT change these unless you know what you're doing.
+_AWS_EXPIRY = 60 * 60 * 24 * 7
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate",
+}
+AWS_S3_MAX_MEMORY_SIZE = config(
+    "DJANGO_AWS_S3_MAX_MEMORY_SIZE",
+    cast=int,
+    default=100_000_000,  # 100MB
 )
-GS_DEFAULT_ACL = "publicRead"
+AWS_S3_REGION_NAME = config("DJANGO_AWS_S3_REGION_NAME", default=None)
+AWS_S3_CUSTOM_DOMAIN = config("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
+AWS_S3_ENDPOINT_URL = config("DJANGO_AWS_S3_ENDPOINT_URL", default=None)
+aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 
 # STATIC & MEDIA
 # ------------------------------------------------------------------------------
 STORAGES = {
     "default": {
-        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
             "location": "media",
             "file_overwrite": False,
         },
     },
     "staticfiles": {
-        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
             "location": "static",
-            "default_acl": "publicRead",
+            "default_acl": "public-read",
         },
     },
 }
 
-MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
-COLLECTFASTA_STRATEGY = "collectfasta.strategies.gcloud.GoogleCloudStrategy"
-STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
+MEDIA_URL = f"https://{aws_s3_domain}/media/"
+COLLECTFASTA_STRATEGY = "collectfasta.strategies.boto3.Boto3Strategy"
+STATIC_URL = f"https://{aws_s3_domain}/static/"
 
 # EMAIL
 # ------------------------------------------------------------------------------
