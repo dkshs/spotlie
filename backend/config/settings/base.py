@@ -203,5 +203,6 @@ LOGGING = {
     "root": {"level": "INFO", "handlers": ["console"]},
 }
 
+
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"

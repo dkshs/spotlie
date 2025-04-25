@@ -120,7 +120,7 @@ STATIC_URL = f"https://{aws_s3_domain}/static/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
 DEFAULT_FROM_EMAIL = config(
     "DJANGO_DEFAULT_FROM_EMAIL",
-    default="SpotLie <noreply@4sg9gdqxh@mozmail.com>",
+    default="SpotLie <spotlie@ncontiero.com>",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = config("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
