@@ -17,10 +17,6 @@ Music app.
   - [TailwindCSS](https://tailwindcss.com/)
   - [TanStack Query](https://tanstack.com/query/latest/)
 
-## Demo
-
-Demo of the project can be found here: <https://spotlie.ncontiero.com/>
-
 ### Required tools
 
 You will need to have [Git](https://git-scm.com) to clone the repository.
