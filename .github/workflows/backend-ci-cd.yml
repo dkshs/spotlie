@@ -1,5 +1,10 @@
 name: Backend - CI|CD
 
+# Enable Buildkit and let compose use it to speed up image building
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
 on:
   pull_request:
     paths: ["backend/**"]
@@ -32,25 +37,47 @@ jobs:
         working-directory: "backend"
         run: pre-commit run --show-diff-on-failure --color=always --all-files
 
-  deploy-backend:
-    if: github.event_name == 'push'
-    name: Deploy Backend
-    runs-on: ubuntu-latest
+  # With no caching at all the entire ci process takes 3m to complete!
+  docker:
+    name: Docker Build
     needs: linter
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Code Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Create Spotlie local .env file
+        working-directory: backend
+        run: |
+          mkdir -p .envs/.local
+          cat .envs.example/.local/.postgres > .envs/.local/.postgres
+          cat .envs.example/.local/.django > .envs/.local/.django
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and cache local backend
+        uses: docker/bake-action@v6
         with:
-          node-version-file: ./frontend/.nvmrc
+          push: false
+          load: true
+          files: backend/docker-compose.local.yml
+          targets: django
+          set: |
+            django.cache-from=type=gha,scope=django-cached-tests
+            django.cache-to=type=gha,scope=django-cached-tests,mode=max
+            postgres.cache-from=type=gha,scope=postgres-cached-tests
+            postgres.cache-to=type=gha,scope=postgres-cached-tests,mode=max
 
-      - name: Install Railway
-        run: npm i -g @railway/cli
+      - name: Check DB Migrations
+        working-directory: backend
+        run: docker compose -f docker-compose.local.yml run --rm django python manage.py makemigrations --check
 
-      - name: Deploy
-        run: railway up -d -s ${{secrets.RAILWAY_BACK_SERVICE}}
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - name: Run DB Migrations
+        working-directory: backend
+        run: docker compose -f docker-compose.local.yml run --rm django python manage.py migrate
+
+      - name: Tear down the Stack
+        working-directory: backend
+        run: docker compose -f docker-compose.local.yml down
